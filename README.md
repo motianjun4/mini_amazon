@@ -1,3 +1,44 @@
+已经配置好数据库连接，账户密码见群里  
+配置好CI/CD，详情见Github Actions 
+Deployment URL: http://vcm.tinchun.top:5000
+# Workflow：
+1. 开发：从master checkout 新分支，分支名格式：dev_{name}\_{feature}. eg.: dev_tm326_login
+1. 在新分支上开发新feature并在本地测试
+1. 测试完毕后push到repository, 在Github上提出Pull Request 来merge到master
+1. Pull Request 通过后会自动构建并部署到服务器上
+
+# Development：
+1. 创建.flaskenv文件，
+```
+FLASK_APP=amazon.py
+FLASK_ENV=development
+
+SECRET_KEY=***
+
+DB_NAME=amazon
+DB_USER=postgres
+DB_PASSWORD=***
+DB_HOST=vcm.tinchun.top
+DB_PORT=54320
+
+```
+2. 创建并激活venv:
+```bash
+$ python3 -m venv ./venv
+$ source ./venv/bin/activate
+```
+3. 安装Dependencies:
+```bash
+$ make install
+```
+
+4. 启动服务：
+```bash
+$ make run
+```
+
+以下为原README.md
+
 This course project is intended as a 'standard option'.
 
 Created by [Rickard Stureborg](http://www.rickard.stureborg.com) and [Yihao Hu](https://www.linkedin.com/in/yihaoh/) for CS316, adapted for CS516.

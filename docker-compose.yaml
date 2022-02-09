@@ -1,0 +1,16 @@
+version: "3.3"
+services:
+  mini-amazon:
+    image: ghcr.io/motianjun4/mini_amazon:master
+    ports:
+      - "5000:5000"
+    restart: always
+
+  watchtower:
+    image: index.docker.io/containrrr/watchtower:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.docker/config.json:/config.json
+    restart: always
+    command: --interval 10 mini-amazon
+  

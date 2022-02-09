@@ -5,12 +5,17 @@ services:
     ports:
       - "5000:5000"
     restart: always
+    labels:
+      com.centurylinklabs.watchtower.enable: true
+    
 
   watchtower:
     image: index.docker.io/containrrr/watchtower:latest
+    environment:
+      WATCHTOWER_LABEL_ENABLE: 1
+      WATCHTOWER_POLL_INTERVAL: 10
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ~/.docker/config.json:/config.json
     restart: always
-    command: --interval 10 mini-amazon
   

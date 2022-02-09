@@ -35,7 +35,7 @@ def deposit():
     amount = None
     try:
         amount = float(request.form['amount'])
-    except e:
+    except Exception as e:
         return json_response(ResponseType.ERROR, None, str(e))
     current_balance = Account.deposit_by_uid(current_user.id, amount)
     return json_response(ResponseType.SUCCESS, {"current_balance":int(current_balance)})
@@ -43,10 +43,9 @@ def deposit():
 @bp.route('/account/withdrawn', methods=['POST'])
 @login_required
 def withdrawn():
-    amount = None
     try:
         amount = float(request.form['amount'])
-    except e:
+    except Exception as e:
         return json_response(ResponseType.ERROR, None, str(e))
     account = Account.get_by_uid(current_user.id)
     if amount > account.balance:

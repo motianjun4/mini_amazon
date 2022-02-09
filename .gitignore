@@ -50,7 +50,7 @@ __pycache__/
 ######################
 google_credential.json
 *.pem
-.flaskenv
+# .flaskenv
 
 # DS Store #
 ######################
@@ -63,5 +63,3 @@ playground.py
 # emacs #
 ######################
 **/*~
-
-# .flaskenv

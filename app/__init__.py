@@ -15,7 +15,12 @@ def create_app():
 
     app.db = DB(app)
     login.init_app(app)
-    # minio_client.init_app(app)
+
+    found = minio_client.bucket_exists("products")
+    if not found:
+        minio_client.make_bucket("products")
+    else:
+        print("Bucket 'products' already exists")
 
     from .index import bp as index_bp
     app.register_blueprint(index_bp)

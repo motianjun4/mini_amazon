@@ -8,7 +8,14 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: true
     
-
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    restart: always
+    command: server /data --console-address ":9001"
+    
   watchtower:
     image: index.docker.io/containrrr/watchtower:latest
     environment:

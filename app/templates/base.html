@@ -44,25 +44,25 @@
                 </ul>
                 <form class="d-flex">
                     {% if current_user.is_authenticated %}
-                    <a class="navbar-brand" href="#!">Hello {{current_user.firstname}}! </a>
-                    <a href="{{ url_for('accounts.account') }}" class="btn btn-outline-dark">My Account</a>
-                    <a href="{{ url_for('users.logout') }}" class="btn btn-outline-dark">Log out</a>
+                      <a class="navbar-brand" href="#!">Hello {{current_user.firstname}}! </a>
+                      <a href="{{ url_for('accounts.account') }}" class="btn btn-outline-dark">My Account</a>
+                      <a href="{{ url_for('users.logout') }}" class="btn btn-outline-dark">Log out</a>
+                      <button class="btn btn-outline-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
+                          <i class="bi-cart-fill me-1"></i>
+                          Cart
+                          <span class="badge bg-dark text-white ms-1 rounded-pill">{{cart_cnt}}</span>
+                      </button>
                     {% else %}
-                    <a href="{{ url_for('users.login') }}" class="btn btn-outline-dark">Log in</a>
+                      <a href="{{ url_for('users.login') }}" class="btn btn-outline-dark">Log in</a>
                     {% endif %}
-                    <button class="btn btn-outline-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
-                        <i class="bi-cart-fill me-1"></i>
-                        Cart
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">{{cart_cnt}}</span>
-                    </button>
                 </form>
             </div>
         </div>
     </nav>
-</head>
-<body>
-  <div class="main">
-    {% block content %}{% endblock %}
-  </div>
-</body>
+  </head>
+  <body>
+    <div class="main">
+      {% block content %}{% endblock %}
+    </div>
+  </body>
 </html>

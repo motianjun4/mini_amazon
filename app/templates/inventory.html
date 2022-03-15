@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br><br>
+
+<h2>Inventory</h2>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Product ID</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Quantity</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in avail_products%}
+      <tr>
+        <th scope="row">{{product.id}}</th>
+        <td>{{product.name}}</td>
+        <td>{{product.quantity}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<br><br>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+      {{ form.firstname.label }}<br/>
+      {{ form.firstname(size=32) }}<br/>
+      {% for error in form.firstname.errors %}
+      <span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </p>
+    <p>
+      {{ form.lastname.label }}<br/>
+      {{ form.lastname(size=32) }}<br/>
+      {% for error in form.lastname.errors %}
+      <span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+    </p>
+    <p>{{ form.submit() }}</p>
+  </form>
+
+{% endblock %}

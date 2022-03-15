@@ -1,8 +1,9 @@
+from sqlite3 import register_adapter
 from flask import Flask
 from flask_login import LoginManager
 from .config import Config
 from .db import DB
-
+from libs.my_minio import minio_client
 
 login = LoginManager()
 login.login_view = 'users.login'
@@ -14,6 +15,7 @@ def create_app():
 
     app.db = DB(app)
     login.init_app(app)
+    # minio_client.init_app(app)
 
     from .index import bp as index_bp
     app.register_blueprint(index_bp)
@@ -23,5 +25,8 @@ def create_app():
 
     from .accounts import bp as account_bp
     app.register_blueprint(account_bp)
+
+    from .products import bp as products_bp
+    app.register_blueprint(products_bp)
 
     return app

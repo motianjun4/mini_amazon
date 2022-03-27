@@ -28,16 +28,16 @@
 <form action="" method="post">
     {{ form.hidden_tag() }}
     <p>
-      {{ form.firstname.label }}<br/>
-      {{ form.firstname(size=32) }}<br/>
-      {% for error in form.firstname.errors %}
+      {{ form.productname.label }}<br/>
+      {{ form.productname(size=32) }}<br/>
+      {% for error in form.productname.errors %}
       <span style="color: red;">[{{ error }}]</span>
       {% endfor %}
     </p>
     <p>
-      {{ form.lastname.label }}<br/>
-      {{ form.lastname(size=32) }}<br/>
-      {% for error in form.lastname.errors %}
+      {{ form.productnum.label }}<br/>
+      {{ form.productnum(size=32) }}<br/>
+      {% for error in form.productnum.errors %}
       <span style="color: red;">[{{ error }}]</span>
       {% endfor %}
     </p>

@@ -30,6 +30,20 @@ class inventoryForm(FlaskForm):
     product_number = IntegerField('Product Number', validators=[DataRequired()])
     submit = SubmitField('Add')
 
+@bp.route('/inventory', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index.index'))
+    form = inventoryForm()
+    if form.validate_on_submit():
+        if Inventory(form.email.data,
+                         form.password.data,
+                         form.firstname.data,
+                         form.lastname.data):
+            flash('Congratulations, you are now a registered user!')
+            return redirect(url_for('users.login'))
+    return render_template('inventory.html', form=form)
+
 @bp.route('/inventory')
 def inventory():
     if not current_user.is_authenticated:
@@ -37,3 +51,13 @@ def inventory():
     products = Inventory.get(current_user.id)
     return render_template('inventory.html', avail_products=products)
 
+@bp.route('/account/deposit',methods=['POST'])
+@login_required
+def deposit():
+    amount = None
+    try:
+        amount = float(request.form['amount'])
+    except Exception as e:
+        return json_response(ResponseType.ERROR, None, str(e))
+    current_balance = Account.deposit_by_uid(current_user.id, amount)
+    return json_response(ResponseType.SUCCESS, {"current_balance":int(current_balance)})

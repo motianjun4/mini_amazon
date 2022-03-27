@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from unicodedata import name
 from flask import current_app as app
 '''
@@ -21,28 +22,17 @@ class Inventory:
         self.name = name
 
     @staticmethod
-    def get(uid):
+    def get_all_by_uid(uid):
         rows = app.db.execute('''
 SELECT id, name, uid, quantity
 FROM Inventory
-WHERE id = :id AND uid = :uid
+WHERE uid = :uid
 ''',
                              uid=uid)
-        return Inventory(*(rows[0])) if rows else None
+        return [Inventory(*row) for row in rows]
 
     @staticmethod
-    def remove_product(id, uid, rnum):
-        rows = app.db.execute('''
-UPDATE Inventory
-SET quantity = quantity + :rnum
-WHERE id = :id AND uid = :uid
-RETURNING quantity
-        ''', id=id, uid=uid, rnum=rnum)
-        quantity = rows[0][0]
-        return quantity
-
-    @staticmethod
-    def add_product(uid, name):
+    def add_new_product(uid, name):
         rows = app.db.execute('''
 SELECT id, uid, name
 FROM Inventory
@@ -56,6 +46,57 @@ INSERT INTO Inventory(name, uid, quantity)
 VALUES(:name, :uid, :quantity)
 RETURNING id
             ''', name=name, uid=uid, quantity=1)
-            id = rows[0][0]
-            return Inventory.get(id)
-        return Inventory(*(rows[0])) if rows else None
+        return
+
+    @staticmethod
+    def modify_quantity(uid, pname, pnum):
+        have_num = app.db.execute('''
+                                SELECT quantity
+                                FROM Inventory
+                                WHERE uid = :uid AND name = :name
+                                ''',uid=uid, name=pname)
+        have_num = have_num[0][0]
+        
+        if not have_num and pnum<0:
+            return
+        if have_num+pnum<0:
+            app.db.execute('''
+                        DELETE FROM Inventory
+                        WHERE uid = :uid AND name = :name
+                        RETURNING quantity
+                        ''', uid=uid, name = pname)
+            return 
+        else:
+            app.db.execute('''
+                        UPDATE Inventory
+                        SET quantity = quantity + :pnum
+                        WHERE uid = :uid AND name = :name
+                        RETURNING quantity
+                        ''', uid=uid, name = pname, pnum=pnum)
+        return
+
+    @staticmethod
+    def remove_product(uid, pname):
+        row = app.db.execute('''
+                                    SELECT id, uid, name
+                                    FROM Inventory
+                                    WHERE uid = :uid AND name = :name
+                                    ''', uid=uid, name=pname)
+        product_name = row[0][2]
+        if product_name:
+            app.db.execute('''
+                        DELETE FROM Inventory
+                        WHERE uid = :uid AND name = :name
+                        RETURNING quantity
+                        ''', uid=uid, name = pname)
+        else:
+            print("no this product!")
+        return
+
+    @staticmethod
+    def get_low_price():
+        pass
+
+    @staticmethod
+    def get_popularity():
+        pass

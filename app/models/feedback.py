@@ -78,6 +78,7 @@ ORDER BY timestamp DESC limit 5
         ''', uid=uid, type=type)
         return [Review(*row) for row in rows]
 
+    @staticmethod
     def seller_show_reviews(upid, type):
         sql = '''
 SELECT review.id, review.type, review.upid, review.rate, review.review, review.create_at,

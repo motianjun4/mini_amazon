@@ -1,9 +1,13 @@
+import datetime
 from flask import render_template, redirect, url_for, flash, request
 from werkzeug.urls import url_parse
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_required, login_user, logout_user, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from app.models.purchase import Purchase
+
+from app.utils.json_response import ResponseType, json_response
 
 from .models.user import User
 
@@ -72,3 +76,45 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('index.index'))
+
+
+@bp.route('/user')
+def my_profile():
+    # find the products current user has bought:
+    if not current_user.is_authenticated:
+        return redirect(url_for('users.login', next=url_for('.my_profile')))
+    purchases = Purchase.get_all_by_uid_since(
+        current_user.id, datetime.datetime(1980, 9, 14, 0, 0, 0))
+    # render the page by adding information to the index.html file
+    return render_template('my_profile.html',
+                           purchase_history=purchases,
+                           user=current_user)
+
+
+@bp.route('/balance/deposit', methods=['POST'])
+@login_required
+def deposit():
+    amount = None
+    try:
+        amount = float(request.form['amount'])
+    except Exception as e:
+        return json_response(ResponseType.ERROR, None, str(e))
+    if amount <= 0:
+        return json_response(ResponseType.ERROR, None, f'The amount must larger than 0.')
+    current_balance = User.add_balance(current_user.id, amount)
+    return json_response(ResponseType.SUCCESS, {"current_balance": int(current_balance)})
+
+
+@bp.route('/balance/withdrawn', methods=['POST'])
+@login_required
+def withdrawn():
+    try:
+        amount = float(request.form['amount'])
+    except Exception as e:
+        return json_response(ResponseType.ERROR, None, str(e))
+    if amount > current_user.balance:
+        return json_response(ResponseType.ERROR, None, f'${amount} is more than your current balance ${current_user.balance}')
+    if amount <= 0:
+        return json_response(ResponseType.ERROR, None, f'The amount must larger than 0.')
+    current_balance = User.add_balance(current_user.id, -amount)
+    return json_response(ResponseType.SUCCESS, {"current_balance": int(current_balance)})

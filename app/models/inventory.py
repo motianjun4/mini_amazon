@@ -1,6 +1,7 @@
 from asyncio.windows_events import NULL
 from unicodedata import name
 from flask import current_app as app
+from .product import Product
 '''
 
 CREATE TABLE IF NOT EXISTS public.inventory
@@ -35,94 +36,100 @@ CREATE TABLE IF NOT EXISTS public.purchase
 '''
 
 class Inventory:
-    def __init__(self, id, uid, name, quantity=0):
+    def __init__(self, id, pid, uid, price, quantity=0):
         self.id = id
+        self.pid = pid
         self.uid = uid
+        self.price = price
         self.quantity = quantity
-        self.name = name
 
     @staticmethod
-    def get_all_by_uid(uid):
+    def get_all_by_uid(uid):     #show all
         rows = app.db.execute('''
-SELECT id, name, uid, quantity
-FROM Inventory
-WHERE uid = :uid
-''',
-                             uid=uid)
+                            SELECT Inventory.id, pid, uid, price, quantity
+                            FROM Inventory JOIN Product ON Inventory.pid = Product.id
+                            WHERE uid = :uid
+                            ''', uid=uid)
         return [Inventory(*row) for row in rows]
 
     @staticmethod
-    def add_new_product(uid, name):
-        rows = app.db.execute('''
-SELECT id, uid, name
-FROM Inventory
-WHERE uid = :uid AND name = :name
-''',
-                            uid=uid, name=name
-                            )
-        if not rows:
-            rows = app.db.execute('''
-INSERT INTO Inventory(name, uid, quantity)
-VALUES(:name, :uid, :quantity)
-RETURNING id
-            ''', name=name, uid=uid, quantity=1)
-        return
-
-    @staticmethod
-    def modify_quantity(uid, pname, pnum):
-        have_num = app.db.execute('''
-                                SELECT quantity
-                                FROM Inventory
-                                WHERE uid = :uid AND name = :name
-                                ''',uid=uid, name=pname)
-        have_num = have_num[0][0]
-        
-        if not have_num and pnum<0:
-            return
-        if have_num+pnum<0:
-            app.db.execute('''
-                        DELETE FROM Inventory
-                        WHERE uid = :uid AND name = :name
-                        RETURNING quantity
-                        ''', uid=uid, name = pname)
-            return 
-        else:
-            app.db.execute('''
-                        UPDATE Inventory
-                        SET quantity = quantity + :pnum
-                        WHERE uid = :uid AND name = :name
-                        RETURNING quantity
-                        ''', uid=uid, name = pname, pnum=pnum)
-        return
-
-    @staticmethod
-    def remove_product(uid, pname):
+    def get_product_pid(name):
         row = app.db.execute('''
-                            SELECT id, uid, name
+                            SELECT *
+                            FROM Product
+                            WHERE name = :name
+                            ''', name=name)
+        if row:
+            return Product(*row[0]).id
+        else:
+            print("cannot find product!")
+            return 
+
+    @staticmethod
+    def add_new_product(uid, pid, price): #for inventory
+        rows = app.db.execute('''
+                            INSERT INTO Inventory(pid, uid, price, quantity)
+                            VALUES(:pid, :uid, :price, :quantity)
+                            RETURNING id
+                            ''', pid=pid, uid=uid, price=price, quantity=1)
+        return
+
+    @staticmethod
+    def modify_quantity(uid, pid, pnum):   
+        # have_num = app.db.execute('''
+        #                         SELECT quantity
+        #                         FROM Inventory
+        #                         WHERE uid = :uid AND name = :name
+        #                         ''',uid=uid, name=pname)
+        # have_num = Inventory(*have_num[0]).quantity
+        
+        # # if not have_num and pnum<0:
+        # #     return
+        # if have_num+pnum<0:
+        #     app.db.execute('''
+        #                 DELETE FROM Inventory
+        #                 WHERE uid = :uid AND name = :name
+        #                 RETURNING quantity
+        #                 ''', uid=uid, name = pname)
+        #     return 
+        # else:
+        if pnum<0:
+            print("quantity is less than 0!")  #exception!
+            return 
+        app.db.execute('''
+                    UPDATE Inventory
+                    SET quantity = :pnum
+                    WHERE uid = :uid AND pid = :pid
+                    RETURNING quantity
+                    ''', uid=uid, pid = pid, pnum=pnum)
+        return
+
+    @staticmethod
+    def remove_product(uid, pid):
+        row = app.db.execute('''
+                            SELECT *
                             FROM Inventory
-                            WHERE uid = :uid AND name = :name
-                            ''', uid=uid, name=pname)
-        product_name = row[0][2]
+                            WHERE uid = :uid AND pid = :pid
+                            ''', uid=uid, pid=pid)
+        product_name = Product(*row[0]).name
         if product_name:
             app.db.execute('''
                         DELETE FROM Inventory
                         WHERE uid = :uid AND name = :name
                         RETURNING quantity
-                        ''', uid=uid, name = pname)
-        else:
-            print("no this product!")
+                        ''', uid=uid, name = product_name)
         return
 
-    @staticmethod
-    def get_low_price(pname):
-        low_price = app.db.execute('''
-                                SELECT price
-                                FROM Product
-                                WHERE name = :pname
-                                ORDER BY ASC
-                                ''', name=pname)
-        return low_price[0][0]
+    # @staticmethod
+    # def get_low_price(pname):
+    #     low_price = app.db.execute('''
+    #                             SELECT price
+    #                             FROM Product
+    #                             WHERE name = :pname
+    #                             ORDER BY ASC
+    #                             ''', name=pname)
+    #     return low_price[0][0]
 
-    @staticmethod
-    def get_popularity():
-        pass
+    # @staticmethod
+    # def get_popularity():
+    #     pass

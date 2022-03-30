@@ -1,4 +1,5 @@
 from asyncio.windows_events import NULL
+from pickle import FALSE, TRUE
 from unicodedata import name
 from flask import current_app as app
 from .product import Product
@@ -106,18 +107,11 @@ class Inventory:
 
     @staticmethod
     def remove_product(uid, pid):
-        row = app.db.execute('''
-                            SELECT *
-                            FROM Inventory
-                            WHERE uid = :uid AND pid = :pid
-                            ''', uid=uid, pid=pid)
-        product_name = Product(*row[0]).name
-        if product_name:
-            app.db.execute('''
-                        DELETE FROM Inventory
-                        WHERE uid = :uid AND name = :name
-                        RETURNING quantity
-                        ''', uid=uid, name = product_name)
+        app.db.execute('''
+                    DELETE FROM Inventory
+                    WHERE uid = :uid AND pid = :pid
+                    RETURNING quantity
+                    ''', uid=uid, pid = pid)
         return
 
     # @staticmethod
@@ -130,6 +124,17 @@ class Inventory:
     #                             ''', name=pname)
     #     return low_price[0][0]
 
-    # @staticmethod
-    # def get_popularity():
-    #     pass
+    @staticmethod
+    def products_run_down(uid):
+        rows = app.db.execute('''
+                            SELECT *
+                            FROM Inventory
+                            WHERE uid=uid
+                            ''', uid=uid)
+        run_down_list = []
+        for row in rows:
+            if Inventory(*row).quantity<5:
+                run_down_list.append((Inventory(*row).pid, Inventory(*row).quantity))
+        return run_down_list
+                   
+        

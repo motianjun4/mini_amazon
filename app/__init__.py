@@ -28,9 +28,6 @@ def create_app():
     from .users import bp as user_bp
     app.register_blueprint(user_bp)
 
-    from .accounts import bp as account_bp
-    app.register_blueprint(account_bp)
-
     from .products import bp as products_bp
     app.register_blueprint(products_bp)
 

@@ -1,12 +1,13 @@
 {% extends "base.html" %} {% block content %}
 
+<div class="container">
 <br />
 
 <div class="card">
   <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
   <div class="card-body">
     <h4 class="card-title">Balance</h4>
-    <p class="card-text">$<span>{{account.balance}}</span></p>
+    <p class="card-text">$<span>{{user.balance}}</span></p>
     <button
       class="btn btn-primary"
       type="button"
@@ -63,7 +64,7 @@
                     alert(`${amount} is not a valid amount of money.`)
                     return
                   }
-                  $.post("/account/deposit", {amount:Number(amount)}, (data)=>{
+                  $.post("/balance/deposit", {amount:Number(amount)}, (data)=>{
                     if (data.status != "success"){
                       alert('error: '+data.msg)
                       return
@@ -110,7 +111,7 @@
                     alert(`${amount} is not a valid amount of money.`)
                     return
                   }
-                  $.post("/account/withdrawn", {amount:Number(amount)}, (data)=>{
+                  $.post("/balance/withdrawn", {amount:Number(amount)}, (data)=>{
                     if (data.status != "success"){
                       alert('error: '+data.msg)
                       return
@@ -154,5 +155,10 @@
     </div>
   </div>
 </div>
+
+
+</div>
+
+
 
 {% endblock %}

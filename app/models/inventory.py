@@ -46,7 +46,7 @@ class Inventory:
     def get_all_by_uid(uid):     #show all
         rows = app.db.execute('''
                             SELECT Inventory.id, pid, Inventory.uid, price, quantity, name
-                            FROM Inventory JOIN Products ON Inventory.pid = Products.id
+                            FROM Inventory JOIN Product ON Inventory.pid = Product.id
                             WHERE Inventory.uid = :uid
                             ''', uid=uid)
         return [(Inventory(*row[:-1]), row[-1]) for row in rows]
@@ -55,7 +55,7 @@ class Inventory:
     def get_product_pid(name):
         row = app.db.execute('''
                             SELECT *
-                            FROM Products
+                            FROM Product
                             WHERE name = :name
                             ''', name=name)
         if row:

@@ -1,0 +1,1 @@
+psql -h vcm.tinchun.top -p 54320 -d amazon1 -U postgres -W -f "create.sql" -f "./load.sql"

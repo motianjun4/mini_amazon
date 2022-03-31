@@ -6,17 +6,18 @@ from .. import login
 
 
 class User(UserMixin):
-    def __init__(self, id, email, firstname, lastname):
+    def __init__(self, id, email, firstname, lastname, balance):
         self.id = id
         self.email = email
         self.firstname = firstname
         self.lastname = lastname
+        self.balance = balance
 
     @staticmethod
     def get_by_auth(email, password):
         rows = app.db.execute("""
-SELECT password, id, email, firstname, lastname
-FROM Users
+SELECT password, id, email, firstname, lastname, balance
+FROM "user"
 WHERE email = :email
 """,
                               email=email)
@@ -32,7 +33,7 @@ WHERE email = :email
     def email_exists(email):
         rows = app.db.execute("""
 SELECT email
-FROM Users
+FROM "user"
 WHERE email = :email
 """,
                               email=email)
@@ -42,7 +43,7 @@ WHERE email = :email
     def register(email, password, firstname, lastname):
         try:
             rows = app.db.execute("""
-INSERT INTO Users(email, password, firstname, lastname)
+INSERT INTO user(email, password, firstname, lastname)
 VALUES(:email, :password, :firstname, :lastname)
 RETURNING id
 """,
@@ -61,9 +62,20 @@ RETURNING id
     @login.user_loader
     def get(id):
         rows = app.db.execute("""
-SELECT id, email, firstname, lastname
-FROM Users
+SELECT id, email, firstname, lastname, balance
+FROM "user"
 WHERE id = :id
 """,
                               id=id)
         return User(*(rows[0])) if rows else None
+
+    @staticmethod
+    def add_balance(id, amount):
+        rows = app.db.execute('''
+UPDATE "user"
+SET balance = balance + :amount
+WHERE id = :id
+RETURNING balance
+        ''', id=id, amount=amount)
+        balance = rows[0][0]
+        return balance

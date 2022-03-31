@@ -68,12 +68,14 @@ class Review(Base):
                 maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
     uid = Column(Integer, nullable=False)
     type = Column(Integer, nullable=False)
-    upid = Column(Integer,  nullable=False)
-    target_uid
-    target_pid
+    target_uid = Column(Integer, ForeignKey('user.id'), nullable=False)
+    target_user = relationship("User")
+    target_pid = Column(Integer, ForeignKey('product.id'), nullable=False)
+    target_product = relationship("Product")
     rate = Column(Integer, nullable=False)
     review = Column(Text, nullable=False)
     create_at = Column(DateTime, nullable=False, server_default=text('now()'))
+    review_likes = relationship("ReviewLike", back_populates="review")
 
 
 class ReviewLike(Base):
@@ -81,8 +83,10 @@ class ReviewLike(Base):
 
     id = Column(Integer, Identity(start=1, increment=1, minvalue=1,
                 maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
-    rid = Column(Integer, nullable=False)
-    uid = Column(Integer, nullable=False)
+    rid = Column(Integer, ForeignKey('review.id'),nullable=False)
+    review = relationship("Review", back_populates="review_likes")
+    uid = Column(Integer, ForeignKey('user.id'), nullable=False)
+    creator = relationship("User")
     is_up = Column(Integer, nullable=False)
 
 

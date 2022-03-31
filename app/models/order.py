@@ -112,7 +112,7 @@ class Order:
         rows = app.db.execute('''
                             SELECT *
                             FROM Purchase JOIN Inventory ON Inventory.id=Purchase.iid
-                            WHERE oid = oid AND fulfillment = FALSE
+                            WHERE oid = :oid AND fulfillment = FALSE
                             ''', oid=oid)
         if not rows:
             return True
@@ -121,11 +121,40 @@ class Order:
 
 
 ########################detail order page same as Product/Cart
+# quantities and unit prices, total price, Final price
 
+    @staticmethod
+    def order_page(uid): #uid is from buyer’s uid
+        rows =  app.db.execute('''
+                            SELECT Purchase.count, Inventory.price, Inventory.pid
+                            FROM Order JOIN Purchase ON Order.id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
+                            WHERE Order.uid = :uid
+                            ''', uid=uid)
+        final = 0
+        order_list = []
+        for row in rows:
+            quantity = row[0]
+            price = row[1]
+            pid = row[2]
+            total_price = quantity*price
+            final+=total_price
+            order_list.append((quantity, price, pid, total_price))
+        return order_list
 
-
-
-
+    @staticmethod
+    def order_final_price(uid): #uid is from buyer’s uid
+        rows =  app.db.execute('''
+                            SELECT Purchase.count, Inventory.price
+                            FROM Order JOIN Purchase ON Order.id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
+                            WHERE Order.uid = :uid
+                            ''', uid=uid)
+        final = 0
+        for row in rows:
+            quantity = row[0]
+            price = row[1]
+            total_price = quantity*price
+            final+=total_price
+        return final
 
 ########################visualization/analytics
 
@@ -143,3 +172,9 @@ class Order:
         for row in rows:
             trends_list.append((row[0], row[1])) #(name, num)
         return trends_list
+
+# additional feature(s): Add analytics about buyers who have worked with this seller, e.g., ratings, number of messages, etc.
+
+    @staticmethod
+    def analy_buyer(uid): #this uid is for seller
+        pass

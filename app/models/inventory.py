@@ -129,7 +129,7 @@ class Inventory:
         rows = app.db.execute('''
                             SELECT *
                             FROM Inventory
-                            WHERE uid=uid
+                            WHERE uid = :uid
                             ''', uid=uid)
         run_down_list = []
         for row in rows:

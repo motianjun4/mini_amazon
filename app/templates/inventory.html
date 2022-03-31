@@ -1,47 +1,38 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
 
-{% block content %}
+<br />
 
-<br><br>
-
-<h2>Inventory</h2>
-<table class='table table-hover table-bordered container'>
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Product ID</th>
-      <th scope="col">Product Name</th>
-      <th scope="col">Quantity</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for product in avail_products%}
-      <tr>
-        <th scope="row">{{product.id}}</th>
-        <td>{{product.name}}</td>
-        <td>{{product.quantity}}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-<br><br>
-<form action="" method="post">
-    {{ form.hidden_tag() }}
-    <p>
-      {{ form.productname.label }}<br/>
-      {{ form.productname(size=32) }}<br/>
-      {% for error in form.productname.errors %}
-      <span style="color: red;">[{{ error }}]</span>
-      {% endfor %}
-    </p>
-    <p>
-      {{ form.productnum.label }}<br/>
-      {{ form.productnum(size=32) }}<br/>
-      {% for error in form.productnum.errors %}
-      <span style="color: red;">[{{ error }}]</span>
-      {% endfor %}
-    </p>
-    <p>{{ form.submit() }}</p>
-  </form>
+<div class="card">
+  <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
+  <div class="card-body">
+    <h4 class="card-title">Inventory</h4>
+    <div class="card-text">
+      <table class="table table-hover table-bordered container">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Inventory ID</th>
+            <th scope="col">User ID</th>
+            <th scope="col">Product ID</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for inventory in inventory_history%}
+          <tr>
+            <th scope="row">{{inventory[0].id}}</th>
+            <td>{{inventory[0].pid}}</td>
+            <td>{{inventory[0].uid}}</td>
+            <td>{{inventory[1]}}</td>
+            <td>{{inventory.price}}</td>
+            <td>{{inventory.quantity}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 {% endblock %}

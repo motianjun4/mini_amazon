@@ -128,17 +128,19 @@ def gen_review():
                 print(f'{rid}', end=' ', flush=True)
             uid = get_id(num_users)
             typ = fake.random_int(min=1, max=2)
+            target_uid = 0
+            target_pid = 0
             if typ == 1:
-                upid = get_id(num_users)
+                target_uid = get_id(num_users)
             else:
-                upid = get_id(num_products)
+                target_pid = get_id(num_products)
             oid = get_id(num_orders)
             iid = get_id(num_inventories)
             rate = fake.random_int(min=1, max=5)
             review = fake.paragraph(nb_sentences=2)
             past_datetime: datetime = fake.past_datetime()
             create_at = past_datetime.isoformat()
-            writer.writerow([rid, uid, typ, upid, rate, review, create_at])
+            writer.writerow([rid, uid, typ, target_uid, target_pid, rate, review, create_at])
         print(f'{num_reviews} generated')
     return
 
@@ -162,7 +164,7 @@ def gen_review_like():
 # gen_products()
 # gen_cart()
 # gen_inventory()
-gen_order()
-gen_purchases()
+# gen_order()
+# gen_purchases()
 gen_review()
-gen_review_like()
+# gen_review_like()

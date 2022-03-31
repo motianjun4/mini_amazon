@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine, text
-
+from sqlalchemy.orm import scoped_session, sessionmaker
+from .models.orm.orm_models import Base
 
 class DB:
     """Hosts all functions for querying the database.
@@ -21,6 +22,10 @@ class DB:
     def __init__(self, app):
         self.engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'],
                                     execution_options={"isolation_level": "SERIALIZABLE"})
+        self.db_session = scoped_session(sessionmaker(autocommit=False,
+                                                 autoflush=False,
+                                                      bind=self.engine))
+        Base.query = self.db_session.query_property()
 
     def execute(self, sqlstr, **kwargs):
         """Execute a single SQL statement sqlstr.
@@ -44,3 +49,6 @@ class DB:
                 return result.fetchall()
             else:
                 return result.rowcount
+
+    def get_session(self):
+        return self.db_session

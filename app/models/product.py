@@ -16,7 +16,7 @@ class Product:
     def get(id):
         rows = app.db.execute('''
 SELECT id, name, category, description, quantity, available
-FROM Products
+FROM Product
 WHERE id = :id
 ''',
                               id=id)
@@ -25,9 +25,9 @@ WHERE id = :id
     @staticmethod
     def get_all(available=True):
         rows = app.db.execute('''
-SELECT Sell.id, name, category, description, products.quantity, available, price
-FROM Products, Sell 
-WHERE available = :available and Products.id = Sell.pid
+SELECT Sell.id, name, category, description, Product.quantity, available, price
+FROM Product, Sell 
+WHERE available = :available and Product.id = Sell.pid
 ''',
                               available=available)
         return [Product(*row) for row in rows]
@@ -35,7 +35,7 @@ WHERE available = :available and Products.id = Sell.pid
     @staticmethod
     def createProduct(form):
         rows = app.db.execute("""
-INSERT INTO Products(name, category, description, quantity, available)
+INSERT INTO Product(name, category, description, quantity, available)
 VALUES(:name, :category, :description, :quantity, true)
 RETURNING id
 """, name=form.product_name.data, category=form.category.data, description=form.description.data, quantity=form.quantity.data)

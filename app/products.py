@@ -35,7 +35,7 @@ def createProduct():
         file = request.files['image']
         file.save('tmp/' + file.filename)
         minio_client.fput_object('products', form.product_name.data + ".jpg", 'tmp/' + file.filename)
-        if Product.createProduct(form):
+        if Product.createProduct(form, current_user.id):
             flash('Congratulations, you create a new product!')
             return redirect(url_for('index.index'))
     return render_template('sell.html', title='Sell', form=form)
@@ -52,7 +52,7 @@ def addCart():
     except Exception as e:
         return json_response(ResponseType.ERROR, None, str(e))
     cart_items = Cart.addCart(sid, amount)
-    return json_response(ResponseType.SUCCESS, {"cart_items":cart_items})
+    return json_response(ResponseType.SUCCESS, {"cart_items":str(cart_items)})
 
 
 @bp.route('/searchCart', methods=['GET', 'POST'])

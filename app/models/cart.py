@@ -3,10 +3,10 @@ from flask_login import current_user
 
 
 class Cart:
-    def __init__(self, cid, uid, sid, pName, pQuantity, pPrice, pDescription):
+    def __init__(self, cid, uid, iid, pName, pQuantity, pPrice, pDescription):
         self.cid = cid
         self.uid = uid
-        self.sid = sid
+        self.iid = iid
         self.pName = pName
         self.pQuantity = pQuantity
         self.pPrice = pPrice
@@ -16,9 +16,9 @@ class Cart:
     @staticmethod
     def get_all_by_uid(uid):
         rows = app.db.execute('''
-SELECT Carts.id, Carts.uid, Carts.sid, products.name, Carts.quantity, sell.price, products.description
-FROM Products, Carts, Sell
-WHERE Carts.uid = :id and Carts.sid = Sell.id and Sell.pid = Products.id
+SELECT cart.id, cart.uid, cart.iid, product.name, cart.quantity, inventory.price, product.description
+FROM product, cart, inventory
+WHERE cart.uid = :id and cart.iid = inventory.id and inventory.pid = product.id
 ''', id=uid)
         return [Cart(*row) for row in rows] if rows is not None else None
 
@@ -27,22 +27,23 @@ WHERE Carts.uid = :id and Carts.sid = Sell.id and Sell.pid = Products.id
     def get_count(uid):
         cnt = app.db.execute('''
 SELECT COUNT(*)
-FROM Products, Carts, Sell
-WHERE Carts.uid = :id and Carts.sid = Sell.id and Sell.pid = Products.id
+FROM product, cart, inventory
+WHERE cart.uid = :id and cart.iid = inventory.id and inventory.pid = product.id
 ''', id=uid)
         return cnt[0][0]
 
 
     @staticmethod
-    def addCart(sid, numOfItems):
+    def addCart(iid, numOfItems):
         app.db.execute("""
-INSERT INTO Carts(uid, sid, quantity)
-VALUES(:uid, :sid, :quantity)
+INSERT INTO cart(uid, iid, quantity)
+VALUES(:uid, :iid, :quantity)
 RETURNING id
-""", uid=current_user.id, sid=sid, quantity=numOfItems)
+""", uid=current_user.id, iid=iid, quantity=numOfItems)
+
         rows = app.db.execute('''
-SELECT Carts.uid, Carts.sid, products.name, sell.quantity, sell.price, products.description
-FROM Products, Carts, Sell
-WHERE Carts.uid = :id and Carts.sid = Sell.id and Sell.pid = Products.id
+SELECT cart.id, cart.uid, cart.iid, product.name, inventory.quantity, inventory.price, product.description
+FROM product, cart, inventory
+WHERE cart.uid = :id and cart.iid = inventory.id and inventory.pid = product.id
 ''', id=current_user.id)
         return [Cart(*row) for row in rows] if rows is not None else None

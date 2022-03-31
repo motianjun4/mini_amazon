@@ -16,8 +16,8 @@ class User(UserMixin):
     @staticmethod
     def get_by_auth(email, password):
         rows = app.db.execute("""
-SELECT password, id, email, firstname, lastname
-FROM Users
+SELECT password, id, email, firstname, lastname, balance
+FROM "user"
 WHERE email = :email
 """,
                               email=email)
@@ -33,7 +33,7 @@ WHERE email = :email
     def email_exists(email):
         rows = app.db.execute("""
 SELECT email
-FROM Users
+FROM "user"
 WHERE email = :email
 """,
                               email=email)
@@ -43,7 +43,7 @@ WHERE email = :email
     def register(email, password, firstname, lastname):
         try:
             rows = app.db.execute("""
-INSERT INTO Users(email, password, firstname, lastname)
+INSERT INTO user(email, password, firstname, lastname)
 VALUES(:email, :password, :firstname, :lastname)
 RETURNING id
 """,
@@ -63,7 +63,7 @@ RETURNING id
     def get(id):
         rows = app.db.execute("""
 SELECT id, email, firstname, lastname, balance
-FROM Users
+FROM "user"
 WHERE id = :id
 """,
                               id=id)
@@ -72,7 +72,7 @@ WHERE id = :id
     @staticmethod
     def add_balance(id, amount):
         rows = app.db.execute('''
-UPDATE users
+UPDATE "user"
 SET balance = balance + :amount
 WHERE id = :id
 RETURNING balance

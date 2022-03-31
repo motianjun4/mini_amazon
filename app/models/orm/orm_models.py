@@ -1,5 +1,5 @@
-from sqlalchemy import Boolean, Column, DateTime, Identity, Integer, Numeric, String, Text, text
-from sqlalchemy.orm import declarative_base
+from sqlalchemy import Boolean, Column, DateTime, Identity, Integer, Numeric, String, Text, text, ForeignKey
+from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
 
@@ -9,7 +9,7 @@ class Cart(Base):
 
     id = Column(Integer, Identity(start=1, increment=1, minvalue=1,
                 maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
-    uid = Column(Integer, nullable=False)
+    uid = Column(Integer, ForeignKey('user.id') ,nullable=False)
     iid = Column(Integer, nullable=False)
     quantity = Column(Integer, nullable=False)
 
@@ -34,6 +34,7 @@ class Order(Base):
     address = Column(String(255), nullable=False)
     create_at = Column(DateTime, nullable=False)
     tel = Column(String(31), nullable=False)
+    purchases = relationship("Purchase", back_populates="order")
 
 
 class Product(Base):
@@ -52,8 +53,10 @@ class Purchase(Base):
 
     id = Column(Integer, Identity(start=1, increment=1, minvalue=1,
                 maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
-    oid = Column(Integer, nullable=False)
-    iid = Column(Integer, nullable=False)
+    oid = Column(Integer,ForeignKey('order.id'), nullable=False)
+    order = relationship("Order", back_populates="purchases")
+    iid = Column(Integer,ForeignKey('inventory.id'), nullable=False)
+    inventory = relationship("Inventory")
     count = Column(Integer, nullable=False)
     fulfillment = Column(Boolean, nullable=False, server_default=text('false'))
 
@@ -65,7 +68,9 @@ class Review(Base):
                 maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
     uid = Column(Integer, nullable=False)
     type = Column(Integer, nullable=False)
-    upid = Column(Integer, nullable=False)
+    upid = Column(Integer,  nullable=False)
+    target_uid
+    target_pid
     rate = Column(Integer, nullable=False)
     review = Column(Text, nullable=False)
     create_at = Column(DateTime, nullable=False, server_default=text('now()'))

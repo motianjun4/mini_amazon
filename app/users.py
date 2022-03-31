@@ -83,12 +83,12 @@ def my_profile():
     # find the products current user has bought:
     if not current_user.is_authenticated:
         return redirect(url_for('users.login', next=url_for('.my_profile')))
-    purchases = Purchase.get_all_by_uid_since(
-        current_user.id, datetime.datetime(1980, 9, 14, 0, 0, 0))
+    
+    purchases = Purchase.get_all_by_uid(current_user.id).all()
     # render the page by adding information to the index.html file
     return render_template('my_profile.html',
-                           purchase_history=purchases,
-                           user=current_user)
+                           purchases=purchases,
+                           user=current_user,)
 
 
 @bp.route('/balance/deposit', methods=['POST'])

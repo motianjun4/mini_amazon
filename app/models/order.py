@@ -1,6 +1,9 @@
 from asyncio.windows_events import NULL
+from itertools import count
 from unicodedata import name
 from flask import current_app as app
+from .purchase import Purchase
+from .inventory import Inventory
 '''
 
 CREATE TABLE IF NOT EXISTS public.inventory
@@ -35,75 +38,108 @@ CREATE TABLE IF NOT EXISTS public.purchase
 '''
 
 class Order:
-    def __init__(self, id, uid, address, date, amount, status):
-        self.id = id
-        self.uid = uid
-        self.address = address
-        self.date = date
-        self.amount = amount
-        self.status = status
+    def __init__(self, id, uid, iid, address, tel, create_at, count, fulfillment):
+        self.id = id #
+        self.uid = uid #ID for seller
+        self.iid = iid
+        self.address = address #
+        self.tel = tel 
+        self.create_at = create_at #
+        self.count = count #
+        self.fulfillment = fulfillment #
 
     @staticmethod
     def get_all_by_uid(uid):
         rows = app.db.execute('''
-SELECT id, uid, address, date, amount, status
-FROM Order
-WHERE uid = :uid
-ORDER BY datetime DESC
-''',
-                             uid=uid)
+                            SELECT Order.id, Inventory.uid, iid, address, tel, create_at, COUNT(*), fulfillment
+                            FROM Order JOIN Purchase ON Order.id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
+                            WHERE Inventory.uid = :uid
+                            GROUP BY Order.id
+                            ORDER BY create_at DESC
+                            ''', uid=uid)
         return [Order(*row) for row in rows]
 
     @staticmethod
     def get_fulfilled_by_uid(uid):
         rows = app.db.execute('''
-SELECT id, uid, address, date, amount, status
-FROM Order
-WHERE uid = :uid AND status = 1
-ORDER BY datetime DESC
-''',
-                             uid=uid)
+                            SELECT Order.id, Inventory.uid, iid, address, tel, create_at, COUNT(*), fulfillment
+                            FROM Order JOIN Purchase ON Order.id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
+                            WHERE Inventory.uid = :uid AND fulfillment = TRUE
+                            GROUP BY Order.id
+                            ORDER BY create_at DESC
+                            ''', uid=uid)
         return [Order(*row) for row in rows]
 
     @staticmethod
     def get_unfulfilled_by_uid(uid):
         rows = app.db.execute('''
-SELECT id, uid, address, date, amount, status
-FROM Order
-WHERE uid = :uid AND status = 0
-ORDER BY datetime DESC
-''',
-                             uid=uid)
+                            SELECT Order.id, Inventory.uid, iid, address, tel, create_at, COUNT(*), fulfillment
+                            FROM Order JOIN Purchase ON Order.id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
+                            WHERE Inventory.uid = :uid AND fulfillment = FALSE
+                            GROUP BY Order.id
+                            ORDER BY create_at DESC
+                            ''', uid=uid)
         return [Order(*row) for row in rows]
 
-    @staticmethod
-    def get_summary(id, uid):
-        rows = app.db.execute('''
-SELECT id, uid, address, date, amount, status
-FROM Order
-WHERE uid = :uid AND id = :id
-''',
-                             uid=uid, id=id)
-        # list_ = []
-        for row in rows:
-            address = Order(*row).address
-            date = Order(*row).date
-            amount = Order(*row).amount
-            status = Order(*row).status
-        return (address, date, amount, status)
+#     @staticmethod
+#     def get_summary(id, uid):
+#         rows = app.db.execute('''
+# SELECT id, uid, address, date, amount, status
+# FROM Order
+# WHERE uid = :uid AND id = :id
+# ''',
+#                              uid=uid, id=id)
+#         # list_ = []
+#         for row in rows:
+#             address = Order(*row).address
+#             date = Order(*row).date
+#             amount = Order(*row).amount
+#             status = Order(*row).status
+#         return (address, date, amount, status)
+
 
     @staticmethod
-    def fullfill_order(uid, id):
+    def fullfill_order(iid):
         app.db.execute('''
-                        UPDATE Order
-                        SET status = 1
-                        WHERE uid = :uid AND id = :id
-                        ''', uid=uid, id=id)
+                        UPDATE Purchase
+                        SET fulfillment = TRUE
+                        WHERE iid = :iid
+                        ''', iid=iid)
         return
 
+    @staticmethod
+    def entire_fulfilled(oid): #from the buyer’s perspective
+        rows = app.db.execute('''
+                            SELECT *
+                            FROM Purchase JOIN Inventory ON Inventory.id=Purchase.iid
+                            WHERE oid = oid AND fulfillment = FALSE
+                            ''', oid=oid)
+        if not rows:
+            return True
+        else:
+            return False
 
-    
-    
+
+########################detail order page same as Product/Cart
 
 
 
+
+
+
+########################visualization/analytics
+
+    @staticmethod
+    def products_trends():
+        rows = app.db.execute('''
+                            SELECT pid, COUNT(*)
+                            FROM Purchase JOIN Inventory ON Inventory.id=Purchase.iid
+                            WHERE fulfillment = TRUE
+                            GROUP BY Inventory.pid
+                            ORDER BY DESC 
+                            LIMIT 15
+                            ''')
+        trends_list = []
+        for row in rows:
+            trends_list.append((row[0], row[1])) #(name, num)
+        return trends_list

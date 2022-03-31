@@ -1,4 +1,6 @@
 from flask import current_app as app
+from ..db import DB
+from .orm.orm_models import Purchase as PurchaseORM
 
 
 class Purchase():
@@ -10,14 +12,10 @@ class Purchase():
         self.fulfillment = fulfillment
 
     @staticmethod
-    def get(id):
-        rows = app.db.execute('''
-SELECT id, oid, iid, count, fulfillment
-FROM purchase
-WHERE id = :id
-''',
-                              id=id)
-        return Purchase(*(rows[0])) if rows else None
+    def get(id)->PurchaseORM:
+        db:DB = app.db
+        res = db.get_session().query(PurchaseORM).get(id)
+        return res
 
     @staticmethod
     def get_all_by_uid_since(uid, since):

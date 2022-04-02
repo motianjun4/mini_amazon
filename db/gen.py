@@ -23,7 +23,7 @@ def get_id(num):
     return fake.random_int(min=1, max=num)
 
 def gen_users():
-    with open('User.csv', 'w') as f:
+    with open('./generated/User.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('User...', end=' ', flush=True)
         for uid in range(1, num_users+1):
@@ -44,7 +44,7 @@ def gen_users():
 
 def gen_products():
     available_pids = []
-    with open('Product.csv', 'w') as f:
+    with open('./generated/Product.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Product...', end=' ', flush=True)
         for pid in range(1, num_products+1):
@@ -60,7 +60,7 @@ def gen_products():
     return available_pids
 
 def gen_cart():
-    with open('Cart.csv', 'w') as f:
+    with open('./generated/Cart.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Cart...', end=' ', flush=True)
         for cid in range(1, num_cart+1):
@@ -73,7 +73,7 @@ def gen_cart():
         print(f'{num_cart} generated')
 
 def gen_inventory():
-    with open('Inventory.csv', 'w') as f:
+    with open('./generated/Inventory.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Inventory...', end=' ', flush=True)
         for iid in range(1, num_inventories+1):
@@ -87,7 +87,7 @@ def gen_inventory():
         print(f'{num_inventories} generated')
 
 def gen_order():
-    with open('Order.csv', 'w') as f:
+    with open('./generated/Order.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Order...', end=' ', flush=True)
         for oid in range(1, num_orders+1):
@@ -104,7 +104,7 @@ def gen_order():
 
 
 def gen_purchases():
-    with open('Purchase.csv', 'w') as f:
+    with open('./generated/Purchase.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Purchase...', end=' ', flush=True)
         for id in range(1, num_purchases+1):
@@ -120,7 +120,7 @@ def gen_purchases():
 
 
 def gen_review():
-    with open('Review.csv', 'w') as f:
+    with open('./generated/Review.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Review...', end=' ', flush=True)
         for rid in range(1, num_reviews+1):
@@ -146,7 +146,7 @@ def gen_review():
 
 
 def gen_review_like():
-    with open('ReviewLike.csv', 'w') as f:
+    with open('./generated/ReviewLike.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('ReviewLike...', end=' ', flush=True)
         for id in range(1, num_review_likes+1):

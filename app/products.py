@@ -1,11 +1,12 @@
-from wsgiref.validate import validator
+from uuid import uuid1
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileAllowed
 from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField
 from wtforms.validators import DataRequired
 from app.utils.json_response import ResponseType, json_response
-from libs.my_minio import minio_client
+from libs.my_minio import put_file
 
 from .models.product import Product
 from .models.cart import Cart
@@ -23,7 +24,7 @@ class CreateProductForm(FlaskForm):
     quantity = IntegerField('Quantity', validators=[DataRequired()])
     price = FloatField('Price', validators=[DataRequired()])
     description = StringField('Description', validators=[DataRequired()])
-    image = FileField(u'Image File')
+    image = FileField(u'Image File', validators=[FileAllowed(['jpg'])])
     submit = SubmitField('Create!')
 
 
@@ -33,9 +34,11 @@ def createProduct():
     form = CreateProductForm()
     if form.validate_on_submit():
         file = request.files['image']
-        file.save('tmp/' + file.filename)
-        minio_client.fput_object('products', form.product_name.data + ".jpg", 'tmp/' + file.filename)
-        if Product.createProduct(form, current_user.id):
+        tmp_filepath = f"/tmp/{uuid1()}.jpg"
+        file.save(tmp_filepath)
+        pid, iid = Product.createProduct(form, current_user.id)
+        if pid and iid:
+            put_file('image', f'product_{pid}.jpg', tmp_filepath)
             flash('Congratulations, you create a new product!')
             return redirect(url_for('index.index'))
     return render_template('sell.html', title='Sell', form=form)

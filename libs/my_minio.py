@@ -6,7 +6,7 @@ minio_client = Minio("vcm.tinchun.top:9000", access_key="minioadmin", secret_key
 exist_bucket = set()
 
 
-def put_file(bucket, filename, stream:io.IOBase, length:int) -> bool:
+def put_file(bucket, filename, stream:io.BytesIO, length:int) -> bool:
     if bucket not in exist_bucket and not minio_client.bucket_exists(bucket):
         minio_client.make_bucket(bucket)
     exist_bucket.add(bucket)

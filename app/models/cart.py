@@ -3,11 +3,12 @@ from flask_login import current_user
 
 
 class Cart:
-    def __init__(self, cid, uid, iid, pName, pQuantity, pPrice, pDescription):
+    def __init__(self, cid, uid, iid, pName, pid, pQuantity, pPrice, pDescription):
         self.cid = cid
         self.uid = uid
         self.iid = iid
         self.pName = pName
+        self.pid = pid
         self.pQuantity = pQuantity
         self.pPrice = pPrice
         self.pDesciption = pDescription
@@ -16,7 +17,7 @@ class Cart:
     @staticmethod
     def get_all_by_uid(uid):
         rows = app.db.execute('''
-SELECT cart.id, cart.uid, cart.iid, product.name, cart.quantity, inventory.price, product.description
+SELECT cart.id, cart.uid, cart.iid, product.name, product.id, cart.quantity, inventory.price, product.description
 FROM product, cart, inventory
 WHERE cart.uid = :id and cart.iid = inventory.id and inventory.pid = product.id
 ''', id=uid)
@@ -42,7 +43,7 @@ RETURNING id
 """, uid=current_user.id, iid=iid, quantity=numOfItems)
 
         rows = app.db.execute('''
-SELECT cart.id, cart.uid, cart.iid, product.name, inventory.quantity, inventory.price, product.description
+SELECT cart.id, cart.uid, cart.iid, product.name, product.id, inventory.quantity, inventory.price, product.description
 FROM product, cart, inventory
 WHERE cart.uid = :id and cart.iid = inventory.id and inventory.pid = product.id
 ''', id=current_user.id)

@@ -50,5 +50,5 @@ VALUES(:uid, :pid, :price, :quantity)
 RETURNING id
 """, uid=current_user.id, pid=pid, price=form.price.data, quantity=form.quantity.data)
         iid = rows[0][0]
-        return iid
+        return (pid, iid)
 

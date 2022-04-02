@@ -6,13 +6,13 @@ minio_client = Minio("vcm.tinchun.top:9000", access_key="minioadmin", secret_key
 exist_bucket = set()
 
 
-def put_file(bucket, filename, stream:io.BytesIO, length:int) -> bool:
+def put_file(bucket, filename, filepath) -> bool:
     if bucket not in exist_bucket and not minio_client.bucket_exists(bucket):
         minio_client.make_bucket(bucket)
     exist_bucket.add(bucket)
     try:
-        minio_client.put_object(
-            bucket, filename, stream, length)
+        res = minio_client.fput_object(
+            bucket, filename, filepath)
         return True
     except Exception as e:
         print("upload object failed, ", str(e))
@@ -31,9 +31,10 @@ if __name__ == "__main__":
     # testing
     fake = Faker()
     image:bytes = fake.image(image_format='jpeg')
-    stream = io.BytesIO(image)
-    put_file("test", "test.jpg", stream, len(image))
-    path = get_file("test", "test.jpg")
+    with open('/tmp/test.jpg', 'wb') as f:
+        f.write(image)
+    put_file("test", "test1.jpg", "/tmp/test.jpg")
+    path = get_file("test", "test1.jpg")
     with open(path, 'rb') as f:
         b = f.read()
     assert(b==image)

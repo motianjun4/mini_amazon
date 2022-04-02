@@ -1,13 +1,19 @@
-from sqlite3 import register_adapter
 from flask import Flask
 from flask_login import LoginManager
 from .config import Config
 from .db import DB
-from libs.my_minio import minio_client
+import logging
+
 
 login = LoginManager()
 login.login_view = 'users.login'
 
+class ImgFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        return "GET /img/" not in record.getMessage()
+
+log = logging.getLogger("werkzeug")
+log.addFilter(ImgFilter())
 
 def create_app():
     app = Flask(__name__)
@@ -25,5 +31,8 @@ def create_app():
 
     from .products import bp as products_bp
     app.register_blueprint(products_bp)
+
+    from .misc import bp as misc_bp
+    app.register_blueprint(misc_bp)
 
     return app

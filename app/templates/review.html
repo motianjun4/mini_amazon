@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 align="center">Submit Review</h1>
+<form action="" method="post" align="center" enctype="multipart/form-data">
+  {{ form.hidden_tag() }}
+  <p>
+    {{ form.rate.label }}
+    {{ form.rate(size=32) }}<br/>
+    {% for error in form.product_name.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  <p>
+    {{ form.review.label }}
+    {{ form.review(size=32) }}<br/>
+    {% for error in form.category.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  <p>{{ form.submit() }}</p>
+</form>
+
+{% endblock %}

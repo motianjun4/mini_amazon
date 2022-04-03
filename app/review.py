@@ -69,7 +69,7 @@ def editSellerReview():
 
 @bp.route('/review/seller/remove', methods=['POST'])
 @login_required
-def removeProductReview():
+def removeSellerReview():
     args = request.args
     Review.delete(args['uid'], 1, args['sid'], 0)
     return json_response(ResponseType.SUCCESS, {})

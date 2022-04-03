@@ -26,7 +26,7 @@ def submitProductReview():
     form = CreateReviewForm()
     if form.validate_on_submit():
         args = request.args        
-        Review.submit(args['uid'], 2, 0, args['pid'], form.rate.data, form.review.date)
+        Review.submit(args['uid'], 2, 0, args['pid'], form.rate.data, form.review.data)
         return url_for('index.index')
     return render_template('review.html', form=form)
 
@@ -36,7 +36,7 @@ def editProductReview():
     form = CreateReviewForm()
     if form.validate_on_submit():
         args = request.args
-        Review.edit(args['uid'], 2, 0, args['pid'], form.rate.data, form.review.date)
+        Review.edit(args['uid'], 2, 0, args['pid'], form.rate.data, form.review.data)
         return url_for('index.index')
     return render_template('review.html', form=form)
 
@@ -53,7 +53,7 @@ def submitSellerReview():
     form = CreateReviewForm()
     if form.validate_on_submit():
         args = request.args        
-        Review.submit(args['uid'], 1, args['sid'], 0, form.rate.data, form.review.date)
+        Review.submit(args['uid'], 1, args['sid'], 0, form.rate.data, form.review.data)
         return url_for('index.index')
     return render_template('review.html', title='SubmitReview', form=form)
 
@@ -63,7 +63,7 @@ def editSellerReview():
     form = CreateReviewForm()
     if form.validate_on_submit():
         args = request.args
-        Review.edit(args['uid'], 1, args['sid'], 0, form.rate.data, form.review.date)
+        Review.edit(args['uid'], 1, args['sid'], 0, form.rate.data, form.review.data)
         return url_for('index.index')
     return render_template('review.html', title='EditReview', form=form)
 

@@ -22,4 +22,4 @@ class Purchase():
     @staticmethod
     def get_all_by_uid(uid)->Union[Query, List[PurchaseORM]]:
         # return app.db.get_session().query(PurchaseORM).filter(PurchaseORM.order.has(uid=10))
-        return app.db.get_session().query(PurchaseORM).join(OrderORM).join(InventoryORM).join(ProductORM).filter(OrderORM.uid==10)
+        return app.db.get_session().query(PurchaseORM).join(OrderORM).filter(OrderORM.uid==uid)

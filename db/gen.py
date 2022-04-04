@@ -112,9 +112,10 @@ def gen_purchases():
                 print(f'{id}', end=' ', flush=True)
             oid = get_id(num_orders)
             iid = get_id(num_inventories)
+            price = f'{str(fake.random_int(max=500))}.{fake.random_int(max=99):02}'
             count = fake.random_int(min=1, max=10)
             fulfillment = fake.random_int(min=0, max=1)
-            writer.writerow([id, oid, iid, count, fulfillment])
+            writer.writerow([id, oid, iid, price, count, fulfillment])
         print(f'{num_purchases} generated')
     return
 
@@ -165,6 +166,6 @@ def gen_review_like():
 # gen_cart()
 # gen_inventory()
 # gen_order()
-# gen_purchases()
-gen_review()
+gen_purchases()
+# gen_review()
 # gen_review_like()

@@ -1,14 +1,18 @@
+from ctypes import Union
+from typing import List
 from flask import current_app as app
 from flask_login import current_user
 
+from app.models.utils import paginate_raw
 
 class Product:
-    def __init__(self, id, uid, name, category, description):
+    def __init__(self, id, uid, name, category, description, iMinPrice=0):
         self.id = id
         self.uid = uid
         self.name = name
         self.category = category
         self.description = description
+        self.iMinPrice:Union[None, int] = iMinPrice
 
     @staticmethod
     def get(id):
@@ -21,18 +25,17 @@ WHERE id = :id
         return Product(*(rows[0])) if rows is not None else None
 
     @staticmethod
-    def get_all(available_only=True, limit=100):
-        sql = '''
-SELECT product.id, product.uid, name, category, description
+    def get_all(has_seller=True, page=0, page_size=20):
+        # a = if available_only: 1 else: 2
+        sql = f'''
+SELECT product.id, product.uid, name, category, description, min(inventory.price)
 FROM product
+LEFT OUTER JOIN inventory ON inventory.pid = product.id
+{"WHERE inventory.id is not NULL" if has_seller else ""}
+GROUP BY product.id
 '''
 
-        if available_only: # if only show available items, select products that have inventory
-            sql += '''
-            INNER JOIN inventory ON inventory.uid = product.uid AND inventory.quantity > 0
-            '''
-        sql += "LIMIT :limit"
-        rows = app.db.execute(sql, limit=limit)
+        rows = app.db.execute(paginate_raw(sql, page, page_size))
         return [Product(*row) for row in rows]
 
     @staticmethod

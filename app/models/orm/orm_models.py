@@ -70,16 +70,10 @@ class Review(Base):
                 maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
     uid = Column(Integer, nullable=False)
     type = Column(Integer, nullable=False)
-<<<<<<< HEAD
-    upid = Column(Integer,  nullable=False)
-    # target_uid
-    # target_pid
-=======
     target_uid = Column(Integer, ForeignKey('user.id'), nullable=False)
     target_user = relationship("User")
     target_pid = Column(Integer, ForeignKey('product.id'), nullable=False)
     target_product = relationship("Product")
->>>>>>> 75f8073c1d18c351e1c9b1817b68d9dba18ca6d7
     rate = Column(Integer, nullable=False)
     review = Column(Text, nullable=False)
     create_at = Column(DateTime, nullable=False, server_default=text('now()'))

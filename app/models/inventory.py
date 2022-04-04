@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 from unicodedata import name
+=======
+>>>>>>> f583454d5f19618b8c65b50363d8046fa046ae75
 from flask import current_app as app
+from typing import List
 from .product import Product
+from .orm.orm_models import Inventory as InventoryORM
 '''
 
 CREATE TABLE IF NOT EXISTS public.inventory
@@ -64,6 +69,10 @@ class Inventory:
         else:
             print("cannot find product!")
             return 
+
+    @staticmethod
+    def get_by_uid_ORM(uid) -> List[InventoryORM]:
+        return app.db.get_session().query(InventoryORM).filter(InventoryORM.uid == uid)
 
     @staticmethod
     def add_new_product(uid, pid, price): #for inventory

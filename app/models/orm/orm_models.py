@@ -59,6 +59,7 @@ class Purchase(Base):
     order = relationship("Order", back_populates="purchases", lazy=False)
     iid = Column(Integer,ForeignKey('inventory.id'), nullable=False)
     inventory = relationship("Inventory", lazy=False)
+    price = Column(Numeric(14, 2), nullable=False)
     count = Column(Integer, nullable=False)
     fulfillment = Column(Boolean, nullable=False, server_default=text('false'))
 
@@ -68,16 +69,18 @@ class Review(Base):
 
     id = Column(Integer, Identity(start=1, increment=1, minvalue=1,
                 maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
-    uid = Column(Integer, nullable=False)
+    uid = Column(Integer, ForeignKey('user.id'), nullable=False)
+    user = relationship("User", foreign_keys=[uid], lazy=False)
     type = Column(Integer, nullable=False)
     target_uid = Column(Integer, ForeignKey('user.id'), nullable=False)
-    target_user = relationship("User")
+    target_user = relationship("User", foreign_keys=[target_uid])
     target_pid = Column(Integer, ForeignKey('product.id'), nullable=False)
     target_product = relationship("Product")
     rate = Column(Integer, nullable=False)
     review = Column(Text, nullable=False)
     create_at = Column(DateTime, nullable=False, server_default=text('now()'))
-    review_likes = relationship("ReviewLike", back_populates="review")
+    review_likes = relationship(
+        "ReviewLike", back_populates="review", lazy=False)
 
 
 class ReviewLike(Base):

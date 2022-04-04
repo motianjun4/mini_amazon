@@ -1,0 +1,23 @@
+{%macro datatable(id, data)%}
+<div>
+    <table id="table_{{id}}">
+    </table>
+</div>
+<script type="text/javascript" src="{{ url_for('static', filename='js/datatable_config.js') }}"></script>
+<script type="text/javascript" >
+    {
+        let config = window.datatable_config['{{id}}']
+        let data = {{data|tojson|safe}}
+        console.log("load", '{{id}}', data)
+        let createdRowCallback = window.datatable_created_row['{{id}}']
+
+        $("#table_{{id}}").DataTable({
+            data:data,
+            columns: config,
+            createdRow: createdRowCallback,
+        })
+    }
+    
+</script>
+
+{%endmacro%}

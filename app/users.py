@@ -5,6 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models.inventory import Inventory
+from app.models.review import Review
 from app.models.purchase import Purchase
 
 from app.utils.json_response import ResponseType, json_response
@@ -93,10 +94,20 @@ def my_profile():
         "count":purchase.count
 
     } for purchase in purchases]
+
+    inventory_list = Inventory.get_by_uid_ORM(current_user.id)
+    inventory_obj_list = [{
+        "product": {"id": item.product.id, "name": item.product.name},
+        "price": str(item.price),
+        "quantity": item.quantity,
+    } for item in inventory_list]
+    is_seller = inventory_list.count() > 0 
+
     # render the page by adding information to the index.html file
     return render_template('my_profile.html',
-                           purchases=purchases,
                            purchase_obj_list=purchase_obj_list,
+                           inventory_obj_list=inventory_obj_list,
+                           is_seller=is_seller,
                            user=current_user,)
 
 
@@ -141,7 +152,21 @@ def public_profile(uid):
         "product": {"id":item.product.id, "name":item.product.name},
         "price": str(item.price),
     } for item in inventory_list]
-    is_seller = inventory_list.count()
+    is_seller = inventory_list.count() > 0
+
+    review_obj_list = []
+    if is_seller:
+        reviews = Review.get_all_by_tuid(uid)
+        review_obj_list = [{
+            "id": review.id,
+            "uid": review.uid,
+            "creator": f"{review.user.firstname} {review.user.lastname}",
+            "review": review.review,
+            "rate": review.rate,
+            "upvote_cnt": len(list(filter(lambda item: item.is_up, review.review_likes))),
+            "downvote_cnt": len(list(filter(lambda item: not item.is_up, review.review_likes))),
+        } for review in reviews]
+
     return render_template('public_profile.html',
                            user=user, 
                            money_spent=money_spent, 
@@ -149,4 +174,5 @@ def public_profile(uid):
                            inventory_list=inventory_list, 
                            is_seller=is_seller,
                            inventory_obj_list = obj_list,
+                           review_obj_list=review_obj_list,
                            )

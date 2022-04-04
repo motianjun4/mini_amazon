@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS public.purchase
     iid integer NOT NULL,
     count integer NOT NULL,
     fulfillment boolean NOT NULL DEFAULT 0,
+    purchase_price decimal(14, 2) NOT NULL, 
     CONSTRAINT inventory_pkey PRIMARY KEY (id)
 );
 

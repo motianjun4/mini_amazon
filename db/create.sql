@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS "purchase"
     iid integer NOT NULL,
     count integer NOT NULL,
     fulfillment boolean NOT NULL DEFAULT FALSE
+    purchase_price decimal(14, 2) NOT NULL, 
 );
 
 CREATE TABLE IF NOT EXISTS "review"

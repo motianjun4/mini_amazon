@@ -69,8 +69,8 @@ class Review(Base):
     uid = Column(Integer, nullable=False)
     type = Column(Integer, nullable=False)
     upid = Column(Integer,  nullable=False)
-    target_uid
-    target_pid
+    # target_uid
+    # target_pid
     rate = Column(Integer, nullable=False)
     review = Column(Text, nullable=False)
     create_at = Column(DateTime, nullable=False, server_default=text('now()'))

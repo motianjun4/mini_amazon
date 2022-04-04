@@ -1,9 +1,8 @@
 {% extends "base.html" %} {% block content %}
 
-<br />
+<!-- <br />
 
 <div class="card">
-  <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
   <div class="card-body">
     <h4 class="card-title">Inventory</h4>
     <div class="card-text">
@@ -22,8 +21,8 @@
           {% for inventory in inventory_history%}
           <tr>
             <th scope="row">{{inventory[0].id}}</th>
-            <td>{{inventory[0].pid}}</td>
             <td>{{inventory[0].uid}}</td>
+            <td>{{inventory[0].pid}}</td>
             <td>{{inventory[1]}}</td>
             <td>{{inventory.price}}</td>
             <td>{{inventory.quantity}}</td>
@@ -33,6 +32,32 @@
       </table>
     </div>
   </div>
+</div> -->
+
+<br />
+<div class="input-group mb-3">
+  <input id="product_name" type="text" class="form-control" placeholder="Product name" aria-label="Product name" aria-describedby="button-addon2">
+  <div class="input-group-append">
+    <button class="btn btn-outline-secondary" type="button" id="add-submit_product_name">Confirm</button>
+  </div>
+  <script>
+    $('#add-submit_product_name').on('click', (event)=>{
+      var pname = $('#product_name}}').val()
+      $.post("/addProduct", {pname:pname}, (data)=>{
+        if (data.status != "success"){
+          alert('error: '+data.msg)
+          return
+        }
+        location.reload()
+      })
+    })
+</script>
 </div>
+
+<!-- <br />
+<div class="input-group mb-3">
+  <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+  <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
+</div> -->
 
 {% endblock %}

@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-from unicodedata import name
-=======
->>>>>>> f583454d5f19618b8c65b50363d8046fa046ae75
 from flask import current_app as app
 from typing import List
 from .product import Product

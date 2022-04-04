@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="container">
+
 
 <h1>Login</h1>
 
@@ -34,5 +36,7 @@
   {{ form.submit(class_="btn btn-black") }}
   <a class="btn btn-secondary" href="{{ url_for('users.register') }}" role="button">Register</a>
 </form>
+
+</div>
 
 {% endblock %}

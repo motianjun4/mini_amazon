@@ -1,0 +1,51 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="container">
+  <br />
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">{{user.firstname}} {{user.lastname}}</h4>
+      <div class="card-text" style="word-wrap: break-word;">
+        <pre>
+User ID: {{user.id}}        
+Summary:
+Money spent: ${{money_spent}}
+Item Bought: {{items_bought}} Items
+        </pre>
+      </div>
+    </div>
+  </div>
+  {% if is_seller %}
+  <br />
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Sells</h4>
+      <div class="card-text">
+        Email: <a href="mailto:{{user.email}}">{{user.email}}</a>
+        <div style="margin-top:1em;">
+
+        {%import 'ajax_table.html' as t%}
+      {{t.ajax_table("sell-table", inventory_obj_list)}}
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <br />
+
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Reviews</h4>
+      <div class="card-text">
+          WIP
+      </div>
+    </div>
+  </div>
+
+  </table>
+  {% endif %}
+
+
+</div>
+
+{% endblock %}

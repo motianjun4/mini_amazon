@@ -1,10 +1,10 @@
-import datetime
 from flask import render_template, redirect, url_for, flash, request
 from werkzeug.urls import url_parse
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from app.models.inventory import Inventory
 from app.models.purchase import Purchase
 
 from app.utils.json_response import ResponseType, json_response
@@ -85,9 +85,18 @@ def my_profile():
         return redirect(url_for('users.login', next=url_for('.my_profile')))
     
     purchases = Purchase.get_all_by_uid(current_user.id).all()
+    purchase_obj_list = [{
+        "id": purchase.id,
+        "product": {"pid": purchase.inventory.product.id, "name": purchase.inventory.product.name},
+        "order": {"oid": purchase.oid, "buydate": str(purchase.order.create_at)},
+        "price":str(purchase.price),
+        "count":purchase.count
+
+    } for purchase in purchases]
     # render the page by adding information to the index.html file
     return render_template('my_profile.html',
                            purchases=purchases,
+                           purchase_obj_list=purchase_obj_list,
                            user=current_user,)
 
 
@@ -118,3 +127,26 @@ def withdrawn():
         return json_response(ResponseType.ERROR, None, f'The amount must larger than 0.')
     current_balance = User.add_balance(current_user.id, -amount)
     return json_response(ResponseType.SUCCESS, {"current_balance": int(current_balance)})
+
+
+@bp.route('/user/<int:uid>')
+def public_profile(uid):
+    # show id, name, summary: total number of item buyed, total money spend, 
+    # if the user sell something, show email, address*, inventory they have and reviews to that seller
+    user = User.get(uid)
+    money_spent = Purchase.get_money_spend_by_uid(uid)
+    items_bought = Purchase.get_items_bought_by_uid(uid)
+    inventory_list = Inventory.get_by_uid_ORM(uid)
+    obj_list = [ {
+        "product": {"id":item.product.id, "name":item.product.name},
+        "price": str(item.price),
+    } for item in inventory_list]
+    is_seller = inventory_list.count()
+    return render_template('public_profile.html',
+                           user=user, 
+                           money_spent=money_spent, 
+                           items_bought=items_bought, 
+                           inventory_list=inventory_list, 
+                           is_seller=is_seller,
+                           inventory_obj_list = obj_list,
+                           )

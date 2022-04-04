@@ -1,56 +1,32 @@
 {% extends "base.html" %} {% block content %}
 
 <div class="container">
-<br />
+  <br />
 
-<div class="card">
-  <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
-  <div class="card-body">
-    <h4 class="card-title">Balance</h4>
-    <p class="card-text">$<span>{{user.balance}}</span></p>
-    <button
-      class="btn btn-primary"
-      type="button"
-      data-toggle="collapse"
-      data-target="#collapseDeposit"
-      aria-expanded="false"
-      aria-controls="collapseDeposit"
-    >
-      Deposit
-    </button>
-    <button
-      class="btn btn-primary"
-      type="button"
-      data-toggle="collapse"
-      data-target="#collapseWithdrawn"
-      aria-expanded="false"
-      aria-controls="collapseWithdrawn"
-    >
-      Withdrawn
-    </button>
-    <div id="balanceCollapseGroup" class="mt-1">
-      <div
-        class="collapse"
-        id="collapseDeposit"
-        data-parent="#balanceCollapseGroup"
-      >
-        <div class="card card-body">
+  <div class="card">
+    <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
+    <div class="card-body">
+      <h4 class="card-title">Balance</h4>
+      <p class="card-text">$<span>{{user.balance}}</span></p>
+      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDeposit"
+        aria-expanded="false" aria-controls="collapseDeposit">
+        Deposit
+      </button>
+      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseWithdrawn"
+        aria-expanded="false" aria-controls="collapseWithdrawn">
+        Withdrawn
+      </button>
+      <div id="balanceCollapseGroup" class="mt-1">
+        <div class="collapse" id="collapseDeposit" data-parent="#balanceCollapseGroup">
+          <div class="card card-body">
             <div class="form-group">
               <label for="amount">Amount deposit</label>
               <div class="input-group mb-2">
                 <div class="input-group-prepend">
                   <div class="input-group-text">$</div>
                 </div>
-                <input
-                  type="number"
-                  required
-                  name="deposit"
-                  class="form-control"
-                  min="0"
-                  value="0"
-                  step=".01"
-                  id="deposit-input"
-                />
+                <input type="number" required name="deposit" class="form-control" min="0" value="0" step=".01"
+                  id="deposit-input" />
               </div>
             </div>
             <div class="form-group row">
@@ -58,15 +34,15 @@
                 <button id="deposit-submit" class="btn btn-primary">Deposit</button>
               </div>
               <script>
-                $('#deposit-submit').on('click', (event)=>{
+                $('#deposit-submit').on('click', (event) => {
                   let amount = $('#deposit-input').val()
-                  if(Number(amount) == NaN){
+                  if (Number(amount) == NaN) {
                     alert(`${amount} is not a valid amount of money.`)
                     return
                   }
-                  $.post("/balance/deposit", {amount:Number(amount)}, (data)=>{
-                    if (data.status != "success"){
-                      alert('error: '+data.msg)
+                  $.post("/balance/deposit", { amount: Number(amount) }, (data) => {
+                    if (data.status != "success") {
+                      alert('error: ' + data.msg)
                       return
                     }
                     location.reload()
@@ -74,30 +50,18 @@
                 })
               </script>
             </div>
+          </div>
         </div>
-      </div>
-      <div
-        class="collapse"
-        id="collapseWithdrawn"
-        data-parent="#balanceCollapseGroup"
-      >
-        <div class="card card-body">
+        <div class="collapse" id="collapseWithdrawn" data-parent="#balanceCollapseGroup">
+          <div class="card card-body">
             <div class="form-group">
               <label for="amount">Amount Withdrawn:</label>
               <div class="input-group mb-2">
                 <div class="input-group-prepend">
                   <div class="input-group-text">$</div>
                 </div>
-                <input
-                  type="number"
-                  required
-                  name="deposit"
-                  class="form-control"
-                  min="0"
-                  value="0"
-                  step=".01"
-                  id="withdrawn-input"
-                />
+                <input type="number" required name="deposit" class="form-control" min="0" value="0" step=".01"
+                  id="withdrawn-input" />
               </div>
             </div>
             <div class="form-group row">
@@ -105,15 +69,15 @@
                 <button id="withdrawn-submit" class="btn btn-primary">Withdrawn</button>
               </div>
               <script>
-                $('#withdrawn-submit').on('click', (event)=>{
+                $('#withdrawn-submit').on('click', (event) => {
                   let amount = $('#withdrawn-input').val()
-                  if(Number(amount) == NaN){
+                  if (Number(amount) == NaN) {
                     alert(`${amount} is not a valid amount of money.`)
                     return
                   }
-                  $.post("/balance/withdrawn", {amount:Number(amount)}, (data)=>{
-                    if (data.status != "success"){
-                      alert('error: '+data.msg)
+                  $.post("/balance/withdrawn", { amount: Number(amount) }, (data) => {
+                    if (data.status != "success") {
+                      alert('error: ' + data.msg)
                       return
                     }
                     location.reload()
@@ -121,26 +85,44 @@
                 })
               </script>
             </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<br />
+  <br />
 
-<div class="card">
-  <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
-  <div class="card-body">
-    <h4 class="card-title">Recent Purchases</h4>
-    <div class="card-text">
-      {%import 'ajax_table.html' as t%}
-      {{t.ajax_table("recent-purchase", purchase_obj_list)}}
+  <div class="card">
+    <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
+    <div class="card-body">
+      <h4 class="card-title">Recent Purchases</h4>
+      <div class="card-text">
+        {%import 'ajax_table.html' as t%}
+        {{t.ajax_table("recent-purchase", purchase_obj_list)}}
+      </div>
     </div>
   </div>
+
+  <br />
+
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">My Inventory</h4>
+      <div class="card-text">
+        {% if is_seller %}
+
+        {%import 'ajax_table.html' as t%}
+        {{t.ajax_table("my-inventory", inventory_obj_list)}}
+
+        {%else%}
+        You don't have anything to sell yet. <a href="/sell">Start to sell something now!</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
 </div>
-
-
 </div>
 
 

@@ -6,7 +6,6 @@ window.datatable_config = {
       title: "Product",
       data: "product",
       render: (data, type, row) => {
-        console.log(data);
         return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.id}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
       },
     },
@@ -25,19 +24,30 @@ window.datatable_config = {
       },
     },
     {
-        title:"Order",
-        data:"order",
-        render:(data,type,row)=>{
-            return `<a href="/order/${data.oid}">${data.buydate}</a>`;
-        }
+      title: "Order",
+      data: "order",
+      render: (data, type, row) => {
+        return `<a href="/order/${data.oid}">${data.buydate}</a>`;
+      },
     },
     {
-        title:"Price",
-        data:"price"
+      title: "Price",
+      data: "price",
     },
     {
-        title:"Quantity",
-        data:"count"
-    }
+      title: "Quantity",
+      data: "count",
+    },
+  ],
+  "my-inventory": [
+    {
+      title: "Product",
+      data: "product",
+      render: (data, type, row) => {
+        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.id}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
+      },
+    },
+    { title: "Price", data: "price" },
+    { title: "Quantity", data:"quantity"}
   ],
 };

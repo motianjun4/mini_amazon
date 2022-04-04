@@ -93,10 +93,20 @@ def my_profile():
         "count":purchase.count
 
     } for purchase in purchases]
+
+    inventory_list = Inventory.get_by_uid_ORM(current_user.id)
+    inventory_obj_list = [{
+        "product": {"id": item.product.id, "name": item.product.name},
+        "price": str(item.price),
+        "quantity": item.quantity,
+    } for item in inventory_list]
+    is_seller = inventory_list.count() > 0 
+
     # render the page by adding information to the index.html file
     return render_template('my_profile.html',
-                           purchases=purchases,
                            purchase_obj_list=purchase_obj_list,
+                           inventory_obj_list=inventory_obj_list,
+                           is_seller=is_seller,
                            user=current_user,)
 
 
@@ -141,7 +151,7 @@ def public_profile(uid):
         "product": {"id":item.product.id, "name":item.product.name},
         "price": str(item.price),
     } for item in inventory_list]
-    is_seller = inventory_list.count()
+    is_seller = inventory_list.count() > 0
     return render_template('public_profile.html',
                            user=user, 
                            money_spent=money_spent, 

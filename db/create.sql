@@ -62,8 +62,8 @@ CREATE TABLE IF NOT EXISTS "purchase"
     oid integer NOT NULL,
     iid integer NOT NULL,
     count integer NOT NULL,
-    fulfillment boolean NOT NULL DEFAULT FALSE
-    purchase_price decimal(14, 2) NOT NULL, 
+    fulfillment boolean NOT NULL DEFAULT FALSE,
+    purchase_price decimal(14, 2) NOT NULL
 );
 
 CREATE INDEX idx_purchase_oid ON "purchase" (oid);

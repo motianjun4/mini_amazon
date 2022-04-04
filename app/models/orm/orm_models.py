@@ -59,6 +59,7 @@ class Purchase(Base):
     order = relationship("Order", back_populates="purchases", lazy=False)
     iid = Column(Integer,ForeignKey('inventory.id'), nullable=False)
     inventory = relationship("Inventory", lazy=False)
+    price = Column(Numeric(14, 2), nullable=False)
     count = Column(Integer, nullable=False)
     fulfillment = Column(Boolean, nullable=False, server_default=text('false'))
 

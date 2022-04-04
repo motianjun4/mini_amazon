@@ -23,3 +23,25 @@ class Purchase():
     def get_all_by_uid(uid)->Union[Query, List[PurchaseORM]]:
         # return app.db.get_session().query(PurchaseORM).filter(PurchaseORM.order.has(uid=10))
         return app.db.get_session().query(PurchaseORM).join(OrderORM).filter(OrderORM.uid==uid)
+
+    @staticmethod
+    def get_money_spend_by_uid(uid)->str:
+        sql = '''
+        select sum(price*"count")
+from purchase
+join "order" ON purchase.oid = "order".id
+where "order".uid = :uid
+        '''
+        rows = app.db.execute(sql, uid=uid)
+        return rows[0][0] or "0.00"
+
+    @staticmethod
+    def get_items_bought_by_uid(uid) -> str:
+        sql = '''
+        select sum("count")
+from purchase
+join "order" ON purchase.oid = "order".id
+where "order".uid = :uid
+        '''
+        rows = app.db.execute(sql, uid=uid)
+        return rows[0][0] or "0"

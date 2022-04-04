@@ -134,8 +134,8 @@
   <div class="card-body">
     <h4 class="card-title">Recent Purchases</h4>
     <div class="card-text">
-      {%import 'my_profile_purchase.html' as p%}
-      {{p.purchase_table(purchases, pagination)}}
+      {%import 'ajax_table.html' as t%}
+      {{t.ajax_table("recent-purchase", purchase_obj_list)}}
     </div>
   </div>
 </div>

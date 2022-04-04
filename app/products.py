@@ -1,4 +1,6 @@
 from uuid import uuid1
+from app.models.inventory import Inventory
+from app.models.review import Review
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user
 from flask_wtf import FlaskForm
@@ -64,3 +66,34 @@ def searchCart():
     cart_items = Cart.get_all_by_uid(current_user.id)
     return render_template('main_page.html',
                            cart_items=cart_items)
+
+@bp.route('/product/<int:pid>')
+@login_required
+def productDetail(pid):
+    # show product detail, list of seller and current stock, reviews
+    product = Product.get(pid)
+    
+    seller_list = Inventory.get_seller_list(pid)
+    seller_obj_list = [{
+        "seller": {"id": item[4], "name": item[2] + item[3]},
+        "price": str(item[0]),
+        "quantity": str(item[1]),
+    } for item in seller_list]
+
+    review_obj_list = []
+    reviews = Review.get_all_by_tpid(pid)
+    review_obj_list = [{
+        "id": review.id,
+        "uid": review.uid,
+        "creator": f"{review.user.firstname} {review.user.lastname}",
+        "review": review.review,
+        "rate": review.rate,
+        "upvote_cnt": len(list(filter(lambda item: item.is_up, review.review_likes))),
+        "downvote_cnt": len(list(filter(lambda item: not item.is_up, review.review_likes))),
+    } for review in reviews]
+
+    return render_template('product_detail.html',
+                           product=product, 
+                           seller_obj_list=seller_obj_list,
+                           review_obj_list=review_obj_list,
+                           )

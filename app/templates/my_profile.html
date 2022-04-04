@@ -134,24 +134,8 @@
   <div class="card-body">
     <h4 class="card-title">Recent Purchases</h4>
     <div class="card-text">
-      <table class="table table-hover table-bordered container">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">Purchase ID</th>
-            <th scope="col">Product Name</th>
-            <th scope="col">Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for purchase in purchase_history%}
-          <tr>
-            <th scope="row">{{purchase.id}}</th>
-            <td>{{purchase.pid}}</td>
-            <td>{{purchase.time_purchased}}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      {%import 'my_profile_purchase.html' as p%}
+      {{p.purchase_table(purchases, pagination)}}
     </div>
   </div>
 </div>

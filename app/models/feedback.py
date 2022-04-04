@@ -1,6 +1,3 @@
-from asyncio.windows_events import NULL
-from sqlite3 import OperationalError
-from tkinter import SE
 from flask import current_app as app
 import time
 '''
@@ -123,5 +120,5 @@ SELECT is_up FROM review_like
 WHERE rid=:rid, uid=:uid
         ''', rid=rid, uid=uid)
         if len(rows) == 0:
-            return NULL
+            return None
         return rows[0][0]

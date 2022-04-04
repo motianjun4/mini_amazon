@@ -1,0 +1,24 @@
+{%macro purchase_table(purchase, pagination)%}
+
+<table class="table table-hover table-bordered container">
+    <thead class="thead-dark">
+        <tr>
+        <th scope="col">Purchase ID</th>
+        <th scope="col">Product Name</th>
+        <th scope="col">Price</th>
+        <th scope="col">Count</th>
+        
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in purchase%}
+        <tr>
+        <td>{{item.id}}</th>
+        <td>{{item.inventory.product.description}}</td>
+        <td>{{item.inventory.price}}</td>
+        <td>{{item.count}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+{%endmacro%}

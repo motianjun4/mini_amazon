@@ -1,13 +1,19 @@
-from sqlite3 import register_adapter
 from flask import Flask
 from flask_login import LoginManager
 from .config import Config
 from .db import DB
-from libs.my_minio import minio_client
+import logging
+
 
 login = LoginManager()
 login.login_view = 'users.login'
 
+class ImgFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        return "GET /img/" not in record.getMessage()
+
+log = logging.getLogger("werkzeug")
+log.addFilter(ImgFilter())
 
 def create_app():
     app = Flask(__name__)
@@ -16,11 +22,6 @@ def create_app():
     app.db = DB(app)
     login.init_app(app)
 
-    found = minio_client.bucket_exists("products")
-    if not found:
-        minio_client.make_bucket("products")
-    else:
-        print("Bucket 'products' already exists")
 
     from .index import bp as index_bp
     app.register_blueprint(index_bp)
@@ -33,5 +34,8 @@ def create_app():
 
     from .inventorys import bp as inventory_bp
     app.register_blueprint(inventory_bp)
+
+    from .misc import bp as misc_bp
+    app.register_blueprint(misc_bp)
 
     return app

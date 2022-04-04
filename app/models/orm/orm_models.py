@@ -19,7 +19,8 @@ class Inventory(Base):
 
     id = Column(Integer, Identity(start=1, increment=1, minvalue=1,
                 maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
-    pid = Column(Integer, nullable=False)
+    pid = Column(Integer, ForeignKey('product.id'), nullable=False)
+    product = relationship("Product", back_populates="inventories", lazy=False)
     uid = Column(Integer, nullable=False)
     price = Column(Numeric(14, 2), nullable=False)
     quantity = Column(Integer, nullable=False)
@@ -34,7 +35,7 @@ class Order(Base):
     address = Column(String(255), nullable=False)
     create_at = Column(DateTime, nullable=False)
     tel = Column(String(31), nullable=False)
-    purchases = relationship("Purchase", back_populates="order")
+    purchases = relationship("Purchase", back_populates="order", lazy=False)
 
 
 class Product(Base):
@@ -46,6 +47,7 @@ class Product(Base):
     name = Column(Text, nullable=False, unique=True)
     category = Column(String(255), nullable=False)
     description = Column(Text, nullable=False)
+    inventories = relationship("Inventory", back_populates="product", lazy='dynamic')
 
 
 class Purchase(Base):
@@ -54,9 +56,9 @@ class Purchase(Base):
     id = Column(Integer, Identity(start=1, increment=1, minvalue=1,
                 maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
     oid = Column(Integer,ForeignKey('order.id'), nullable=False)
-    order = relationship("Order", back_populates="purchases")
+    order = relationship("Order", back_populates="purchases", lazy=False)
     iid = Column(Integer,ForeignKey('inventory.id'), nullable=False)
-    inventory = relationship("Inventory")
+    inventory = relationship("Inventory", lazy=False)
     count = Column(Integer, nullable=False)
     fulfillment = Column(Boolean, nullable=False, server_default=text('false'))
 
@@ -68,12 +70,20 @@ class Review(Base):
                 maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
     uid = Column(Integer, nullable=False)
     type = Column(Integer, nullable=False)
+<<<<<<< HEAD
     upid = Column(Integer,  nullable=False)
     # target_uid
     # target_pid
+=======
+    target_uid = Column(Integer, ForeignKey('user.id'), nullable=False)
+    target_user = relationship("User")
+    target_pid = Column(Integer, ForeignKey('product.id'), nullable=False)
+    target_product = relationship("Product")
+>>>>>>> 75f8073c1d18c351e1c9b1817b68d9dba18ca6d7
     rate = Column(Integer, nullable=False)
     review = Column(Text, nullable=False)
     create_at = Column(DateTime, nullable=False, server_default=text('now()'))
+    review_likes = relationship("ReviewLike", back_populates="review")
 
 
 class ReviewLike(Base):
@@ -81,8 +91,10 @@ class ReviewLike(Base):
 
     id = Column(Integer, Identity(start=1, increment=1, minvalue=1,
                 maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
-    rid = Column(Integer, nullable=False)
-    uid = Column(Integer, nullable=False)
+    rid = Column(Integer, ForeignKey('review.id'),nullable=False)
+    review = relationship("Review", back_populates="review_likes")
+    uid = Column(Integer, ForeignKey('user.id'), nullable=False)
+    creator = relationship("User")
     is_up = Column(Integer, nullable=False)
 
 

@@ -1,4 +1,4 @@
-{%macro ajax_table(id, data)%}
+{%macro datatable(id, data)%}
 <div>
     <table id="table_{{id}}">
     </table>
@@ -8,10 +8,13 @@
     {
         let config = window.datatable_config['{{id}}']
         let data = {{data|tojson|safe}}
+        console.log("load", '{{id}}', data)
+        let createdRowCallback = window.datatable_created_row['{{id}}']
 
         $("#table_{{id}}").DataTable({
             data:data,
-            columns: config
+            columns: config,
+            createdRow: createdRowCallback,
         })
     }
     

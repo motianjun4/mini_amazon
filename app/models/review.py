@@ -1,5 +1,6 @@
-from sqlite3 import OperationalError
+from typing import List
 from flask import current_app as app
+from .orm.orm_models import Review as ReviewORM
 import time
 '''
 CREATE TABLE IF NOT EXISTS "review"
@@ -29,6 +30,16 @@ rid 引用review.id, is_up 好评为1,差评为0
 class Review:
     def __init__(self):
         pass
+
+    # get user review
+    @staticmethod
+    def get_all_by_tuid(tuid) -> List[ReviewORM]:
+        return app.db.get_session().query(ReviewORM).filter(ReviewORM.target_uid == tuid)
+
+    # get product review
+    @staticmethod
+    def get_all_by_tpid(tpid) -> List[ReviewORM]:
+        return app.db.get_session().query(ReviewORM).filter(ReviewORM.target_pid == tpid)
 
     @staticmethod
     def submit(uid, type, target_uid, target_pid, rate, review):

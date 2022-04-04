@@ -24,8 +24,8 @@ Item Bought: {{items_bought}} Items
         Email: <a href="mailto:{{user.email}}">{{user.email}}</a>
         <div style="margin-top:1em;">
 
-        {%import 'ajax_table.html' as t%}
-      {{t.ajax_table("sell-table", inventory_obj_list)}}
+        {%import 'datatable.html' as t%}
+      {{t.datatable("sell-table", inventory_obj_list)}}
         </div>
 
       </div>
@@ -37,7 +37,8 @@ Item Bought: {{items_bought}} Items
     <div class="card-body">
       <h4 class="card-title">Reviews</h4>
       <div class="card-text">
-          WIP
+          {%import 'datatable.html' as t%}
+          {{t.datatable("public-user-review", review_obj_list)}}
       </div>
     </div>
   </div>

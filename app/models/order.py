@@ -142,6 +142,18 @@ class Order:
         return order_list
 
     @staticmethod
+    def bought_from_seller(uid, sid):
+        rows =  app.db.execute('''
+                            SELECT Inventory.uid
+                            FROM "order" JOIN Purchase ON "order".id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
+                            WHERE "order".uid = :uid
+                            ''', uid=uid)
+        for row in rows:
+            if sid == row[0]:
+                return True
+        return False
+
+    @staticmethod
     def order_final_price(uid): #uid is from buyer’s uid
         rows =  app.db.execute('''
                             SELECT Purchase.count, Purchase.price

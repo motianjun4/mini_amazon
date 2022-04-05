@@ -38,5 +38,8 @@ def create_app():
     from .misc import bp as misc_bp
     app.register_blueprint(misc_bp)
 
+    from .review import bp as review_bp
+    app.register_blueprint(review_bp)
+
     return app
     

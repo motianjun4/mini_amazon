@@ -1,3 +1,4 @@
+from distutils.command.build import build
 from itertools import count
 from unicodedata import name
 from flask import current_app as app
@@ -38,23 +39,26 @@ CREATE TABLE IF NOT EXISTS public.purchase
 '''
 
 class Order:
-    def __init__(self, id, uid, iid, address, tel, create_at, count, fulfillment):
+    def __init__(self, id, iid, address, tel, create_at, fulfillment, buid, firstname, lastname):
         self.id = id #
-        self.uid = uid #ID for seller
+        # self.uid = uid #ID for seller
         self.iid = iid
         self.address = address #
         self.tel = tel 
         self.create_at = create_at #
-        self.count = count #
+        # self.count = count #count category
         self.fulfillment = fulfillment #
+        self.buid = buid #ID for buyer
+        self.firstname = firstname
+        self.lastname = lastname
+        # self.total_amount = total_amount #total num of items
 
     @staticmethod
     def get_all_by_uid(uid):
         rows = app.db.execute('''
-                            SELECT "order".id, Inventory.uid, iid, address, tel, create_at, COUNT(*), fulfillment
-                            FROM "order" JOIN Purchase ON "order".id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
+                            SELECT "order".id, iid, address, tel, create_at, fulfillment, "order".uid, firstname, lastname
+                            FROM "order" JOIN Purchase ON "order".id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid JOIN "user" ON "user".id = "order".uid
                             WHERE Inventory.uid = :uid
-                            GROUP BY "order".id
                             ORDER BY create_at DESC
                             ''', uid=uid)
         return [Order(*row) for row in rows]
@@ -62,8 +66,8 @@ class Order:
     @staticmethod
     def get_fulfilled_by_uid(uid):
         rows = app.db.execute('''
-                            SELECT "order".id, Inventory.uid, iid, address, tel, create_at, COUNT(*), fulfillment
-                            FROM "order" JOIN Purchase ON "order".id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
+                            SELECT "order".id, iid, address, tel, create_at, COUNT(purchase.iid), fulfillment, "order".uid, firstname, lastname, SUM(Purchase.count)
+                            FROM "order" JOIN Purchase ON "order".id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid JOIN "user" ON "user".id = "order".uid
                             WHERE Inventory.uid = :uid AND fulfillment = TRUE
                             GROUP BY "order".id
                             ORDER BY create_at DESC
@@ -73,8 +77,8 @@ class Order:
     @staticmethod
     def get_unfulfilled_by_uid(uid):
         rows = app.db.execute('''
-                            SELECT "order".id, Inventory.uid, iid, address, tel, create_at, COUNT(*), fulfillment
-                            FROM "order" JOIN Purchase ON "order".id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
+                            SELECT "order".id, iid, address, tel, create_at, COUNT(purchase.iid), fulfillment, "order".uid, firstname, lastname, SUM(Purchase.count)
+                            FROM "order" JOIN Purchase ON "order".id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid JOIN "user" ON "user".id = "order".uid
                             WHERE Inventory.uid = :uid AND fulfillment = FALSE
                             GROUP BY "order".id
                             ORDER BY create_at DESC

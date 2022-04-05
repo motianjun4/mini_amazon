@@ -51,10 +51,10 @@ class Order:
     @staticmethod
     def get_all_by_uid(uid):
         rows = app.db.execute('''
-                            SELECT Order.id, Inventory.uid, iid, address, tel, create_at, COUNT(*), fulfillment
-                            FROM Order JOIN Purchase ON Order.id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
+                            SELECT "order".id, Inventory.uid, iid, address, tel, create_at, COUNT(*), fulfillment
+                            FROM "order" JOIN Purchase ON "order".id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
                             WHERE Inventory.uid = :uid
-                            GROUP BY Order.id
+                            GROUP BY "order".id
                             ORDER BY create_at DESC
                             ''', uid=uid)
         return [Order(*row) for row in rows]
@@ -62,10 +62,10 @@ class Order:
     @staticmethod
     def get_fulfilled_by_uid(uid):
         rows = app.db.execute('''
-                            SELECT Order.id, Inventory.uid, iid, address, tel, create_at, COUNT(*), fulfillment
-                            FROM Order JOIN Purchase ON Order.id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
+                            SELECT "order".id, Inventory.uid, iid, address, tel, create_at, COUNT(*), fulfillment
+                            FROM "order" JOIN Purchase ON "order".id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
                             WHERE Inventory.uid = :uid AND fulfillment = TRUE
-                            GROUP BY Order.id
+                            GROUP BY "order".id
                             ORDER BY create_at DESC
                             ''', uid=uid)
         return [Order(*row) for row in rows]
@@ -73,10 +73,10 @@ class Order:
     @staticmethod
     def get_unfulfilled_by_uid(uid):
         rows = app.db.execute('''
-                            SELECT Order.id, Inventory.uid, iid, address, tel, create_at, COUNT(*), fulfillment
-                            FROM Order JOIN Purchase ON Order.id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
+                            SELECT "order".id, Inventory.uid, iid, address, tel, create_at, COUNT(*), fulfillment
+                            FROM "order" JOIN Purchase ON "order".id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
                             WHERE Inventory.uid = :uid AND fulfillment = FALSE
-                            GROUP BY Order.id
+                            GROUP BY "order".id
                             ORDER BY create_at DESC
                             ''', uid=uid)
         return [Order(*row) for row in rows]
@@ -157,8 +157,8 @@ class Order:
     def order_final_price(uid): #uid is from buyer’s uid
         rows =  app.db.execute('''
                             SELECT Purchase.count, Purchase.price
-                            FROM Order JOIN Purchase ON Order.id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
-                            WHERE Order.uid = :uid
+                            FROM "order" JOIN Purchase ON "order".id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid
+                            WHERE "order".uid = :uid
                             ''', uid=uid)
         final = 0
         for row in rows:

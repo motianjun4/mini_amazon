@@ -118,7 +118,10 @@ window.datatable_config = {
       },
     },
     { title: "Price", data: "price" },
-    { title: "Quantity", data:"quantity"}
+    { title: "Quantity", data:"quantity"},
+    { title: "Action", data:"iid", orderable:false, width:"4em", render:(data, type, row)=>{
+      return `<a class="btn btn-primary" href="/inventory/${data}">Edit</a>`;
+    }}
   ],
   "product-detail-review":[
     {title:"ID", data:"id"},

@@ -98,6 +98,7 @@ def my_profile():
 
     inventory_list = Inventory.get_by_uid_ORM(current_user.id)
     inventory_obj_list = [{
+        "iid": item.id,
         "product": {"id": item.product.id, "name": item.product.name},
         "price": str(item.price),
         "quantity": item.quantity,

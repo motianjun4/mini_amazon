@@ -1,6 +1,16 @@
 // Use with datatable.html
 // Store configuration separately in this file
 window.datatable_config = {
+  "product-search-list": [
+    {
+      title: "Name",
+      data: "name",
+    },
+    {
+      title: "Price",
+      data: "price",
+    },
+  ],
   "sell-table": [
     {
       title: "Product",
@@ -60,6 +70,35 @@ window.datatable_config = {
 };
 
 window.datatable_created_row = {
+  "product-search-list": (row, item, index) =>{
+    row.innerHTML = ""
+
+    html = `
+      <td colspan="2">
+      <div class="card">
+        <div class="card-body" style="display:flex">
+            <div>
+                <img src="/img/product_${item.id}.jpg" style="height: 5em; width:5em;">
+            </div>
+            
+            <div class="ml-2" style="flex-grow:1">
+                <h4 class="card-title"><a href="/product/${item.id}">${item.name}</a></h4>
+                <p class="card-text">Starting from: $${item.price}</p>
+            </div>
+            <div>
+                <input id="product_${item.id}_quantity" type="number" class="form-control mb-2" min="1" style="width: 8em;" placeholder="Quantity">
+                <button id="product_${item.id}_add_cart" type="button" class="btn btn-primary" style="width: 8em;">Add to cart</button>
+                <script>  
+                  add_cart_listener(${item.id}, ${item.iid})
+                </script>
+            </div>
+        </div>        
+      </div>
+
+      </td>
+    `
+    row.innerHTML = html
+  },
   "public-user-review": (row, review, index) => {
     row.innerHTML=""
     html = `

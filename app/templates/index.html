@@ -88,13 +88,13 @@
                                                 <option value="5">Five</option>
                                             </select>
                                             <div class="col-sm-10">
-                                                <button id="add-submit{{product.id}}" class="btn btn-primary"  data-pid="{{ product.id }}">Confirm</button>
+                                                <button id="add-submit{{product.id}}" class="btn btn-primary"  data-pid="{{ product.id }}" data-iid="{{product.iid}}">Confirm</button>
                                             </div>      
                                             <script>
                                                 $('#add-submit{{product.id}}').on('click', (event)=>{
                                                   let amount = $('#numOfItems{{product.id}}').val()
-                                                  var sid = $('#add-submit{{product.id}}').data('pid')
-                                                  $.post("/addCart", {amount:Number(amount), sid:sid}, (data)=>{
+                                                  var iid = $('#add-submit{{product.id}}').data('iid')
+                                                  $.post("/addCart", {amount:Number(amount), iid:iid}, (data)=>{
                                                     if (data.status != "success"){
                                                       alert('error: '+data.msg)
                                                       return

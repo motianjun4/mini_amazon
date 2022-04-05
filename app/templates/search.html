@@ -1,0 +1,97 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="container">
+    <br/>
+    <div class="card">
+        <div class="card-body">
+            <form action="/search" method="get">
+                <div class="form-group">
+                    <label class="mr-2">Search for products:</label>
+                    <div class="input-group">
+                        <input name="q" class="form-control" id="search_input"  placeholder="Keyword" value="{{query}}">
+                        <span class="input-group-btn"><button type="submit" class="btn btn-primary mr-2 ml-2">Submit</button></span>
+
+                    </div>
+                    
+                </div>
+            </form>
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+
+        </div>
+    </div>
+
+        <script>
+          function add_cart_listener(pid, iid) {
+            console.log(pid, iid)
+            $(`#product_${pid}_add_cart`).on('click', (event) => {
+              let quantity = $(`#product_${pid}_quantity`).val()
+              if (quantity < 1){
+                alert("The quantity should be greater than or equal to 1")
+                return
+              }
+              add_item_to_cart(iid, quantity)
+            })
+          }
+
+          function add_item_to_cart(iid, quantity) {
+            $.post("/addCart", { amount: Number(quantity), iid: iid }, (data) => {
+              if (data.status != "success") {
+                alert('error: ' + data.msg)
+                return
+              }
+              alert(`${quantity} item added!`)
+              location.reload()
+            })
+          }
+        </script>
+{# this is item template, ignore this
+    <div class="card">
+        <div class="card-body" style="display:flex">
+            <div>
+                <img src="/img/product_{{product_obj_list[0].id}}.jpg" style="height: 5em; width:5em;">
+            </div>
+            
+            <div class="ml-2" style="flex-grow:1">
+                <h4 class="card-title"><a href="/product/{{product_obj_list[0].id}}">{{product_obj_list[0].name}}</a></h4>
+                <p class="card-text">Starting from: ${{product_obj_list[0].price}}</p>
+            </div>
+            <div>
+                <input id="product_{{product_obj_list[0].id}}_quantity" type="number" class="form-control mb-2" min="1" style="width: 8em;" placeholder="Quantity">
+                <button id="product_{{product_obj_list[0].id}}_add_cart" type="button" class="btn btn-primary" style="width: 8em;">Add to cart</button>
+                <script>  
+                  add_cart_listener(Number('{{product_obj_list[0].id}}'), Number('{{ product_obj_list[0].iid}}'))
+                </script>
+            </div>
+        </div>        
+    </div>
+#}
+    {% if has_result %}
+        <br/>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Products</h4>
+            <div class="card-text">
+                {%import 'datatable.html' as t%}
+                {{t.datatable("product-search-list", product_obj_list)}}
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+    
+
+
+
+
+
+</div>
+{% endblock %}

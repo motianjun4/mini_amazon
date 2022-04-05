@@ -109,6 +109,27 @@ window.datatable_config = {
       data: "count",
     },
   ],
+  "order-purchase": [
+    {
+      title: "ID",
+      data: "id",
+    },
+    {
+      title: "Product",
+      data: "product",
+      render: (data, type, row) => {
+        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
+      },
+    },
+    {
+      title: "Price",
+      data: "price",
+    },
+    {
+      title: "Quantity",
+      data: "count",
+    },
+  ],
   "my-inventory": [
     {
       title: "Product",

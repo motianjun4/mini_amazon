@@ -1,8 +1,7 @@
-from itertools import count
-from unicodedata import name
 from flask import current_app as app
 from .purchase import Purchase
 from .inventory import Inventory
+from .orm.orm_models import Order as OrderORM
 '''
 
 CREATE TABLE IF NOT EXISTS public.inventory
@@ -47,6 +46,10 @@ class Order:
         self.create_at = create_at #
         self.count = count #
         self.fulfillment = fulfillment #
+
+    @staticmethod
+    def get(oid)->'OrderORM':
+        return app.db.get_session().query(OrderORM).filter(OrderORM.id == oid).first()
 
     @staticmethod
     def get_all_by_uid(uid):

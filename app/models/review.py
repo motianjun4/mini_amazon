@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import List
 from flask import current_app as app
+import pytz
 from .orm.orm_models import Review as ReviewORM
 import time
 '''
@@ -58,7 +59,7 @@ WHERE uid = :uid
 AND type = :type
 AND target_uid = :target_uid
 AND target_pid = :target_pid
-        ''', uid=uid, type=type, target_uid=target_uid, target_pid=target_pid, rate=rate, review=review, create_at=str(datetime.now()))
+        ''', uid=uid, type=type, target_uid=target_uid, target_pid=target_pid, rate=rate, review=review, create_at=str(datetime.now().astimezone(pytz.utc)))
 
     @staticmethod
     def delete(uid, type, target_uid, target_pid):
@@ -85,7 +86,7 @@ AND target_pid = :target_pid
     def show_review_list_user(uid, type):
         if type == 2:
             rows =app.db.execute('''
-SELECT review.rate, review.review, product.name, product.id
+SELECT review.rate, review.review, product.name, product.id, review.create_at
 FROM review
 LEFT JOIN product ON product.id=review.target_pid
 WHERE review.uid = :uid
@@ -95,7 +96,7 @@ ORDER BY create_at DESC
             return rows
         elif type == 1:
             rows =app.db.execute('''
-SELECT review.rate, review.review, "user".firstname, "user".lastname, "user".id
+SELECT review.rate, review.review, "user".firstname, "user".lastname, "user".id, review.create_at
 FROM review
 LEFT JOIN "user" ON "user".id=review.target_uid
 WHERE review.uid = :uid

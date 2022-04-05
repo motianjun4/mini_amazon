@@ -138,6 +138,7 @@ window.datatable_config = {
     {title:"Upvotes", data:"upvote_cnt"}
   ],
   "reviews-for-product":[
+    {title: "Time", data:"time"},
     {
       title: "Product",
       data: "product",
@@ -152,6 +153,7 @@ window.datatable_config = {
     }}
   ],
   "reviews-for-seller":[
+    {title: "Time", data:"time"},
     {
       title: "Seller",
       data: "seller",
@@ -269,3 +271,8 @@ window.datatable_created_row = {
       row.innerHTML = html
   },
 };
+
+window.datatable_order = {
+  "reviews-for-product":[[0, 'desc']],
+  "reviews-for-seller":[[0, 'desc']]
+}

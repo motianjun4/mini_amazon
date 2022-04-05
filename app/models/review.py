@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 from flask import current_app as app
 from .orm.orm_models import Review as ReviewORM
@@ -52,12 +53,12 @@ VALUES(:uid, :type, :target_uid, :target_pid, :rate, :review)
     def edit(uid, type, target_uid, target_pid, rate, review):
         app.db.execute('''
 UPDATE review
-SET rate = :rate, review = :review, create_at=NULL
+SET rate = :rate, review = :review, create_at=:create_at
 WHERE uid = :uid
 AND type = :type
 AND target_uid = :target_uid
 AND target_pid = :target_pid
-        ''', uid=uid, type=type, target_uid=target_uid, target_pid=target_pid, rate=rate, review=review)
+        ''', uid=uid, type=type, target_uid=target_uid, target_pid=target_pid, rate=rate, review=review, create_at=str(datetime.now()))
 
     @staticmethod
     def delete(uid, type, target_uid, target_pid):
@@ -72,13 +73,13 @@ AND target_pid = :target_pid
     @staticmethod
     def show_review(uid, type, target_uid, target_pid):
         rows = app.db.execute('''
-SELECT rate, review FROM review
+SELECT id, rate, review FROM review
 WHERE uid = :uid
 AND type = :type
 AND target_uid = :target_uid
 AND target_pid = :target_pid
         ''', uid=uid, type=type, target_uid=target_uid, target_pid=target_pid)
-        return rows
+        return rows[0] if rows else None
 
     @staticmethod
     def show_review_list_user(uid, type):

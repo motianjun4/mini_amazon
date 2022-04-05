@@ -1,5 +1,4 @@
 from itertools import count
-from os import stat
 from unicodedata import name
 from flask import current_app as app
 from .purchase import Purchase

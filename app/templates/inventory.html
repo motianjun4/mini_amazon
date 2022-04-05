@@ -2,46 +2,27 @@
 
 {% block content %}
 
-<br><br>
-
-<h2>Inventory</h2>
-<table class='table table-hover table-bordered container'>
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Product ID</th>
-      <th scope="col">Product Name</th>
-      <th scope="col">Quantity</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for product in avail_products%}
-      <tr>
-        <th scope="row">{{product.id}}</th>
-        <td>{{product.name}}</td>
-        <td>{{product.quantity}}</td>
-      </tr>
+<h1 align="center">Modify inventory product</h1>
+<h2 align="center">{{inven_iid.name}}</h1>
+<form action="" method="post" align="center" enctype="multipart/form-data">
+  {{ form.hidden_tag() }}
+  <p>
+    {{ form.quantity.label }}
+    {{ form.quantity(size=64) }}<br/>
+    {% for error in form.quantity.errors %}
+    <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
-  </tbody>
-</table>
-
-<br><br>
-<form action="" method="post">
-    {{ form.hidden_tag() }}
-    <p>
-      {{ form.productname.label }}<br/>
-      {{ form.productname(size=32) }}<br/>
-      {% for error in form.productname.errors %}
-      <span style="color: red;">[{{ error }}]</span>
-      {% endfor %}
-    </p>
-    <p>
-      {{ form.productnum.label }}<br/>
-      {{ form.productnum(size=32) }}<br/>
-      {% for error in form.productnum.errors %}
-      <span style="color: red;">[{{ error }}]</span>
-      {% endfor %}
-    </p>
-    <p>{{ form.submit() }}</p>
-  </form>
+  </p>
+  <p>
+    {{ form.price.label }}
+    {{ form.price(size=64) }}<br/>
+    {% for error in form.price.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  
+  <p>{{ form.submit() }}</p>
+  <p>{{ form.delete() }}</p>
+</form>
 
 {% endblock %}

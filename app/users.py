@@ -7,6 +7,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models.inventory import Inventory
 from app.models.review import Review
 from app.models.purchase import Purchase
+from app.models.order import Order
 
 from app.utils.json_response import ResponseType, json_response
 
@@ -167,6 +168,13 @@ def public_profile(uid):
             "downvote_cnt": len(list(filter(lambda item: not item.is_up, review.review_likes))),
         } for review in reviews]
 
+    # check wether bought this product
+    has_bought = Order.bought_from_seller(current_user.id, uid)  
+    has_review = False
+    review = Review.show_review(current_user.id, 1, uid, 0)
+    if review:
+        has_review = True
+
     return render_template('public_profile.html',
                            user=user, 
                            money_spent=money_spent, 
@@ -175,4 +183,7 @@ def public_profile(uid):
                            is_seller=is_seller,
                            inventory_obj_list = obj_list,
                            review_obj_list=review_obj_list,
+                           has_bought=has_bought,
+                           review=review,
+                           has_review=has_review,
                            )

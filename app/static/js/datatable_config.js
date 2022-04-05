@@ -21,6 +21,17 @@ window.datatable_config = {
     },
     { title: "Price", data: "price" },
   ],
+  "seller-table": [
+    {
+      title: "Seller",
+      data: "seller",
+      render: (data, type, row) => {
+        return `<a href="/user/${data.id}">${data.name}</a>`;
+      },
+    },
+    { title: "Price", data: "price" },
+    { title: "Quantity", data: "quantity" },
+  ],
   "recent-purchase": [
     {
       title: "ID",
@@ -59,6 +70,13 @@ window.datatable_config = {
     },
     { title: "Price", data: "price" },
     { title: "Quantity", data:"quantity"}
+  ],
+  "product-detail-review":[
+    {title:"ID", data:"id"},
+    {title:"User",data:"creator"},
+    {title:"Review", data:"review"},
+    {title:"Rates", data:"rate"},
+    {title:"Upvotes", data:"upvote_cnt"}
   ],
   "public-user-review":[
     {title:"ID", data:"id"},
@@ -100,6 +118,43 @@ window.datatable_created_row = {
     row.innerHTML = html
   },
   "public-user-review": (row, review, index) => {
+    row.innerHTML=""
+    html = `
+      <td colspan="5">
+      <div class="card text-left">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h4 class="card-title"><span class="text-secondary" style="font-size:0.7em">#${review.id} </span><a href="/user/${review.uid}">${review.creator}</a>
+                      ${
+                        window.current_user_id == review.uid
+                          ? `<span class="text-secondary" style="font-size: 0.7em;">(You)</span>`
+                          : ""
+                      }
+                      </h4>
+                    </div>
+                    <div class="col" style="text-align: right;">
+                    ${
+                      `<i class="bi bi-star-fill"></i>`.repeat(review.rate) +
+                      `<i class="bi bi-star"></i>`.repeat(5 - review.rate)
+                    }
+                      <button type="button" class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i>${
+                        review.upvote_cnt
+                      }</button>
+                      <button type="button" class="btn btn-light mr-2"><i class="bi bi-hand-thumbs-down"></i>${
+                        review.downvote_cnt
+                      }</button>
+                      
+                    </div>
+                  </div>
+                  <p class="card-text">${review.review}</p>
+                </div>
+              </div>
+      </td>
+      `;
+      row.innerHTML = html
+  },
+  "product-detail-review": (row, review, index) => {
     row.innerHTML=""
     html = `
       <td colspan="5">

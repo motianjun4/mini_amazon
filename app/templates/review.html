@@ -8,14 +8,14 @@
   <p>
     {{ form.rate.label }}
     {{ form.rate(size=32) }}<br/>
-    {% for error in form.product_name.errors %}
+    {% for error in form.rate.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
   </p>
   <p>
     {{ form.review.label }}
     {{ form.review(size=32) }}<br/>
-    {% for error in form.category.errors %}
+    {% for error in form.review.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
   </p>

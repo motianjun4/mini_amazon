@@ -27,7 +27,7 @@ def submitProductReview():
     if form.validate_on_submit():
         args = request.args        
         Review.submit(current_user.id, 2, 0, args['pid'], form.rate.data, form.review.data)
-        return redirect(url_for('products.productDetail', pid=args['pid']))
+        return redirect(url_for('products.product_detail', pid=args['pid']))
     return render_template('review.html', form=form)
 
 @bp.route('/review/product/edit', methods=['GET', 'POST'])
@@ -37,7 +37,10 @@ def editProductReview():
     if form.validate_on_submit():
         args = request.args
         Review.edit(current_user.id, 2, 0, args['pid'], form.rate.data, form.review.data)
-        return redirect(url_for('products.productDetail', pid=args['pid']))
+        if args['redirect'] == 'product':
+            return redirect(url_for('products.product_detail', pid=args['pid']))
+        elif args['redirect'] == 'user':
+            return redirect(url_for('users.my_profile'))
     return render_template('review.html', form=form)
 
 @bp.route('/review/product/remove', methods=['GET'])
@@ -45,7 +48,10 @@ def editProductReview():
 def removeProductReview():
     args = request.args
     Review.delete(current_user.id, 2, 0, args['pid'])
-    return redirect(url_for('products.productDetail', pid=args['pid']))
+    if args['redirect'] == 'product':
+        return redirect(url_for('products.product_detail', pid=args['pid']))
+    elif args['redirect'] == 'user':
+        return redirect(url_for('users.my_profile'))
 
 @bp.route('/review/seller/submit', methods=['GET', 'POST'])
 @login_required
@@ -64,7 +70,10 @@ def editSellerReview():
     if form.validate_on_submit():
         args = request.args
         Review.edit(current_user.id, 1, args['sid'], 0, form.rate.data, form.review.data)
-        return redirect(url_for('users.public_profile', uid=args['sid']))
+        if args['redirect'] == 'seller':
+            return redirect(url_for('users.public_profile', uid=args['sid']))
+        elif args['redirect'] == 'user':
+            return redirect(url_for('users.my_profile'))
     return render_template('review.html', form=form)
 
 @bp.route('/review/seller/remove', methods=['GET'])
@@ -72,4 +81,7 @@ def editSellerReview():
 def removeSellerReview():
     args = request.args
     Review.delete(current_user.id, 1, args['sid'], 0)
-    return redirect(url_for('users.public_profile', uid=args['sid']))
+    if args['redirect'] == 'seller':
+        return redirect(url_for('users.public_profile', uid=args['sid']))
+    elif args['redirect'] == 'user':
+        return redirect(url_for('users.my_profile'))

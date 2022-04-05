@@ -70,7 +70,7 @@ def searchCart():
 
 @bp.route('/product/<int:pid>')
 @login_required
-def productDetail(pid):
+def product_detail(pid):
     # show product detail, list of seller and current stock, reviews
     product = Product.get(pid)
 
@@ -87,7 +87,7 @@ def productDetail(pid):
     for order in order_list:
         if(order[2] == pid):
             has_bought = True
-    
+
     has_review = False
     review = Review.show_review(current_user.id, 2, 0, pid)
     if review:

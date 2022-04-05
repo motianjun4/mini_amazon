@@ -1,4 +1,5 @@
 from flask import render_template, redirect, url_for, flash, request
+from .utils.time import localize
 from werkzeug.urls import url_parse
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -103,12 +104,13 @@ def my_profile():
         "quantity": item.quantity,
     } for item in inventory_list]
     is_seller = inventory_list.count() > 0 
-    
+
     #seller review and product review
     seller_review = Review.show_review_list_user(current_user.id, 1)
     seller_review_obj_list = []
     if seller_review:
         seller_review_obj_list = [{
+            "time": str(localize(item[5]).strftime("%m/%d/%Y %H:%M:%S")),
             "seller": {"id": item[4], "name": item[2]+item[3]},
             "rate": item[0],
             "review": item[1],
@@ -117,6 +119,7 @@ def my_profile():
     product_review_obj_list = []
     if product_review:
         product_review_obj_list = [{
+            "time": str(localize(item[4]).strftime("%m/%d/%Y %H:%M:%S")),
             "product": {"id": item[3], "name": item[2]},
             "rate": item[0],
             "review": item[1],

@@ -65,29 +65,29 @@ class Inventory:
         return Inventory(*rows[0])
 
     @staticmethod
-    def get_product_pid(name):
+    def get_product_pid(form):
         row = app.db.execute('''
                             SELECT *
                             FROM Product
                             WHERE name = :name
-                            ''', name=name)
+                            ''', name=form.name.data)
         if row:
             return Product(*row[0]).id
         else:
             print("cannot find product!")
-            return 
+            return None
 
     @staticmethod
     def get_by_uid_ORM(uid) -> List[InventoryORM]:
         return app.db.get_session().query(InventoryORM).filter(InventoryORM.uid == uid)
 
     @staticmethod
-    def add_new_product(uid, pid, price): #for inventory
+    def add_new_product(form, uid, pid): #for inventory
         rows = app.db.execute('''
                             INSERT INTO Inventory(pid, uid, price, quantity)
                             VALUES(:pid, :uid, :price, :quantity)
                             RETURNING id
-                            ''', pid=pid, uid=uid, price=price, quantity=1)
+                            ''', pid=pid, uid=uid, price=form.price.data, quantity=form.quantity.data)
         return
 
     @staticmethod

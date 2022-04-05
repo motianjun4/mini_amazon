@@ -1,4 +1,5 @@
 from cmath import e
+from unicodedata import name
 from flask import render_template, redirect, request, url_for, flash
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
@@ -31,11 +32,18 @@ class ModifyInventoryForm(FlaskForm):
     submit = SubmitField('Modify!')
     delete = SubmitField('Delete!')
 
+class AddProductForm(FlaskForm):
+    name = StringField('ProductName', validators=[DataRequired()])
+    quantity = IntegerField('Quantity', validators=[DataRequired()])
+    price = FloatField('Price', validators=[DataRequired()])
+    add = SubmitField('ADD!')
+
 @bp.route('/inventory/<iid>')
+@login_required
 def inventory(iid):
     # find the products current user has bought:
-    if not current_user.is_authenticated:
-        return redirect(url_for('users.login', next=url_for('.inventory')))
+    # if not current_user.is_authenticated:
+    #     return redirect(url_for('users.login', next=url_for('.inventory')))
     
     form = ModifyInventoryForm()
     inven_iid = Inventory.get_by_iid(current_user.id, iid)
@@ -49,9 +57,17 @@ def inventory(iid):
 
 
 
-# @bp.route('/addProduct', methods=['GET', 'POST'])
-# @login_required
-# def addProduct():
+@bp.route('/addInventory', methods=['GET', 'POST'])
+@login_required
+def addProduct():
+    form = AddProductForm()
+    pid = Inventory.get_product_pid(form)
+    if pid:
+        if form.validate_on_submit():
+            Inventory.add_new_product(form, current_user.id, pid)
+    else:
+        return
+    return
 #     pname = None
 #     try:
 #         pname = request.form['sid']

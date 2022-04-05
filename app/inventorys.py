@@ -1,63 +1,78 @@
-# from cmath import e
-# from flask import render_template, redirect, request, url_for
+from cmath import e
+from unicodedata import name
+from flask import render_template, redirect, request, url_for, flash
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileAllowed
+from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField
+from wtforms.validators import DataRequired
 
-# import datetime
+import datetime
 
-# from numpy import product
-# from app.models.inventory import Inventory
-
-# from app.utils.json_response import ResponseType, json_response
+from app.utils.json_response import ResponseType, json_response
 
 # from .models.purchase import Purchase
 # from .models.account import Account
-# from .models.user import User
+from .models.user import User
+from .models.inventory import Inventory
+from .models.product import Product
 
-# from flask import render_template, redirect, url_for, flash, request
-# from werkzeug.urls import url_parse
-# from flask_login import login_user, logout_user, current_user, login_required
-# from flask_wtf import FlaskForm
-# from wtforms import StringField, IntegerField, PasswordField, BooleanField, SubmitField
-# from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from flask import render_template, redirect, url_for, flash, request
+from flask_login import current_user, login_required
+current_user:User
 
-# current_user:User
+from flask import Blueprint
+bp = Blueprint('inventorys', __name__)
 
 # from flask import Blueprint
-# bp = Blueprint('inventorys', __name__)
+# bp = Blueprint('accounts', __name__)
+
+class ModifyInventoryForm(FlaskForm):
+    quantity = IntegerField('Quantity', validators=[DataRequired()])
+    price = FloatField('Price', validators=[DataRequired()])
+    submit = SubmitField('Modify!')
+    delete = SubmitField('Delete!')
+
+class AddProductForm(FlaskForm):
+    name = StringField('ProductName', validators=[DataRequired()])
+    quantity = IntegerField('Quantity', validators=[DataRequired()])
+    price = FloatField('Price', validators=[DataRequired()])
+    add = SubmitField('ADD!')
+
+@bp.route('/inventory/<iid>')
+@login_required
+def inventory(iid):
+    # find the products current user has bought:
+    # if not current_user.is_authenticated:
+    #     return redirect(url_for('users.login', next=url_for('.inventory')))
+    
+    form = ModifyInventoryForm()
+    inven_iid = Inventory.get_by_iid(current_user.id, iid)
+    if form.validate_on_submit():
+        # button="submit" if form.submit.data else "delete"
+        if form.submit.data:
+            Inventory.modify_quantity(form, iid)
+        elif form.delete.data:
+            Inventory.remove_product(iid)
+    return render_template('inventory.html', title='Inventory', inven_iid=inven_iid, form=form)
 
 
-# class inventoryForm(FlaskForm):
-#     product_name = StringField('Product Name', validators=[DataRequired()])
-#     product_number = IntegerField('Product Number', validators=[DataRequired()])
-#     submit = SubmitField('Add')
 
-# @bp.route('/inventory', methods=['GET', 'POST'])
-# def register():
-#     if current_user.is_authenticated:
-#         return redirect(url_for('index.index'))
-#     form = inventoryForm()
-#     if form.validate_on_submit():
-#         if Inventory(form.email.data,
-#                          form.password.data,
-#                          form.firstname.data,
-#                          form.lastname.data):
-#             flash('Congratulations, you are now a registered user!')
-#             return redirect(url_for('users.login'))
-#     return render_template('inventory.html', form=form)
-
-# @bp.route('/inventory')
-# def inventory():
-#     if not current_user.is_authenticated:
-#         return redirect(url_for('users.login', next=url_for('.inventory')))
-#     products = Inventory.get(current_user.id)
-#     return render_template('inventory.html', avail_products=products)
-
-# @bp.route('/account/deposit',methods=['POST'])
-# @login_required
-# def deposit():
-#     amount = None
+@bp.route('/addInventory', methods=['GET', 'POST'])
+@login_required
+def addProduct():
+    form = AddProductForm()
+    pid = Inventory.get_product_pid(form)
+    if pid:
+        if form.validate_on_submit():
+            Inventory.add_new_product(form, current_user.id, pid)
+    else:
+        return
+    return
+#     pname = None
 #     try:
-#         amount = float(request.form['amount'])
+#         pname = request.form['sid']
 #     except Exception as e:
 #         return json_response(ResponseType.ERROR, None, str(e))
-#     current_balance = Account.deposit_by_uid(current_user.id, amount)
-#     return json_response(ResponseType.SUCCESS, {"current_balance":int(current_balance)})
+#     pid = Inventory.get_product_pid(pname)
+#     Inventory.add_new_product(current_user.id, pid, price=0)
+#     return json_response(ResponseType.SUCCESS, {"pid":str(pid)})

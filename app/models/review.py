@@ -85,20 +85,22 @@ AND target_pid = :target_pid
     def show_review_list_user(uid, type):
         if type == 2:
             rows =app.db.execute('''
-SELECT review.rate, review.review, product.name
+SELECT review.rate, review.review, product.name, product.id
 FROM review
 LEFT JOIN product ON product.id=review.target_pid
-WHERE uid = :uid
-ORDER BY timestamp DESC
+WHERE review.uid = :uid
+AND type=2
+ORDER BY create_at DESC
             ''', uid=uid)
             return rows
         elif type == 1:
             rows =app.db.execute('''
-SELECT review.rate, review.review, user.firstname, user.lastname
+SELECT review.rate, review.review, "user".firstname, "user".lastname, "user".id
 FROM review
-LEFT JOIN user ON user.id=review.target_uid
-WHERE uid = :uid
-ORDER BY timestamp DESC
+LEFT JOIN "user" ON "user".id=review.target_uid
+WHERE review.uid = :uid
+AND type=1
+ORDER BY create_at DESC
             ''', uid=uid)
             return rows
 

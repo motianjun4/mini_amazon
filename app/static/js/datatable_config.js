@@ -84,6 +84,34 @@ window.datatable_config = {
     {title:"Review", data:"review"},
     {title:"Rates", data:"rate"},
     {title:"Upvotes", data:"upvote_cnt"}
+  ],
+  "reviews-for-product":[
+    {
+      title: "Product",
+      data: "product",
+      render: (data, type, row) => {
+        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.id}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
+      },
+    },
+    {title: "Review", data:"review"},
+    {title: "Rate", data:"rate", width:"5em", render:(data,type, row)=> {return `<i class="bi bi-star-fill"></i>`.repeat(data) + `<i class="bi bi-star"></i>`.repeat(5 - data)}},
+    {title: "Action", data:"product", render:(data, type, row)=> {
+      return `<div><a href="/review/product/edit?pid=${data.id}&redirect=user">Edit</a></div><div> <a href="/review/product/remove?pid=${data.id}&redirect=user">Remove</a></div>`
+    }}
+  ],
+  "reviews-for-seller":[
+    {
+      title: "Seller",
+      data: "seller",
+      render: (data, type, row) => {
+        return `<a href="/user/${data.id}">${data.name}</a>`;
+      },
+    },    
+    {title: "Review", data:"review"},
+    {title: "Rate", data:"rate", width:"5em", render:(data,type, row)=> {return `<i class="bi bi-star-fill"></i>`.repeat(data) + `<i class="bi bi-star"></i>`.repeat(5 - data)}},
+    {title: "Action", data:"seller", render:(data, type, row)=> {
+      return `<div><a href="/review/seller/edit?sid=${data.id}&redirect=user">Edit</a></div><div> <a href="/review/seller/remove?sid=${data.id}&redirect=user">Remove</a></div>`
+    }}
   ]
 };
 

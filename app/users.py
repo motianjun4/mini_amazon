@@ -103,11 +103,31 @@ def my_profile():
         "quantity": item.quantity,
     } for item in inventory_list]
     is_seller = inventory_list.count() > 0 
+    
+    #seller review and product review
+    seller_review = Review.show_review_list_user(current_user.id, 1)
+    seller_review_obj_list = []
+    if seller_review:
+        seller_review_obj_list = [{
+            "seller": {"id": item[4], "name": item[2]+item[3]},
+            "rate": item[0],
+            "review": item[1],
+        } for item in seller_review]
+    product_review = Review.show_review_list_user(current_user.id, 2)
+    product_review_obj_list = []
+    if product_review:
+        product_review_obj_list = [{
+            "product": {"id": item[3], "name": item[2]},
+            "rate": item[0],
+            "review": item[1],
+        } for item in product_review]
 
     # render the page by adding information to the index.html file
     return render_template('my_profile.html',
                            purchase_obj_list=purchase_obj_list,
                            inventory_obj_list=inventory_obj_list,
+                           seller_review_obj_list=seller_review_obj_list,
+                           product_review_obj_list=product_review_obj_list,
                            is_seller=is_seller,
                            user=current_user,)
 

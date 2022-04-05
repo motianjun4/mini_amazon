@@ -49,7 +49,6 @@
                     {% if current_user.is_authenticated %}
                       <a class="navbar-brand" href="/user/{{current_user.id}}">Hello {{current_user.firstname}}! </a>
                       <a href="{{ url_for('users.my_profile') }}" class="btn btn-outline-dark mr-1">My Account</a>
-                      <a href="{{ url_for('inventorys.inventory') }}" class="btn btn-outline-dark mr-1">Inventory</a>
                       <a href="{{ url_for('users.logout') }}" class="btn btn-outline-dark mr-1">Log out</a>
                       <button class="btn btn-outline-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
                           <i class="bi-cart-fill me-1"></i>

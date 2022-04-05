@@ -1,3 +1,4 @@
+
 from flask import current_app as app
 from typing import List
 from .product import Product
@@ -37,13 +38,14 @@ CREATE TABLE IF NOT EXISTS public.purchase
 '''
 
 class Inventory:
-    def __init__(self, id, pid, uid, price, quantity=0):
+    def __init__(self, id, pid, uid, price, quantity, name):
         self.id = id
         self.pid = pid
         self.uid = uid
         self.price = price
         self.quantity = quantity
-
+        self.name = name
+        
     @staticmethod
     def get_all_by_uid(uid):     #show all
         rows = app.db.execute('''
@@ -51,7 +53,16 @@ class Inventory:
                             FROM Inventory JOIN Product ON Inventory.pid = Product.id
                             WHERE Inventory.uid = :uid
                             ''', uid=uid)
-        return [(Inventory(*row[:-1]), row[-1]) for row in rows]
+        return [Inventory(*row) for row in rows]
+
+    @staticmethod
+    def get_by_iid(uid, iid):     #show all
+        rows = app.db.execute('''
+                            SELECT Inventory.id, pid, Inventory.uid, Inventory.price, quantity, name
+                            FROM Inventory JOIN Product ON Inventory.pid = Product.id
+                            WHERE Inventory.uid = :uid AND Inventory.id = :iid
+                            ''', uid=uid, iid=iid)
+        return Inventory(*rows[0])
 
     @staticmethod
     def get_product_pid(name):
@@ -80,7 +91,7 @@ class Inventory:
         return
 
     @staticmethod
-    def modify_quantity(uid, pid, pnum):   
+    def modify_quantity(form, iid):   
         # have_num = app.db.execute('''
         #                         SELECT quantity
         #                         FROM Inventory
@@ -98,24 +109,24 @@ class Inventory:
         #                 ''', uid=uid, name = pname)
         #     return 
         # else:
-        if pnum<0:
-            print("quantity is less than 0!")  #exception!
-            return 
+        # if pnum<0:
+        #     print("quantity is less than 0!")  #exception!
+        #     return 
         app.db.execute('''
                     UPDATE Inventory
-                    SET quantity = :pnum
-                    WHERE uid = :uid AND pid = :pid
+                    SET quantity = :pnum, price = :price
+                    WHERE id = :iid
                     RETURNING quantity
-                    ''', uid=uid, pid = pid, pnum=pnum)
+                    ''', iid=iid, pnum=form.quantity.data, price=form.price.data)
         return
 
     @staticmethod
-    def remove_product(uid, pid):
+    def remove_product(iid):
         app.db.execute('''
                     DELETE FROM Inventory
-                    WHERE uid = :uid AND pid = :pid
+                    WHERE id =:iid
                     RETURNING quantity
-                    ''', uid=uid, pid = pid)
+                    ''', iid=iid)
         return
 
     # @staticmethod

@@ -1,5 +1,9 @@
 from cmath import e
-from flask import render_template, redirect, request, url_for
+from flask import render_template, redirect, request, url_for, flash
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileAllowed
+from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField
+from wtforms.validators import DataRequired
 
 import datetime
 
@@ -21,26 +25,38 @@ bp = Blueprint('inventorys', __name__)
 # from flask import Blueprint
 # bp = Blueprint('accounts', __name__)
 
+class ModifyInventoryForm(FlaskForm):
+    quantity = IntegerField('Quantity', validators=[DataRequired()])
+    price = FloatField('Price', validators=[DataRequired()])
+    submit = SubmitField('Modify!')
+    delete = SubmitField('Delete!')
 
-@bp.route('/inventory')
-def inventory():
+@bp.route('/inventory/<iid>')
+def inventory(iid):
     # find the products current user has bought:
     if not current_user.is_authenticated:
         return redirect(url_for('users.login', next=url_for('.inventory')))
-    # account = Account.get_by_uid(current_user.id)
-    inventory = Inventory.get_all_by_uid(current_user.id)
-    # product = Product.get_all()
-    # render the page by adding information to the index.html file
-    return render_template('inventory.html', inventory_history=inventory)
+    
+    form = ModifyInventoryForm()
+    inven_iid = Inventory.get_by_iid(current_user.id, iid)
+    if form.validate_on_submit():
+        # button="submit" if form.submit.data else "delete"
+        if form.submit.data:
+            Inventory.modify_quantity(form, iid)
+        elif form.delete.data:
+            Inventory.remove_product(iid)
+    return render_template('inventory.html', title='Inventory', inven_iid=inven_iid, form=form)
 
-@bp.route('/addProduct', methods=['GET', 'POST'])
-@login_required
-def addProduct():
-    pname = None
-    try:
-        pname = request.form['sid']
-    except Exception as e:
-        return json_response(ResponseType.ERROR, None, str(e))
-    pid = Inventory.get_product_pid(pname)
-    Inventory.add_new_product(current_user.id, pid, price=0)
-    return json_response(ResponseType.SUCCESS, {"pid":str(pid)})
+
+
+# @bp.route('/addProduct', methods=['GET', 'POST'])
+# @login_required
+# def addProduct():
+#     pname = None
+#     try:
+#         pname = request.form['sid']
+#     except Exception as e:
+#         return json_response(ResponseType.ERROR, None, str(e))
+#     pid = Inventory.get_product_pid(pname)
+#     Inventory.add_new_product(current_user.id, pid, price=0)
+#     return json_response(ResponseType.SUCCESS, {"pid":str(pid)})

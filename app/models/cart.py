@@ -1,5 +1,7 @@
+from typing import List
 from flask import current_app as app
 from flask_login import current_user
+from .orm.orm_models import Cart as CartORM
 
 
 class Cart:
@@ -9,7 +11,6 @@ class Cart:
         self.iid = iid
         self.pName = pName
         self.pid = pid
-        self.pQuantity = pQuantity
         self.pPrice = pPrice
         self.pDesciption = pDescription
         self.quantity = pQuantity
@@ -23,6 +24,16 @@ WHERE cart.uid = :id and cart.iid = inventory.id and inventory.pid = product.id
 ''', id=uid)
         return [Cart(*row) for row in rows] if rows is not None else None
 
+    @staticmethod
+    def get_all_by_uid_ORM(uid)->List[CartORM]:
+        return app.db.get_session().query(CartORM).filter(CartORM.uid == uid).all()
+
+    @staticmethod
+    def delete(cid):
+        app.db.execute('''
+DELETE FROM cart
+WHERE id = :id
+''', id=cid)
 
     @staticmethod
     def get_count(uid):

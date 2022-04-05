@@ -51,11 +51,19 @@
                       <a class="navbar-brand" href="/user/{{current_user.id}}">Hello {{current_user.firstname}}! </a>
                       <a href="{{ url_for('users.my_profile') }}" class="btn btn-outline-dark mr-1">My Account</a>
                       <a href="{{ url_for('users.logout') }}" class="btn btn-outline-dark mr-1">Log out</a>
-                      <button class="btn btn-outline-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
+                      <a class="btn btn-outline-dark" type="button" href="{{url_for('cart.cart')}}">
                           <i class="bi-cart-fill me-1"></i>
                           Cart
-                          <span class="badge bg-dark text-white ms-1 rounded-pill">{{cart_cnt}}</span>
-                      </button>
+                          <span id="cart-cnt" class="badge bg-dark text-white ms-1 rounded-pill"></span>
+                          <script>
+                            $.ajax({
+                              url: "{{ url_for('cart.cart_cnt') }}",
+                              success: function(data) {
+                                $('#cart-cnt').text(data.data.count);
+                              }
+                            });
+                          </script>
+                      </a>
                     {% else %}
                       <a href="{{ url_for('users.login') }}" class="btn btn-outline-dark">Log in</a>
                     {% endif %}
@@ -63,6 +71,8 @@
             </div>
         </div>
     </nav>
+
+    {#
     {% if current_user.is_authenticated %}
     <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
       <div class="offcanvas-header">
@@ -97,7 +107,7 @@
       </div>
     </div>
     {% endif %}
-
+    #}
   </head>
   <body>
     <div class="main">

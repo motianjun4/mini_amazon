@@ -1,6 +1,46 @@
 // Use with datatable.html
 // Store configuration separately in this file
 window.datatable_config = {
+  "cart-list": [
+    {
+      title: "ID",
+      data: "cid",
+    },
+    {
+      title: "Product",
+      data: "product",
+      render: (data, type, row) => {
+        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
+      },
+    },
+    {
+      title: "Sold By",
+      data: "seller",
+      render: (data, type, row) => {
+        return `<a href="/user/${data.id}">${data.name}</a>`;
+      },
+    },
+    {
+      title: "Price",
+      data: "price",
+    },
+    {
+      title: "Quantity",
+      data: "quantity",
+    },
+    {
+      title: "Total",
+      data: "total",
+    },
+    {
+      title: "Action",
+      data: "cid",
+      
+      render: (data, type, row) => {
+        return `<button class="btn btn-danger" onclick="remove_cart_item(${data})">Remove</button>`;
+      }
+    }
+  ],
   "product-search-list": [
     {
       title: "Name",

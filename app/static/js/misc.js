@@ -21,3 +21,14 @@ function add_item_to_cart(iid, quantity) {
     location.reload();
   });
 }
+
+function remove_cart_item(cid) {
+  $.post("/removeCart", { cid: cid }, (data) => {
+    if (data.status != "success") {
+      alert("error: " + data.msg);
+      return;
+    }
+    alert(`Item removed!`);
+    location.reload();
+  });
+}

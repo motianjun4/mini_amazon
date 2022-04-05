@@ -33,7 +33,8 @@ class Order(Base):
 
     id = Column(Integer, Identity(start=1, increment=1, minvalue=1,
                 maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
-    uid = Column(Integer, nullable=False)
+    uid = Column(Integer, ForeignKey("user.id"),nullable=False)
+    user = relationship("User", lazy=False)
     address = Column(String(255), nullable=False)
     create_at = Column(DateTime, nullable=False)
     tel = Column(String(31), nullable=False)

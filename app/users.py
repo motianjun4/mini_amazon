@@ -87,11 +87,11 @@ def my_profile():
         return redirect(url_for('users.login', next=url_for('.my_profile')))
     
     purchases = Purchase.get_all_by_uid(current_user.id).all()
-    purchase_obj_list = [{
+    purchase_obj_list = [ {
         "id": purchase.id,
         "product": {"pid": purchase.inventory.product.id, "name": purchase.inventory.product.name},
         "order": {"oid": purchase.oid, "buydate": str(purchase.order.create_at)},
-        "price":str(purchase.price),
+        "price":"$"+str(purchase.price),
         "count":purchase.count
 
     } for purchase in purchases]

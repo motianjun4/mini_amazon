@@ -31,7 +31,7 @@ WHERE id = :id
 SELECT DISTINCT ON (product.id) product.id, product.uid, name, category, description, inventory.price, inventory.id
 FROM product
 LEFT OUTER JOIN inventory ON inventory.pid = product.id
-WHERE name LIKE :like
+WHERE LOWER(name) LIKE LOWER(:like)
 {"AND inventory.id is not NULL" if has_seller else ""}
 ORDER BY product.id, inventory.price
 ''' 

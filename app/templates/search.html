@@ -28,31 +28,6 @@
 
         </div>
     </div>
-
-        <script>
-          function add_cart_listener(pid, iid) {
-            console.log(pid, iid)
-            $(`#product_${pid}_add_cart`).on('click', (event) => {
-              let quantity = $(`#product_${pid}_quantity`).val()
-              if (quantity < 1){
-                alert("The quantity should be greater than or equal to 1")
-                return
-              }
-              add_item_to_cart(iid, quantity)
-            })
-          }
-
-          function add_item_to_cart(iid, quantity) {
-            $.post("/addCart", { amount: Number(quantity), iid: iid }, (data) => {
-              if (data.status != "success") {
-                alert('error: ' + data.msg)
-                return
-              }
-              alert(`${quantity} item added!`)
-              location.reload()
-            })
-          }
-        </script>
 {# this is item template, ignore this
     <div class="card">
         <div class="card-body" style="display:flex">
@@ -65,8 +40,8 @@
                 <p class="card-text">Starting from: ${{product_obj_list[0].price}}</p>
             </div>
             <div>
-                <input id="product_{{product_obj_list[0].id}}_quantity" type="number" class="form-control mb-2" min="1" style="width: 8em;" placeholder="Quantity">
-                <button id="product_{{product_obj_list[0].id}}_add_cart" type="button" class="btn btn-primary" style="width: 8em;">Add to cart</button>
+                <input id="key_{{product_obj_list[0].id}}_quantity" type="number" class="form-control mb-2" min="1" style="width: 8em;" placeholder="Quantity">
+                <button id="key_{{product_obj_list[0].id}}_add_cart" type="button" class="btn btn-primary" style="width: 8em;">Add to cart</button>
                 <script>  
                   add_cart_listener(Number('{{product_obj_list[0].id}}'), Number('{{ product_obj_list[0].iid}}'))
                 </script>

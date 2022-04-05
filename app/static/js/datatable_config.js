@@ -1,6 +1,46 @@
 // Use with datatable.html
 // Store configuration separately in this file
 window.datatable_config = {
+  "cart-list": [
+    {
+      title: "ID",
+      data: "cid",
+    },
+    {
+      title: "Product",
+      data: "product",
+      render: (data, type, row) => {
+        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
+      },
+    },
+    {
+      title: "Sold By",
+      data: "seller",
+      render: (data, type, row) => {
+        return `<a href="/user/${data.id}">${data.name}</a>`;
+      },
+    },
+    {
+      title: "Price",
+      data: "price",
+    },
+    {
+      title: "Quantity",
+      data: "quantity",
+    },
+    {
+      title: "Total",
+      data: "total",
+    },
+    {
+      title: "Action",
+      data: "cid",
+      
+      render: (data, type, row) => {
+        return `<button class="btn btn-danger" onclick="remove_cart_item(${data})">Remove</button>`;
+      }
+    }
+  ],
   "product-search-list": [
     {
       title: "Name",
@@ -31,6 +71,15 @@ window.datatable_config = {
     },
     { title: "Price", data: "price" },
     { title: "Quantity", data: "quantity" },
+    { title: "Action", data:"seller", orderable:false, width:"17em", render:(data, type, row)=>{
+      return `
+      <form class="form-inline my-2 my-lg-0 mr-2">
+        <input id="key_${data.id}_quantity" type="number" class="form-control form-inline mr-1" min="1" style="width: 7em;" placeholder="Quantity">
+        <a id="key_${data.id}_add_cart" class="btn btn-primary" style="width: 7em;" href="javascript:add_cart_button_onclick(${data.id}, ${data.id})">Add to cart</button>
+      </form>
+      
+      `;
+    }}
   ],
   "recent-purchase": [
     {
@@ -132,17 +181,14 @@ window.datatable_created_row = {
                 <p class="card-text">Starting from: $${item.price}</p>
             </div>
             <div>
-                <input id="product_${item.id}_quantity" type="number" class="form-control mb-2" min="1" style="width: 8em;" placeholder="Quantity">
-                <button id="product_${item.id}_add_cart" type="button" class="btn btn-primary" style="width: 8em;">Add to cart</button>
-                <script>  
-                  add_cart_listener(${item.id}, ${item.iid})
-                </script>
+                <input id="key_${item.id}_quantity" type="number" class="form-control mb-2" min="1" style="width: 7em;" placeholder="Quantity">
+                <a id="key_${item.id}_add_cart" class="btn btn-primary" href="javascript:add_cart_button_onclick(${item.id}, ${item.iid})" style="width: 7em;">Add to cart</a>
             </div>
         </div>        
       </div>
 
       </td>
-    `
+    `;
     row.innerHTML = html
   },
   "public-user-review": (row, review, index) => {

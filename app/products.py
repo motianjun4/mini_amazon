@@ -101,7 +101,7 @@ def product_detail(pid):
 
     seller_list = Inventory.get_seller_list(pid)
     seller_obj_list = [{
-        "seller": {"id": item[4], "name": item[2] + item[3]},
+        "seller": {"id": item[4], "name": f"{item[2]} {item[3]}"},
         "price": str(item[0]),
         "quantity": str(item[1]),
     } for item in seller_list]

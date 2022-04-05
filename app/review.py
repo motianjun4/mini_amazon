@@ -5,7 +5,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField
 from wtforms.validators import DataRequired
 from app.utils.json_response import ResponseType, json_response
-from libs.my_minio import minio_client
 
 from .models.review import Review
 from flask_login import current_user, login_required

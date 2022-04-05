@@ -3,20 +3,24 @@
 <div class="container">
   <br />
   <div class="card">
-    <div class="card-body">
-      <h4 class="card-title"> Product Detail </h4>
-      <div class="card-text" style="word-wrap: break-word;">
-        <pre>
-<img src="/img/product_{{product.id}}.jpg" alt="..." />
-Id: {{product.id}} 
-Name: {{product.name}}       
-Category: {{product.category}}
-Description: {{product.description}}
-Lowest Price: {{product.iMinPrice}}
-        </pre>
+    <div class="card-body flex">
+      <div class="mr-2">
+        <img src="/img/product_{{product.id}}.jpg" alt="{{product.id}}" />
       </div>
+      <div>
+        <h4 class="card-title">
+          <span class="text-secondary" style="font-size: 0.7em;">#{{product.id}}</span>
+          <span class="badge badge-secondary">{{product.category}}</span> 
+          {{product.name}}</h4>
+        <div class="card-text">
+          {{product.description}}
+
+        </div>
+      </div>
+      
     </div>
   </div>
+
   <br />
   <div class="card">
     <div class="card-body">

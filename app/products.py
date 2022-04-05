@@ -20,6 +20,31 @@ from flask import Blueprint
 bp = Blueprint('products', __name__)
 
 
+@bp.route('/search')
+def search():
+    args = request.args
+    query = args.get("q")
+
+    if query is None or query == "":
+        product_obj_list = []
+        has_result=False
+        flash("Please specify searching keyword.")
+    else:
+        has_result=True
+        product_list = Product.get_all_by_keyword(query, f"%{query}%")
+        product_obj_list = [{
+            "id": product.id,
+            "name": product.name,
+            "price": str(product.iMinPrice),
+            "iid": product.minPriceIid,
+        } for product in product_list]
+    
+    return render_template('search.html',
+                            user=current_user,
+                            has_result=has_result,
+                            product_obj_list=product_obj_list,
+                            query=query,
+                           )
 
 class CreateProductForm(FlaskForm):
     product_name = StringField('Product Name', validators=[DataRequired()])
@@ -47,17 +72,17 @@ def createProduct():
     return render_template('sell.html', title='Sell', form=form)
 
 
-@bp.route('/addCart', methods=['GET', 'POST'])
+@bp.route('/addCart', methods=['POST'])
 @login_required
 def addCart():
-    sid = None
+    iid = None
     amount = None
     try:
-        sid = request.form['sid']
+        iid = request.form['iid']
         amount = int(request.form['amount'])
     except Exception as e:
         return json_response(ResponseType.ERROR, None, str(e))
-    cart_items = Cart.addCart(sid, amount)
+    cart_items = Cart.addCart(iid, amount)
     return json_response(ResponseType.SUCCESS, {"cart_items":str(cart_items)})
 
 
@@ -70,13 +95,13 @@ def searchCart():
 
 @bp.route('/product/<int:pid>')
 @login_required
-def productDetail(pid):
+def product_detail(pid):
     # show product detail, list of seller and current stock, reviews
     product = Product.get(pid)
 
     seller_list = Inventory.get_seller_list(pid)
     seller_obj_list = [{
-        "seller": {"id": item[4], "name": item[2] + item[3]},
+        "seller": {"id": item[4], "name": f"{item[2]} {item[3]}"},
         "price": str(item[0]),
         "quantity": str(item[1]),
     } for item in seller_list]
@@ -87,7 +112,7 @@ def productDetail(pid):
     for order in order_list:
         if(order[2] == pid):
             has_bought = True
-    
+
     has_review = False
     review = Review.show_review(current_user.id, 2, 0, pid)
     if review:

@@ -10,7 +10,8 @@ class Cart(Base):
     id = Column(Integer, Identity(start=1, increment=1, minvalue=1,
                 maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
     uid = Column(Integer, ForeignKey('user.id') ,nullable=False)
-    iid = Column(Integer, nullable=False)
+    iid = Column(Integer, ForeignKey("inventory.id"), nullable=False)
+    inventory:"Inventory" = relationship("Inventory", lazy=False)
     quantity = Column(Integer, nullable=False)
 
 
@@ -20,8 +21,9 @@ class Inventory(Base):
     id = Column(Integer, Identity(start=1, increment=1, minvalue=1,
                 maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
     pid = Column(Integer, ForeignKey('product.id'), nullable=False)
-    product = relationship("Product", back_populates="inventories", lazy=False)
-    uid = Column(Integer, nullable=False)
+    product:"Product" = relationship("Product", back_populates="inventories", lazy=False)
+    uid = Column(Integer, ForeignKey("user.id"), nullable=False)
+    seller:"User" = relationship("User", lazy=False)
     price = Column(Numeric(14, 2), nullable=False)
     quantity = Column(Integer, nullable=False)
 
@@ -31,7 +33,8 @@ class Order(Base):
 
     id = Column(Integer, Identity(start=1, increment=1, minvalue=1,
                 maxvalue=2147483647, cycle=False, cache=1), primary_key=True)
-    uid = Column(Integer, nullable=False)
+    uid = Column(Integer, ForeignKey("user.id"),nullable=False)
+    user = relationship("User", lazy=False)
     address = Column(String(255), nullable=False)
     create_at = Column(DateTime, nullable=False)
     tel = Column(String(31), nullable=False)

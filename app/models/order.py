@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 from distutils.command.build import build
 from itertools import count
 from unicodedata import name
+=======
+>>>>>>> 286043bd44399b43bf9cb07ba4c0bb559804702d
 from flask import current_app as app
 from .purchase import Purchase
 from .inventory import Inventory
+from .orm.orm_models import Order as OrderORM
 '''
 
 CREATE TABLE IF NOT EXISTS public.inventory
@@ -52,6 +56,10 @@ class Order:
         self.firstname = firstname
         self.lastname = lastname
         # self.total_amount = total_amount #total num of items
+
+    @staticmethod
+    def get(oid)->'OrderORM':
+        return app.db.get_session().query(OrderORM).filter(OrderORM.id == oid).first()
 
     @staticmethod
     def get_all_by_uid(uid):

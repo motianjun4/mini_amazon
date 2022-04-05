@@ -1,4 +1,5 @@
 from flask import render_template, redirect, url_for, flash, request
+from .utils.time import localize
 from werkzeug.urls import url_parse
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -87,27 +88,50 @@ def my_profile():
         return redirect(url_for('users.login', next=url_for('.my_profile')))
     
     purchases = Purchase.get_all_by_uid(current_user.id).all()
-    purchase_obj_list = [{
+    purchase_obj_list = [ {
         "id": purchase.id,
         "product": {"pid": purchase.inventory.product.id, "name": purchase.inventory.product.name},
         "order": {"oid": purchase.oid, "buydate": str(purchase.order.create_at)},
-        "price":str(purchase.price),
+        "price":"$"+str(purchase.price),
         "count":purchase.count
 
     } for purchase in purchases]
 
     inventory_list = Inventory.get_by_uid_ORM(current_user.id)
     inventory_obj_list = [{
+        "iid": item.id,
         "product": {"id": item.product.id, "name": item.product.name},
         "price": str(item.price),
         "quantity": item.quantity,
     } for item in inventory_list]
     is_seller = inventory_list.count() > 0 
 
+    #seller review and product review
+    seller_review = Review.show_review_list_user(current_user.id, 1)
+    seller_review_obj_list = []
+    if seller_review:
+        seller_review_obj_list = [{
+            "time": str(localize(item[5]).strftime("%m/%d/%Y %H:%M:%S")),
+            "seller": {"id": item[4], "name": item[2]+item[3]},
+            "rate": item[0],
+            "review": item[1],
+        } for item in seller_review]
+    product_review = Review.show_review_list_user(current_user.id, 2)
+    product_review_obj_list = []
+    if product_review:
+        product_review_obj_list = [{
+            "time": str(localize(item[4]).strftime("%m/%d/%Y %H:%M:%S")),
+            "product": {"id": item[3], "name": item[2]},
+            "rate": item[0],
+            "review": item[1],
+        } for item in product_review]
+
     # render the page by adding information to the index.html file
     return render_template('my_profile.html',
                            purchase_obj_list=purchase_obj_list,
                            inventory_obj_list=inventory_obj_list,
+                           seller_review_obj_list=seller_review_obj_list,
+                           product_review_obj_list=product_review_obj_list,
                            is_seller=is_seller,
                            user=current_user,)
 

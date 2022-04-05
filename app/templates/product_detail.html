@@ -25,9 +25,53 @@ Lowest Price: {{product.iMinPrice}}
         {%import 'datatable.html' as t%}
         {{t.datatable("seller-table", seller_obj_list)}}
         </div>
-
       </div>
     </div>
+    {% if has_bought %}
+    {% if has_review %}
+    <br />
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">My Review</h4>
+        <div class="card-text">
+            <div class="container">
+                <div class="row">
+                    <p><strong>Review</strong>: {{review[2]}}</p>
+                </div>
+                <div class="row">
+                    <p><strong>Rate</strong>: 
+                        {% for i in range(review[1]) %} 
+                        <i class="bi bi-star-fill"></i>
+                        {% endfor %}
+                        {% for i in range(5-review[1]) %} 
+                        <i class="bi bi-star"></i>
+                        {% endfor %}</p>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <a href="/review/product/edit?pid={{product.id}}">Edit Your Review</a>
+                  </div>
+                  <div class="col">
+                    <a href="/review/product/remove?pid={{product.id}}">Remove Your Review</a>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+    <br />
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">My Review</h4>
+        <div class="card-text">
+          <a href="/review/product/submit?pid={{product.id}}&redirect=product">Submit Your Review</a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    {% endif %}     
+    <br />
     <div class="card">
         <div class="card-body">
           <h4 class="card-title">Reviews</h4>

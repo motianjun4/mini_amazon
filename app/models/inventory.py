@@ -151,7 +151,7 @@ class Inventory:
     @staticmethod
     def get_seller_list(pid):
         rows = app.db.execute('''
-                            SELECT Inventory.price, Inventory.quantity, "user".firstname, "user".lastname, "user".id
+                            SELECT Inventory.price, Inventory.quantity, "user".firstname, "user".lastname, "user".id, inventory.id
                             FROM Inventory
                             LEFT JOIN "user" ON Inventory.uid="user".id
                             WHERE Inventory.pid=:pid

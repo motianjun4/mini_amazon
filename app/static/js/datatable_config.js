@@ -73,14 +73,14 @@ window.datatable_config = {
     { title: "Quantity", data: "quantity" },
     {
       title: "Action",
-      data: "seller",
+      data: "iid",
       orderable: false,
       width: "17em",
       render: (data, type, row) => {
         return `
       <form class="form-inline my-2 my-lg-0 mr-2">
-        <input id="key_${data.id}_quantity" type="number" class="form-control form-inline mr-1" min="1" style="width: 7em;" placeholder="Quantity">
-        <a id="key_${data.id}_add_cart" class="btn btn-primary" style="width: 7em;" href="javascript:add_cart_button_onclick(${data.id}, ${data.id})">Add to cart</button>
+        <input id="key_${data}_quantity" type="number" class="form-control form-inline mr-1" min="1" style="width: 7em;" placeholder="Quantity">
+        <a id="key_${data}_add_cart" class="btn btn-primary" style="width: 7em;" href="javascript:add_cart_button_onclick(${data}, ${data})">Add to cart</button>
       </form>
       
       `;
@@ -88,10 +88,6 @@ window.datatable_config = {
     },
   ],
   "recent-purchase": [
-    {
-      title: "ID",
-      data: "id",
-    },
     {
       title: "Product",
       data: "product",
@@ -101,9 +97,22 @@ window.datatable_config = {
     },
     {
       title: "Order",
-      data: "order",
+      data: "oid",
       render: (data, type, row) => {
-        return `<a href="/order/${data.oid}">#${data.oid} ${data.buydate}</a>`;
+        if (type != "display") {
+          return data;
+        }
+        return `<a href="/order/${data}">#${data}</a>`;
+      },
+    },
+    {
+      title: "Purchase At",
+      data: "purchase_time",
+      render: (data, type, row) => {
+        if (type != "display") {
+          return data;
+        }
+        return `${format_time(data)}`;
       },
     },
     {
@@ -114,6 +123,21 @@ window.datatable_config = {
       title: "Quantity",
       data: "count",
     },
+    {
+      title: "Total",
+      data: "total",
+    },
+    {
+      title:"Fulfillment",
+      data: "fulfillment",
+      render: (data, type, row) => {
+        if (data === true) {
+          return `<span class="badge badge-success">Fulfilled</span>`;
+        } else {
+          return `<span class="badge badge-warning">Pending</span>`;
+        }
+      }
+    }
   ],
   "order-purchase": [
     {
@@ -126,6 +150,16 @@ window.datatable_config = {
       render: (data, type, row) => {
         return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
       },
+    },
+    {
+      title: "Seller",
+      data: "seller",
+      render: (data, type, row) => {
+        if(type!="display"){
+          return data.name;
+        }
+        return `<a href="/user/${data.uid}">${data.name}</a>`;
+      }
     },
     {
       title: "Price",
@@ -145,7 +179,7 @@ window.datatable_config = {
       render: (data, type, row) => {
         return `<a class="btn btn-primary" href="/user/${data}#my_review">View</a>`;
       },
-    }
+    },
   ],
   "my-inventory": [
     {
@@ -163,7 +197,7 @@ window.datatable_config = {
       orderable: false,
       width: "4em",
       render: (data, type, row) => {
-        return `<a class="btn btn-primary" href="/inventory/${data}">Edit</a> <a class="btn btn-danger" href="/deleteInventory/${data}">Delete</a>` ;
+        return `<a class="btn btn-primary" href="/inventory/${data}">Edit</a> <a class="btn btn-danger" href="/deleteInventory/${data}">Delete</a>`;
       },
     },
   ],
@@ -181,33 +215,52 @@ window.datatable_config = {
     { title: "Rates", data: "rate" },
     { title: "Upvotes", data: "upvote_cnt" },
   ],
-  "order-fulfill":[
+  "order-fulfill": [
     {
       title: "ID",
       data: "oid",
       render: (data, type, row) => {
+        if (type === "display") {
         return `<a href="/order/${data}">#${data}</a>`;
-      }
+        }
+        return data;
+      },
     },
-    {title:"Product", data:"product", render: (data, type, row)=>{
-      return `<a href="/product/${data.pid}">${data.name}</a>`;
-    }}, 
-    {title:"Buyer", data:"buyer", render: (data, type, row) => {
-      return `<a href="/user/${data.id}">${data.name}</a>`;
-    }},
-    {title:"Address", data:"address"},
-    {title:"Tel", data:"tel", render:(data, type, row)=>{
-      return `<a href="tel:${data}">${data}</a>`;
-    }},
-    {title:"Create At", data:"create_at"},
+    {
+      title: "Product",
+      data: "product",
+      render: (data, type, row) => {
+        return `<a href="/product/${data.pid}">${data.name}</a>`;
+      },
+    },
+    {
+      title: "Buyer",
+      data: "buyer",
+      render: (data, type, row) => {
+        return `<a href="/user/${data.id}">${data.name}</a>`;
+      },
+    },
+    { title: "Address", data: "address" },
+    {
+      title: "Tel",
+      data: "tel",
+      render: (data, type, row) => {
+        return `<a href="tel:${data}">${data}</a>`;
+      },
+    },
+    { title: "Create At", data: "create_at" },
     // {title:"Categories", data:"categories"},
-    {title:"Quantity", data:"total_amount"},
-    {title:"Fullfillment", data:"fulfillment", render:(data, type, row)=>{
-      console.log(row)
-      return data
-        ? `<a class="btn btn-light btn-sm" style="width:6em" disabled>Confirmed</a>`
-        : `<button class="btn btn-success btn-sm" style="width:6em" onclick="confirm_purchase_fulfillment(${row.purchase_id})">Confirm</button>`;
-    }}
+    { title: "Quantity", data: "total_amount" },
+    {
+      title: "Fulfillment",
+      data: "fulfillment",
+      render: (data, type, row) => {
+        console.log(row);
+        return data
+          ? `<a class="btn btn-light btn-sm" style="width:6em" disabled>Confirmed</a>`
+          : `<button class="btn btn-success btn-sm" style="width:6em" onclick="confirm_purchase_fulfillment(${row.purchase_id})">Confirm</button>`;
+      },
+    },
   ],
   "run-down-list":[
     { title: "Product", data: "name" },
@@ -326,22 +379,33 @@ window.datatable_created_row = {
                       `<i class="bi bi-star-fill"></i>`.repeat(review.rate) +
                       `<i class="bi bi-star"></i>`.repeat(5 - review.rate)
                     }
-                      <button type="button" class="btn ${review.is_upvote?"btn-dark":"btn-light"}" 
-                        onclick="upvote_review(${review.id}, ${review.is_upvote})">
+                      <button type="button" class="btn ${
+                        review.is_upvote ? "btn-dark" : "btn-light"
+                      }" 
+                        onclick="upvote_review(${review.id}, ${
+      review.is_upvote
+    })">
                         <i class="bi bi-hand-thumbs-up"></i>${
-                        review.upvote_cnt
-                      }</button>
-                      <button type="button" class="btn ${review.is_downvote?"btn-dark":"btn-light"} mr-2"
-                        onclick="downvote_review(${review.id}, ${review.is_downvote})">
+                          review.upvote_cnt
+                        }</button>
+                      <button type="button" class="btn ${
+                        review.is_downvote ? "btn-dark" : "btn-light"
+                      } mr-2"
+                        onclick="downvote_review(${review.id}, ${
+      review.is_downvote
+    })">
                         <i class="bi bi-hand-thumbs-down"></i>${
-                        review.downvote_cnt
-                      }</button>
+                          review.downvote_cnt
+                        }</button>
                       
                     </div>
                   </div>
                   <p class="card-text">${review.review}</p>
                   <div class="text-right">
-                      ${new Date(review.create_at).toDateString()+" "+new Date(review.create_at).toLocaleTimeString()}
+                      ${
+                        //new Date(review.create_at).toDateString()+" "+new Date(review.create_at).toLocaleTimeString()
+                        format_time(review.create_at)
+                      }
                   </div>
                 </div>
               </div>
@@ -358,7 +422,9 @@ window.datatable_created_row = {
                   <div class="row">
                     <div class="col">
                       <h4 class="card-title">
-                      <span class="text-secondary" style="font-size:0.7em">#${review.id} </span>
+                      <span class="text-secondary" style="font-size:0.7em">#${
+                        review.id
+                      } </span>
                       <a href="/user/${review.uid}">${review.creator}</a>
                       ${
                         window.current_user_id == review.uid
@@ -372,11 +438,15 @@ window.datatable_created_row = {
                       `<i class="bi bi-star-fill"></i>`.repeat(review.rate) +
                       `<i class="bi bi-star"></i>`.repeat(5 - review.rate)
                     }
-                      <button type="button" class="btn ${review.is_upvote?"btn-dark":"btn-light"}" 
-                        onclick="upvote_review(${review.id}, ${review.is_upvote})">
+                      <button type="button" class="btn ${
+                        review.is_upvote ? "btn-dark" : "btn-light"
+                      }" 
+                        onclick="upvote_review(${review.id}, ${
+      review.is_upvote
+    })">
                         <i class="bi bi-hand-thumbs-up"></i>${
-                        review.upvote_cnt
-                      }</button>
+                          review.upvote_cnt
+                        }</button>
                       <button type="button" class="btn ${review.is_downvote?"btn-dark":"btn-light"} mr-2"
                         onclick="downvote_review(${review.id}, ${review.is_downvote})">
                         <i class="bi bi-hand-thumbs-down"></i>${
@@ -388,9 +458,10 @@ window.datatable_created_row = {
                   <p class="card-text">${review.review}</p>
                   <div class="text-right">
                       ${
-                        new Date(review.create_at).toDateString() +
-                        " " +
-                        new Date(review.create_at).toLocaleTimeString()
+                        // new Date(review.create_at).toDateString() +
+                        // " " +
+                        // new Date(review.create_at).toLocaleTimeString()
+                        format_time(review.create_at)
                       }
                   </div>
                 </div>
@@ -403,5 +474,8 @@ window.datatable_created_row = {
 
 window.datatable_order = {
   "reviews-for-product":[[0, 'desc']],
-  "reviews-for-seller":[[0, 'desc']]
+  "reviews-for-seller":[[0, 'desc']],
+  "seller-table":[[1, 'asc']],
+  "recent-purchase":[[2, 'desc']],
+  "order-fulfill":[[0, 'desc']],
 }

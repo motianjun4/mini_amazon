@@ -2,6 +2,8 @@ from datetime import datetime
 from typing import List
 from flask import current_app as app
 import pytz
+
+from app.utils.time import get_now
 from .orm.orm_models import Review as ReviewORM
 import time
 '''
@@ -59,7 +61,7 @@ WHERE uid = :uid
 AND type = :type
 AND target_uid = :target_uid
 AND target_pid = :target_pid
-        ''', uid=uid, type=type, target_uid=target_uid, target_pid=target_pid, rate=rate, review=review, create_at=str(datetime.now().astimezone(pytz.utc)))
+        ''', uid=uid, type=type, target_uid=target_uid, target_pid=target_pid, rate=rate, review=review, create_at=str(get_now()))
 
     @staticmethod
     def delete(uid, type, target_uid, target_pid):

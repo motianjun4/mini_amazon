@@ -8,3 +8,9 @@ def localize(dt: datetime)->datetime:
 
 def iso(dt: datetime)->str:
     return dt.isoformat()
+
+def strtime(dt: datetime)->str:
+    return dt.strftime("%Y-%m-%d %H:%M:%S")
+
+def get_now()->datetime:
+    return datetime.now().astimezone(pytz.utc)

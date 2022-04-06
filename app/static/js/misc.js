@@ -1,3 +1,8 @@
+function format_time(time) {
+  let date = new Date(time);
+  return `${date.toLocaleString()}`;
+}
+
 
 // key should be used only once in a single page. example: id
 function add_cart_button_onclick(key, iid){

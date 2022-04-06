@@ -2,6 +2,8 @@ from distutils.command.build import build
 from itertools import count
 from unicodedata import category, name
 from flask import current_app as app
+
+from app.utils.time import get_now
 from .purchase import Purchase
 from .inventory import Inventory
 from .orm.orm_models import Order as OrderORM
@@ -213,6 +215,6 @@ class Order:
 INSERT INTO "order"(uid, address, create_at, tel)
 VALUES(:uid, :address, :create_at, :tel)
 RETURNING id
-        ''', uid=uid, address=address, create_at=str(datetime.now().astimezone(pytz.utc)), tel=tel)
+        ''', uid=uid, address=address, create_at=str(get_now()), tel=tel)
         oid = rows[0][0]
         return oid

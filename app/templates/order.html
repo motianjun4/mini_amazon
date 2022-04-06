@@ -4,14 +4,14 @@
 
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Order <span class="text-secondary">#{{order.id}}</span></h4>
+            <h4 class="card-title">Order <span class="text-secondary">#{{order_obj.id}}</span></h4>
             <div class="card-text">
                 <ul class="list-unstyled">
-                    <li>User: <a href="/user/{{order.user.id}}">{{order.user.firstname}} {{order.user.lastname}}</a> </li>
-                    <li>Order Date: {{order.create_at}}</li>
-                    <li>Shipping Address: {{order.address}}</li>
-                    <li>Tel: {{order.tel}}</li>
-                    <li>Fullfillment: {{total_fulfill}}</li>
+                    <li>User: <a href="/user/{{order_obj.user_id}}">{{order_obj.username}}</a> </li>
+                    <li>Order Date: {{order_obj.create_at}}</li>
+                    <li>Shipping Address: {{order_obj.address}}</li>
+                    <li>Tel: {{order_obj.tel}}</li>
+                    <li>Fulfillment: {{total_fulfill}}</li>
                 </ul>
             </div>
         </div>

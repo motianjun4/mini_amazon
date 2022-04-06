@@ -6,7 +6,7 @@ from app.models.order import Order
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user
 from app.utils.json_response import ResponseType, json_response
-from app.utils.time import iso, localize
+from app.utils.time import get_now, iso, localize, strtime
 
 from flask_login import current_user, login_required
 
@@ -29,7 +29,7 @@ def orderlist():
         "buyer": {"uid": order.buid, "name": f"{order.firstname} {order.lastname}"},
         "address": order.address,
         "tel": order.tel,
-        "create_at": iso(localize(order.create_at)),
+        "create_at": strtime(localize(order.create_at)),
         # "categories": order.count,
         "total_amount": order.total_amount,
         "fulfillment": order.fulfillment
@@ -63,5 +63,5 @@ def fulfill_purchase():
     pid = request.form.get('pid')
     if pid is None:
         return json_response(ResponseType.ERROR, "pid is required")
-    Purchase.fulfill(pid, datetime.now())
+    Purchase.fulfill(pid, get_now())
     return json_response(ResponseType.SUCCESS, "purchase fulfilled")

@@ -136,6 +136,10 @@ window.datatable_config = {
       data: "count",
     },
     {
+      title: "Fulfillment",
+      data: "fulfillment",
+    },
+    {
       title: "Review",
       data: "sid",
       render: (data, type, row) => {

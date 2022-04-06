@@ -27,6 +27,7 @@ services:
     ports:
       - "${SERVE_PORT}:5001"
     restart: always
+    env_file: .env
     depends_on:
       - db-init
       - minio

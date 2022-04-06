@@ -1,4 +1,3 @@
-import io
 from faker import Faker
 from minio import Minio
 import os

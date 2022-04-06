@@ -1,0 +1,3 @@
+faker
+minio
+Pillow

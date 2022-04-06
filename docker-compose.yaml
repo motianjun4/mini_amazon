@@ -3,7 +3,7 @@ services:
   db:
     image: postgres
     ports:
-      - "${DB_PORT}:5432"
+      - "${DB_EXT_PORT}:5432"
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -13,13 +13,17 @@ services:
 
   db-init:
     image: postgres
-    command: "cd /src && make load_db_data"
+    user: postgres
+    command: "sh /src/db/load.sh"
+    env_file:
+      - .env
     volumes:
       - ./:/src
     depends_on:
       - db
   mini-amazon:
     image: ghcr.io/motianjun4/mini_amazon:master
+    # build: ./
     ports:
       - "${SERVE_PORT}:5001"
     restart: always
@@ -32,10 +36,22 @@ services:
   minio:
     image: minio/minio
     ports:
-      - "${MINIO_PORT}:9000"
+      - "${MINIO_EXT_PORT}:9000"
       - "${MINIO_CONSOLE_PORT}:9001"
     restart: always
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ACCESS_KEY}
+      - MINIO_ROOT_PASSWORD=${MINIO_SECRET_KEY}
     command: server /data --console-address ":9001"
+
+  minio-init:
+    image: python:3
+    volumes:
+      - ./:/src
+    command: "sh -c 'pip install -r /src/libs/requirements.txt && python3 /src/libs/load_img.py'"
+    env_file: .env
+    depends_on:
+      - minio
     
   watchtower:
     image: index.docker.io/containrrr/watchtower:latest

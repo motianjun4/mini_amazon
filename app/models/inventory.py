@@ -142,15 +142,11 @@ class Inventory:
     @staticmethod
     def products_run_down(uid):
         rows = app.db.execute('''
-                            SELECT *
-                            FROM Inventory
-                            WHERE uid = :uid
+                            SELECT Inventory.id, pid, Inventory.uid, price, quantity, name
+                            FROM Inventory JOIN Product ON Product.id = pid
+                            WHERE Inventory.uid = :uid AND quantity<=6
                             ''', uid=uid)
-        run_down_list = []
-        for row in rows:
-            if Inventory(*row).quantity<5:
-                run_down_list.append((Inventory(*row).pid, Inventory(*row).quantity))
-        return run_down_list
+        return [Inventory(*row) for row in rows]
                    
     @staticmethod
     def get_seller_list(pid):

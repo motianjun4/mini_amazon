@@ -282,10 +282,14 @@ window.datatable_created_row = {
                       `<i class="bi bi-star-fill"></i>`.repeat(review.rate) +
                       `<i class="bi bi-star"></i>`.repeat(5 - review.rate)
                     }
-                      <button type="button" class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i>${
+                      <button type="button" class="btn ${review.is_upvote?"btn-dark":"btn-light"}" 
+                        onclick="upvote_review(${review.id}, ${review.is_upvote})">
+                        <i class="bi bi-hand-thumbs-up"></i>${
                         review.upvote_cnt
                       }</button>
-                      <button type="button" class="btn btn-light mr-2"><i class="bi bi-hand-thumbs-down"></i>${
+                      <button type="button" class="btn ${review.is_downvote?"btn-dark":"btn-light"} mr-2"
+                        onclick="downvote_review(${review.id}, ${review.is_downvote})">
+                        <i class="bi bi-hand-thumbs-down"></i>${
                         review.downvote_cnt
                       }</button>
                       
@@ -324,10 +328,14 @@ window.datatable_created_row = {
                       `<i class="bi bi-star-fill"></i>`.repeat(review.rate) +
                       `<i class="bi bi-star"></i>`.repeat(5 - review.rate)
                     }
-                      <button type="button" class="btn btn-light"><i class="bi bi-hand-thumbs-up"></i>${
+                      <button type="button" class="btn ${review.is_upvote?"btn-dark":"btn-light"}" 
+                        onclick="upvote_review(${review.id}, ${review.is_upvote})">
+                        <i class="bi bi-hand-thumbs-up"></i>${
                         review.upvote_cnt
                       }</button>
-                      <button type="button" class="btn btn-light mr-2"><i class="bi bi-hand-thumbs-down"></i>${
+                      <button type="button" class="btn ${review.is_downvote?"btn-dark":"btn-light"} mr-2"
+                        onclick="downvote_review(${review.id}, ${review.is_downvote})">
+                        <i class="bi bi-hand-thumbs-down"></i>${
                         review.downvote_cnt
                       }</button>
                       

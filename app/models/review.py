@@ -149,15 +149,15 @@ VALUES(:rid, :uid, :is_up)
     def delete(rid, uid):
         app.db.execute('''
 DELETE FROM review_like
-WHERE rid=:rid, uid=:uid
+WHERE rid=:rid AND uid=:uid
         ''', rid=rid, uid=uid)
 
     @staticmethod
-    def is_like(rid, uid):
+    def is_voted(rid, uid):
         rows = app.db.execute('''
-SELECT is_up FROM review_like
-WHERE rid=:rid, uid=:uid
+SELECT id FROM review_like
+WHERE rid=:rid AND uid=:uid
         ''', rid=rid, uid=uid)
         if len(rows) == 0:
-            return None
-        return rows[0][0]
+            return False
+        return True

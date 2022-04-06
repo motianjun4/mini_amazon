@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, flash, request
-from .utils.time import localize
+from .utils.time import iso, localize
 from werkzeug.urls import url_parse
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -189,7 +189,10 @@ def public_profile(uid):
             "review": review.review,
             "rate": review.rate,
             "upvote_cnt": len(list(filter(lambda item: item.is_up, review.review_likes))),
+            "is_upvote": len(list(filter(lambda item: item.is_up and item.uid == current_user.id, review.review_likes))) > 0,
             "downvote_cnt": len(list(filter(lambda item: not item.is_up, review.review_likes))),
+            "is_downvote": len(list(filter(lambda item: not item.is_up and item.uid == current_user.id, review.review_likes))) > 0,
+            "create_at": iso(localize(review.create_at)),
         } for review in reviews]
 
     # check wether bought this product

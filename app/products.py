@@ -9,6 +9,7 @@ from flask_wtf.file import FileAllowed
 from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField
 from wtforms.validators import DataRequired
 from app.utils.json_response import ResponseType, json_response
+from app.utils.time import iso, localize
 from libs.my_minio import put_file
 
 from .models.product import Product
@@ -127,7 +128,10 @@ def product_detail(pid):
         "review": review.review,
         "rate": review.rate,
         "upvote_cnt": len(list(filter(lambda item: item.is_up, review.review_likes))),
+        "is_upvote": len(list(filter(lambda item: item.is_up and item.uid == current_user.id, review.review_likes))) > 0,
         "downvote_cnt": len(list(filter(lambda item: not item.is_up, review.review_likes))),
+        "is_downvote": len(list(filter(lambda item: not item.is_up and item.uid == current_user.id, review.review_likes))) > 0,
+        "create_at": iso(localize(review.create_at)),
     } for review in reviews]
 
     # show summary review

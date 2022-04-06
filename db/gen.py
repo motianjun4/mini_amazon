@@ -115,8 +115,7 @@ def gen_purchases():
             price = f'{str(fake.random_int(max=500))}.{fake.random_int(max=99):02}'
             count = fake.random_int(min=1, max=10)
             fulfillment = fake.random_int(min=0, max=1)
-            if fulfillment:
-                fulfill_at = fake.past_datetime().isoformat()
+            fulfill_at = fake.past_datetime().isoformat()
             writer.writerow(
                 [id, oid, iid, price, count, fulfillment, fulfill_at])
         print(f'{num_purchases} generated')

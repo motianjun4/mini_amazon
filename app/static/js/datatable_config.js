@@ -182,15 +182,32 @@ window.datatable_config = {
     { title: "Upvotes", data: "upvote_cnt" },
   ],
   "order-fulfill":[
-    {title:"Product", data:"product_name"}, //iid
-    {title:"User", data:"buid"}, //uid
-    {title:"Name", data:"name"},
+    {
+      title: "ID",
+      data: "oid",
+      render: (data, type, row) => {
+        return `<a href="/order/${data}">#${data}</a>`;
+      }
+    },
+    {title:"Product", data:"product", render: (data, type, row)=>{
+      return `<a href="/product/${data.pid}">${data.name}</a>`;
+    }}, 
+    {title:"Buyer", data:"buyer", render: (data, type, row) => {
+      return `<a href="/user/${data.id}">${data.name}</a>`;
+    }},
     {title:"Address", data:"address"},
-    {title:"Tel", data:"tel"},
+    {title:"Tel", data:"tel", render:(data, type, row)=>{
+      return `<a href="tel:${data}">${data}</a>`;
+    }},
     {title:"Create At", data:"create_at"},
     // {title:"Categories", data:"categories"},
     {title:"Quantity", data:"total_amount"},
-    {title:"Fulfill", data:"fulfillment"}
+    {title:"Fullfillment", data:"fulfillment", render:(data, type, row)=>{
+      console.log(row)
+      return data
+        ? `<a class="btn btn-light btn-sm" style="width:6em" disabled>Confirmed</a>`
+        : `<button class="btn btn-success btn-sm" style="width:6em" onclick="confirm_purchase_fulfillment(${row.purchase_id})">Confirm</button>`;
+    }}
   ],
   "reviews-for-product": [
     { title: "Time", data: "time" },

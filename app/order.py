@@ -19,7 +19,8 @@ def order_detail(oid):
         "product": {"pid": purchase.inventory.product.id, "name": purchase.inventory.product.name},
         "order": {"oid": purchase.oid, "buydate": str(purchase.order.create_at)},
         "price": "$"+str(purchase.price),
-        "count": purchase.count
+        "count": purchase.count,
+        "sid": purchase.inventory.uid
     } for purchase in order.purchases]
 
     return render_template('order.html', order=order,

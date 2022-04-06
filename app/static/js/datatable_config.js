@@ -135,6 +135,13 @@ window.datatable_config = {
       title: "Quantity",
       data: "count",
     },
+    {
+      title: "Review",
+      data: "sid",
+      render: (data, type, row) => {
+        return `<a class="btn btn-primary" href="/user/${data}#my_review">View</a>`;
+      },
+    }
   ],
   "my-inventory": [
     {

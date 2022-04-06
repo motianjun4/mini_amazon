@@ -10,3 +10,4 @@ gen_db_data:
 	cd db && python3 gen.py
 load_db_data:
 	cd db && source load.sh
+

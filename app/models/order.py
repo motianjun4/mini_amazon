@@ -1,6 +1,6 @@
 from distutils.command.build import build
 from itertools import count
-from unicodedata import name
+from unicodedata import category, name
 from flask import current_app as app
 from .purchase import Purchase
 from .inventory import Inventory
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS public.purchase
 '''
 
 class Order:
-    def __init__(self, id, iid, address, tel, create_at, fulfillment, buid, firstname, lastname):
+    def __init__(self, id, iid, address, tel, create_at, fulfillment, buid, firstname, lastname, product_name, total_amount):
         self.id = id #
         # self.uid = uid #ID for seller
         self.iid = iid
@@ -52,7 +52,8 @@ class Order:
         self.buid = buid #ID for buyer
         self.firstname = firstname
         self.lastname = lastname
-        # self.total_amount = total_amount #total num of items
+        self.product_name = product_name
+        self.total_amount = total_amount #total num of items
 
     @staticmethod
     def get(oid)->'OrderORM':
@@ -61,8 +62,8 @@ class Order:
     @staticmethod
     def get_all_by_uid(uid):
         rows = app.db.execute('''
-                            SELECT "order".id, iid, address, tel, create_at, fulfillment, "order".uid, firstname, lastname
-                            FROM "order" JOIN Purchase ON "order".id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid JOIN "user" ON "user".id = "order".uid
+                            SELECT "order".id, iid, address, tel, create_at, fulfillment, "order".uid, firstname, lastname, Product.name, Purchase.count
+                            FROM "order" JOIN Purchase ON "order".id = Purchase.oid JOIN Inventory ON Inventory.id = Purchase.iid JOIN "user" ON "user".id = "order".uid JOIN Product ON Product.id = Inventory.pid
                             WHERE Inventory.uid = :uid
                             ORDER BY create_at DESC
                             ''', uid=uid)

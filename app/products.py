@@ -128,7 +128,9 @@ def product_detail(pid):
         "review": review.review,
         "rate": review.rate,
         "upvote_cnt": len(list(filter(lambda item: item.is_up, review.review_likes))),
+        "is_upvote": len(list(filter(lambda item: item.is_up and item.uid == current_user.id, review.review_likes))) > 0,
         "downvote_cnt": len(list(filter(lambda item: not item.is_up, review.review_likes))),
+        "is_downvote": len(list(filter(lambda item: not item.is_up and item.uid == current_user.id, review.review_likes))) > 0,
         "create_at": iso(localize(review.create_at)),
     } for review in reviews]
 

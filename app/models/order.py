@@ -185,11 +185,11 @@ class Order:
     @staticmethod
     def products_trends():
         rows = app.db.execute('''
-                            SELECT pid, COUNT(*) as num
+                            SELECT pid AS pt_pid, SUM(purchase.count) AS pt_num
                             FROM Purchase JOIN Inventory ON Inventory.id=Purchase.iid
                             WHERE fulfillment = TRUE
                             GROUP BY Inventory.pid
-                            ORDER BY num DESC 
+                            ORDER BY pt_num DESC 
                             LIMIT 15
                             ''')
         trends_list = []

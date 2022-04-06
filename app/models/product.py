@@ -40,28 +40,16 @@ ORDER BY product.id, inventory.price
 
     @staticmethod
     def get_all(has_seller=True, page=0, page_size=20):
-        # a = if available_only: 1 else: 2
-        rows = app.db.execute('''
-                            SELECT pid, COUNT(*) as num
-                            FROM Purchase JOIN Inventory ON Inventory.id=Purchase.iid
-                            WHERE fulfillment = TRUE
-                            GROUP BY Inventory.pid
-                            ORDER BY num DESC 
-                            LIMIT 15
-                            ''')
-        trends_list = []
-        for row in rows:
-            trends_list.append((row[0], row[1])) #(name, num)
-
-        
+       # a = if available_only: 1 else: 2
+       # minPriceIid --> Sales volume (only in this function)
         sql = f'''
-SELECT DISTINCT ON (product.id) product.id, product.uid, name, category, description, inventory.price, inventory.id
-FROM product
-LEFT OUTER JOIN inventory ON inventory.pid = product.id JOIN Purchase 
-{"WHERE inventory.id is not NULL" if has_seller else ""}
-ORDER BY product.id, inventory.price
+SELECT product.id, product.uid, name, category, description, MIN(Inventory.price), SUM(purchase.count) AS pt_num
+FROM product LEFT OUTER JOIN inventory ON inventory.pid = product.id JOIN Purchase ON Inventory.id=Purchase.iid
+WHERE fulfillment = TRUE 
+GROUP BY product.id
+ORDER BY pt_num DESC 
 '''
-
+# {"AND inventory.id is not NULL" if has_seller else ""}
         rows = app.db.execute(paginate_raw(sql, page, page_size))
         return [Product(*row) for row in rows]
 

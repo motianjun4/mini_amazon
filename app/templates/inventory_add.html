@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 align="center">Add new inventory product</h1>
+<form action="" method="post" align="center" enctype="multipart/form-data">
+  {{ form.hidden_tag() }}
+  <p>
+    {{ form.name.label }}
+    {{ form.name(size=64) }}<br/>
+    {% for error in form.name.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  <p>
+    {{ form.quantity.label }}
+    {{ form.quantity(size=64) }}<br/>
+    {% for error in form.quantity.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  <p>
+    {{ form.price.label }}
+    {{ form.price(size=64) }}<br/>
+    {% for error in form.price.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  
+  <p>{{ form.add() }}</p>
+
+</form>
+
+{% endblock %}

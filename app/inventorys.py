@@ -33,12 +33,12 @@ class ModifyInventoryForm(FlaskForm):
     delete = SubmitField('Delete!')
 
 class AddProductForm(FlaskForm):
-    name = StringField('ProductName', validators=[DataRequired()])
+    name = StringField('Product Name', validators=[DataRequired()])
     quantity = IntegerField('Quantity', validators=[DataRequired()])
     price = FloatField('Price', validators=[DataRequired()])
     add = SubmitField('ADD!')
 
-@bp.route('/inventory/<iid>')
+@bp.route('/inventory/<iid>', methods=['GET', 'POST'])
 @login_required
 def inventory(iid):
     # find the products current user has bought:
@@ -51,11 +51,16 @@ def inventory(iid):
         # button="submit" if form.submit.data else "delete"
         if form.submit.data:
             Inventory.modify_quantity(form, iid)
-        elif form.delete.data:
-            Inventory.remove_product(iid)
+            return redirect(url_for('users.my_profile'))
+        # elif form.delete.data:
+        #     Inventory.remove_product(iid)
     return render_template('inventory.html', title='Inventory', inven_iid=inven_iid, form=form)
 
-
+@bp.route('/deleteInventory/<iid>', methods=['GET', 'POST'])
+@login_required
+def deleteInventory(iid):
+    Inventory.remove_product(iid)
+    return redirect(url_for('users.my_profile'))
 
 @bp.route('/addInventory', methods=['GET', 'POST'])
 @login_required
@@ -65,9 +70,8 @@ def addProduct():
     if pid:
         if form.validate_on_submit():
             Inventory.add_new_product(form, current_user.id, pid)
-    else:
-        return
-    return
+            return redirect(url_for('users.my_profile'))
+    return render_template('inventory_add.html', title='Inventory-Adddd', form=form)
 #     pname = None
 #     try:
 #         pname = request.form['sid']

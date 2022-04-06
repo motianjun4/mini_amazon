@@ -163,7 +163,7 @@ window.datatable_config = {
       orderable: false,
       width: "4em",
       render: (data, type, row) => {
-        return `<a class="btn btn-primary" href="/inventory/${data}">Edit</a>`;
+        return `<a class="btn btn-primary" href="/inventory/${data}">Edit</a> <a class="btn btn-danger" href="/deleteInventory/${data}">Delete</a>` ;
       },
     },
   ],

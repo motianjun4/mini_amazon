@@ -158,18 +158,6 @@ window.datatable_config = {
     {title:"Rates", data:"rate"},
     {title:"Upvotes", data:"upvote_cnt"}
   ],
-<<<<<<< HEAD
-  "order-fulfill":[
-    {title:"Product", data:"iid"}, //iid
-    {title:"User", data:"buid"}, //uid
-    {title:"Name", data:"name"},
-    {title:"Address", data:"address"},
-    {title:"Tel", data:"tel"},
-    {title:"Create At", data:"create_at"},
-    // {title:"Categories", data:"categories"},
-    // {title:"Quantity", data:"total_amount"},
-    {title:"Fulfill", data:"fulfillment"},
-=======
   "reviews-for-product":[
     {title: "Time", data:"time"},
     {
@@ -199,7 +187,6 @@ window.datatable_config = {
     {title: "Action", data:"seller", render:(data, type, row)=> {
       return `<div><a href="/review/seller/edit?sid=${data.id}&redirect=user">Edit</a></div><div> <a href="/review/seller/remove?sid=${data.id}&redirect=user">Remove</a></div>`
     }}
->>>>>>> 286043bd44399b43bf9cb07ba4c0bb559804702d
   ]
 };
 

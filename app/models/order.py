@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 from distutils.command.build import build
 from itertools import count
 from unicodedata import name
-=======
->>>>>>> 286043bd44399b43bf9cb07ba4c0bb559804702d
 from flask import current_app as app
 from .purchase import Purchase
 from .inventory import Inventory

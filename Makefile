@@ -1,5 +1,8 @@
 SHELL := /bin/bash
-include .env
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+endif
 
 run:
 	flask run --port 5001 --host 0.0.0.0

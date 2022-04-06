@@ -132,6 +132,16 @@ def product_detail(pid):
         "create_at": iso(localize(review.create_at)),
     } for review in reviews]
 
+    # show summary review
+    summary_review = list(Review.show_summary_review(2,0,pid))
+    has_summary=False
+    has_half=False
+    if summary_review[0] is not None:
+        has_summary=True
+        summary_review.append(int(summary_review[0]))
+        if int(summary_review[0]) < summary_review[0]:
+            has_half=True
+
     return render_template('product_detail.html',
                            product=product, 
                            has_bought=has_bought,
@@ -139,4 +149,7 @@ def product_detail(pid):
                            review=review,
                            seller_obj_list=seller_obj_list,
                            review_obj_list=review_obj_list,
+                           has_half=has_half,
+                           has_summary=has_summary,
+                           summary_review = summary_review,
                            )

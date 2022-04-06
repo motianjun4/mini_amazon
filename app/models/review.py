@@ -106,30 +106,13 @@ ORDER BY create_at DESC
             return rows
 
     @staticmethod
-    def show_review_list_seller(type, target_uid, target_pid):
-        sql = '''
-SELECT review.id, review.type, review.target_uid, review.target_pid, review.rate, review.review, review.create_at,
-SUM(is_up) AS like_cnt, COUNT(*)-like_cnt AS dislike_cnt
-FROM review
-LEFT JOIN review_like ON review_like.rid = review.id
-GROUP BY rid
-WHERE review.type=:type AND target_uid = :target_uid AND target_pid = :target_pid
-'''
-        rows_first = app.db.execute(sql+"ORDER BY like_cnt DESC limit 3", target_uid=target_uid, target_pid=target_pid, type=type)
-        rows_second = app.db.execute(sql+"ORDER BY create_at DESC limit 5", target_uid=target_uid, target_pid=target_pid, type=type)
-        for row in rows_second:
-            if row not in rows_first and len(rows_first) <= 5:
-                rows_first.append(row)
-        return rows_first
-
-    @staticmethod
     def show_summary_review(type, target_uid, target_pid):
         rows = app.db.execute('''
 SELECT AVG(rate) AS avg_rate, COUNT(*) AS review_cnt
 FROM review
 WHERE type=:type AND target_uid = :target_uid AND target_pid = :target_pid
         ''', type=type, target_uid=target_uid, target_pid=target_pid)
-        return rows
+        return rows[0] if rows else None
 
 class ReviewLike:
     def __init__(self, id, rid, uid, is_up):

@@ -59,3 +59,10 @@ FROM product, cart, inventory
 WHERE cart.uid = :id and cart.iid = inventory.id and inventory.pid = product.id
 ''', id=current_user.id)
         return [Cart(*row) for row in rows] if rows is not None else None
+
+    @staticmethod
+    def empty_cart(uid):
+        app.db.execute("""
+                    delete from cart
+                    where uid=:uid
+        """, uid=uid)

@@ -5,6 +5,8 @@ from flask import current_app as app
 from .purchase import Purchase
 from .inventory import Inventory
 from .orm.orm_models import Order as OrderORM
+from datetime import datetime
+import pytz
 '''
 
 CREATE TABLE IF NOT EXISTS public.inventory
@@ -202,3 +204,15 @@ class Order:
     @staticmethod
     def analy_buyer(uid): #this uid is for seller
         pass
+
+# place order
+
+    @staticmethod
+    def place_order(uid, address, tel):
+        rows = app.db.execute('''
+INSERT INTO "order"(uid, address, create_at, tel)
+VALUES(:uid, :address, :create_at, :tel)
+RETURNING id
+        ''', uid=uid, address=address, create_at=str(datetime.now().astimezone(pytz.utc)), tel=tel)
+        oid = rows[0][0]
+        return oid

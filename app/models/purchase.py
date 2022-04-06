@@ -56,3 +56,11 @@ where "order".uid = :uid
             WHERE id = :id
         ''', id=id, fulfill_at=fulfill_at)
         return True
+
+    @staticmethod
+    def place_order(oid, purchase_list):
+        sql = "INSERT INTO purchase(oid, iid, price, count, fulfillment) VALUES"
+        for purchase in purchase_list:
+            sql += " ("+str(oid)+","+str(purchase[0])+","+str(purchase[1])+","+str(purchase[2])+",false),"
+        sql = sql[:-1]
+        app.db.execute(sql)

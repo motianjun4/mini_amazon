@@ -5,3 +5,6 @@ utc = pytz.timezone("UTC")
 
 def localize(dt: datetime)->datetime:
     return utc.localize(dt).astimezone(pytz.timezone("America/New_York"))
+
+def iso(dt: datetime)->str:
+    return dt.isoformat()

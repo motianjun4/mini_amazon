@@ -29,15 +29,23 @@ def orderlist():
     order_obj_list = [{
         "oid": order.id,
         "iid": order.iid,
+        "product_name": order.product_name,
         "buid": order.buid,
         "name": f"{order.firstname} {order.lastname}",
         "address": order.address,
         "tel": order.tel,
         "create_at": order.create_at,
         # "categories": order.count,
-        # "total_amount": order.total_amount,
+        "total_amount": order.total_amount,
         "fulfillment": order.fulfillment
     } for order in orders]
+
+    # cnt = 0
+    # total_amount = 0
+    # for order in orders:
+    #     if order.uid == current_user.id:
+    #         cnt+=1
+    #         total_amount += order.count
 
     inventory_list = Inventory.get_by_uid_ORM(current_user.id)
     items_bought = Purchase.get_items_bought_by_uid(current_user.id)

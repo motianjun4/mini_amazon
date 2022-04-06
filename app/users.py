@@ -201,6 +201,17 @@ def public_profile(uid):
     review = Review.show_review(current_user.id, 1, uid, 0)
     if review:
         has_review = True
+    
+    # show summary review
+    summary_review = list(Review.show_summary_review(1,uid,0))
+    has_summary=False
+    has_half=False
+    if summary_review[0] is not None:
+        has_summary=True
+        summary_review.append(int(summary_review[0]))
+        if int(summary_review[0]) < summary_review[0]:
+            has_half=True
+
 
     return render_template('public_profile.html',
                            user=user, 
@@ -213,4 +224,7 @@ def public_profile(uid):
                            has_bought=has_bought,
                            review=review,
                            has_review=has_review,
+                           has_summary=has_summary,
+                           has_half=has_half,
+                           summary_review=summary_review,
                            )

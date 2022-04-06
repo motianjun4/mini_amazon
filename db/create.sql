@@ -62,7 +62,8 @@ CREATE TABLE IF NOT EXISTS "purchase"
     iid integer NOT NULL,
     price decimal(14,2) NOT NULL,
     count integer NOT NULL,
-    fulfillment boolean NOT NULL DEFAULT FALSE
+    fulfillment boolean NOT NULL DEFAULT FALSE,
+    fulfill_at timestamp
 );
 
 CREATE INDEX idx_purchase_oid ON "purchase" (oid);

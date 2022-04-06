@@ -65,6 +65,7 @@ class Purchase(Base):
     price = Column(Numeric(14, 2), nullable=False)
     count = Column(Integer, nullable=False)
     fulfillment = Column(Boolean, nullable=False, server_default=text('false'))
+    fulfill_at = Column(DateTime)
 
 
 class Review(Base):

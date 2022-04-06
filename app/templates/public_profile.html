@@ -36,7 +36,7 @@ Item Bought: {{items_bought}} Items
   <br />
   <div class="card">
     <div class="card-body">
-      <h4 class="card-title">My Review</h4>
+      <h4 class="card-title" id="my_review">My Review</h4>
       <div class="card-text">
           <div class="container">
               <div class="row">
@@ -67,7 +67,7 @@ Item Bought: {{items_bought}} Items
   <br />
   <div class="card">
     <div class="card-body">
-      <h4 class="card-title">My Review</h4>
+      <h4 class="card-title" id="my_review">My Review</h4>
       <div class="card-text">
         <a href="/review/seller/submit?sid={{user.id}}&redirect=seller">Submit Your Review</a>
         </div>
@@ -79,6 +79,44 @@ Item Bought: {{items_bought}} Items
   <div class="card">
     <div class="card-body">
       <h4 class="card-title">Reviews</h4>
+      <div class="card-text">
+        {% if has_summary %}
+        <div class="container">
+          <div class="row">
+          <div class="col">
+            <p><strong>Total Review Amount</strong>: {{summary_review[1]}}</p>
+          </div>
+          <div class="col">
+            <p><strong>Average Review Rate</strong>: 
+            {% for i in range(summary_review[2]) %} 
+            <i class="bi bi-star-fill"></i>
+            {% endfor %}
+            {% if has_half %}
+              <i class="bi bi-star-half"></i>
+              {% for i in range(5-summary_review[2]-1) %} 
+              <i class="bi bi-star"></i>
+              {% endfor %}
+            {% else %}
+              {% for i in range(5-summary_review[2]) %} 
+              <i class="bi bi-star"></i>
+              {% endfor %}
+            {% endif %}    
+            <span class="ml-2">{{"%.2f"|format(summary_review[0])}}/5.00</span></p>
+        </div>
+      </div>
+      </div>
+      {% else %}
+        <div class="container">
+          <div class="row">
+          <div class="col">
+            <p><strong>Total Review Amount</strong>: 0</p>
+          </div>
+          <div class="col">
+            <p><strong>Average Review Rate</strong>: Unknown</p>
+          </div>
+        </div>
+      {% endif %}
+      <br />
       <div class="card-text">
           {%import 'datatable.html' as t%}
           {{t.datatable("public-user-review", review_obj_list)}}

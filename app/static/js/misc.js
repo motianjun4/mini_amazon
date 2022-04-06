@@ -32,3 +32,51 @@ function remove_cart_item(cid) {
     location.reload();
   });
 }
+
+function upvote_review(rid, is_upvoted) {
+  console.log("upvote review", rid);
+  if (is_upvoted) {
+    delete_review_like(rid);
+    return;
+  }
+  $.post("/review_like", { rid: rid, action:"upvote" }, (data) => {
+    if (data.status != "success") {
+      alert("error: " + data.msg);
+      return;
+    }
+    alert(`Review upvoted!`);
+    location.reload();
+  });
+}
+
+function downvote_review(rid, is_downvoted) {
+  console.log("downvote review", rid);
+  if (is_downvoted){
+    delete_review_like(rid);
+    return;
+  }
+  $.post("/review_like", { rid: rid, action: "downvote" }, (data) => {
+    if (data.status != "success") {
+      alert("error: " + data.msg);
+      return;
+    }
+    alert(`Review downvoted!`);
+    location.reload();
+  });
+}
+
+function delete_review_like(rid) {
+  $.ajax({
+    url: "/review_like",
+    type: "DELETE",
+    data: { rid: rid },
+    success: function(data) {
+      if (data.status != "success") {
+        alert("error: " + data.msg);
+        return;
+      }
+      alert(`Canceled!`);
+      location.reload();
+    }})
+
+}

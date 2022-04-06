@@ -6,7 +6,7 @@ from wtforms import StringField, IntegerField, FloatField, SubmitField, FileFiel
 from wtforms.validators import DataRequired
 from app.utils.json_response import ResponseType, json_response
 
-from .models.review import Review
+from .models.review import Review, ReviewLike
 from flask_login import current_user, login_required
 
 
@@ -84,3 +84,29 @@ def removeSellerReview():
         return redirect(url_for('users.public_profile', uid=args['sid']))
     elif args['redirect'] == 'user':
         return redirect(url_for('users.my_profile'))
+
+@bp.route('/review_like', methods=['POST'])
+@login_required
+def post_review_like():
+    try:
+        rid = request.form['rid']
+        action = request.form['action']
+    except:
+        return json_response(ResponseType.ERROR, 'rid and action required')
+    if ReviewLike.is_voted(rid, current_user.id):
+        ReviewLike.delete(rid, current_user.id)
+    if action == 'upvote':
+        ReviewLike.insert(rid, current_user.id, 1)
+    elif action == 'downvote':
+        ReviewLike.insert(rid, current_user.id, 0)
+    return json_response(ResponseType.SUCCESS, 'success')
+
+@bp.route('/review_like', methods=['DELETE'])
+@login_required
+def delete_review_like():
+    try:
+        rid = request.form['rid']
+    except:
+        return json_response(ResponseType.ERROR, 'rid and action required')
+    ReviewLike.delete(rid, current_user.id)
+    return json_response(ResponseType.SUCCESS, 'success')

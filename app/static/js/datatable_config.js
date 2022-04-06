@@ -262,6 +262,11 @@ window.datatable_config = {
       },
     },
   ],
+  "run-down-list":[
+    { title: "Product", data: "name" },
+    { title: "Price", data: "price" },
+    { title: "Quantity", data: "quantity" },
+  ],
   "reviews-for-product": [
     { title: "Time", data: "time" },
     {

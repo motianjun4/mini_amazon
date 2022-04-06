@@ -3,7 +3,7 @@ from unicodedata import name
 from flask import render_template, redirect, request, url_for, flash
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
-from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField
+from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField, ValidationError
 from wtforms.validators import DataRequired
 
 import datetime
@@ -80,3 +80,14 @@ def addProduct():
 #     pid = Inventory.get_product_pid(pname)
 #     Inventory.add_new_product(current_user.id, pid, price=0)
 #     return json_response(ResponseType.SUCCESS, {"pid":str(pid)})
+@bp.route('/runningdown')
+@login_required
+def runningdown():
+    rdlist = Inventory.products_run_down(current_user.id)
+    run_down_list = [{
+        "name": run_down.name,
+        "price": str(run_down.price),
+        "quantity": run_down.quantity,
+    } for run_down in rdlist]
+    return render_template('rundownlist.html',
+                           run_down_list=run_down_list)

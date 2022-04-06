@@ -158,6 +158,17 @@ window.datatable_config = {
     {title:"Rates", data:"rate"},
     {title:"Upvotes", data:"upvote_cnt"}
   ],
+  "order-fulfill":[
+    {title:"Product", data:"product_name"}, //iid
+    {title:"User", data:"buid"}, //uid
+    {title:"Name", data:"name"},
+    {title:"Address", data:"address"},
+    {title:"Tel", data:"tel"},
+    {title:"Create At", data:"create_at"},
+    // {title:"Categories", data:"categories"},
+    {title:"Quantity", data:"total_amount"},
+    {title:"Fulfill", data:"fulfillment"}
+  ],
   "reviews-for-product":[
     {title: "Time", data:"time"},
     {

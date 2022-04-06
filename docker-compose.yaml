@@ -1,18 +1,39 @@
 version: "3.3"
 services:
+  db:
+    image: postgres
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_INITDB_ARGS="--locale=en_US.UTF-8"
+    restart: always
+
+  db-init:
+    image: postgres
+    command: "cd /src && make load_db_data"
+    volumes:
+      - ./:/src
+    depends_on:
+      - db
   mini-amazon:
     image: ghcr.io/motianjun4/mini_amazon:master
     ports:
-      - "5000:5000"
+      - "${SERVE_PORT}:5001"
     restart: always
+    depends_on:
+      - db-init
+      - minio
     labels:
       com.centurylinklabs.watchtower.enable: true
     
   minio:
     image: minio/minio
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "${MINIO_PORT}:9000"
+      - "${MINIO_CONSOLE_PORT}:9001"
     restart: always
     command: server /data --console-address ":9001"
     

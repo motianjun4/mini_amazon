@@ -1,8 +1,14 @@
 import io
 from faker import Faker
 from minio import Minio
+import os
 
-minio_client = Minio("vcm.tinchun.top:9000", access_key="minioadmin", secret_key="minioadmin", secure=False)
+minio_host = os.environ['MINIO_HOST']
+minio_port = os.environ['MINIO_PORT']
+access_key = os.environ['MINIO_ACCESS_KEY']
+secret_key = os.environ['MINIO_SECRET_KEY']
+
+minio_client = Minio(f"{minio_host}:{minio_port}", access_key=access_key, secret_key=secret_key, secure=False)
 exist_bucket = set()
 
 

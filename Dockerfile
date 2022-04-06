@@ -4,4 +4,4 @@ COPY . .
 RUN make install
 RUN make lint
 CMD make run
-EXPOSE 5000
+EXPOSE 5001

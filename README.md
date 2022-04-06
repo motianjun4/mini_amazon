@@ -1,9 +1,9 @@
-DB Configuration already done.  
-CI/CD workflow created. Check Github Actions for more details.     
-Deployment URL: http://vcm.tinchun.top:5000   
-Repo URL: https://github.com/motianjun4/mini_amazon (private)  
-[Weekly progress](https://docs.google.com/spreadsheets/d/1SJKBwXUPTEHATQLwuVuDMIyz2ir-mMu3TveiOXlTsNg/edit#gid=1386834576)
-# Workflow：
+# Mini-Amazon
+This is a group final project for Duke COMPSCI 516 course.   
+[Demo Link](http://vcm.tinchun.top:5000)
+
+All passwords and tokens in the history commits have been removed and revoked. All new passwords and tokens are randomly generated.  
+# Development Workflow：
 1. Develop: Update master branch, checkout a new branch from master branch and named as dev_{name}\_{feature}. eg.: dev_tm326_login
 1. Switch to the new branch
 1. Develop new features on the new branch and test on the local machine (connected to a remote database)

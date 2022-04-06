@@ -157,3 +157,23 @@ class Inventory:
                             WHERE Inventory.pid=:pid
         ''', pid=pid)
         return rows
+
+    @staticmethod
+    def get_stock(iid_list):
+        sql = "select id, quantity from inventory where id in ("
+        for iid in iid_list:
+            sql += str(iid) + ','
+        sql=sql[:-1]+')'
+        rows = app.db.execute(sql)
+        return rows
+
+    @staticmethod
+    def reduce_inventory(iid_dict):
+        sql = "UPDATE Inventory SET quantity = ( case"
+        for k,v in iid_dict.items():
+            sql += " when id=" + str(k) +" then quantity-" +str(v)
+        sql += " end) where id in ("
+        for k,_ in iid_dict.items():
+            sql += str(k) + ','
+        sql = sql[:-1]+')'
+        app.db.execute(sql)

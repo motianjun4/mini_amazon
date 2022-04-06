@@ -9,8 +9,47 @@
                 {%import 'datatable.html' as t%}
                 {{t.datatable("cart-list", cart_obj_list)}}
             </div>
+            <div class="text-right">
+                Total: ${{total_price}}
+            </div>
         </div>
     </div>
+</div>
+
+<div class="container">
+    <br />
+    <div class="card">
+        <h4 class="card-title">Confirm Order</h4>
+        <form action="" method="post" align="center" enctype="multipart/form-data">
+          {{ form.hidden_tag() }}
+          <p>
+            {{ form.address.label }}
+            {{ form.address(size=32) }}<br/>
+            {% for error in form.address.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+          </p>
+          <p>
+            {{ form.tel.label }}
+            {{ form.tel(size=32) }}<br/>
+            {% for error in form.tel.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+          </p>
+          <p>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+              {% for message in messages %}
+              <li>{{ message }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+          </p>
+          <p>{{ form.submit() }}</p>
+        </form>
+    </div> 
 </div>
 
 

@@ -79,3 +79,13 @@ RETURNING balance
         ''', id=id, amount=amount)
         balance = rows[0][0]
         return balance
+
+    @staticmethod
+    def check_balance_enough(uid, price):
+        rows = app.db.execute('''
+select balance
+from "user"
+WHERE id = :id
+        ''', id=uid)
+        balance = rows[0][0]
+        return True if balance >= price else False

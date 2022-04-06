@@ -1,1 +1,2 @@
-psql -h vcm.tinchun.top -p 54320 -d amazon1 -U postgres -W -f "create.sql" -f "./load.sql"
+cd "$(dirname "$0")"
+PGPASSWORD=$DB_PASSWORD psql -h $DB_HOST -p $DB_PORT -d $DB_NAME -U $DB_USER -W -f "./create.sql" -f "./load.sql"

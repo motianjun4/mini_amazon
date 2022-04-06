@@ -50,7 +50,8 @@ __pycache__/
 ######################
 google_credential.json
 *.pem
-# .flaskenv
+.flaskenv
+.env
 
 # DS Store #
 ######################

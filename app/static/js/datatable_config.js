@@ -209,6 +209,11 @@ window.datatable_config = {
         : `<button class="btn btn-success btn-sm" style="width:6em" onclick="confirm_purchase_fulfillment(${row.purchase_id})">Confirm</button>`;
     }}
   ],
+  "run-down-list":[
+    { title: "Product", data: "name" },
+    { title: "Price", data: "price" },
+    { title: "Quantity", data: "quantity" },
+  ],
   "reviews-for-product": [
     { title: "Time", data: "time" },
     {

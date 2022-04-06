@@ -11,6 +11,7 @@
                     <li>Order Date: {{order.create_at}}</li>
                     <li>Shipping Address: {{order.address}}</li>
                     <li>Tel: {{order.tel}}</li>
+                    <li>Fullfillment: {{total_fulfill}}</li>
                 </ul>
             </div>
         </div>
@@ -24,7 +25,7 @@
                 {{t.datatable("order-purchase", purchase_obj_list)}}
             </div>
             <div class="text-right">
-                Total: $WIP
+                Total: ${{total_price}}
             </div>
         </div>
     </div>

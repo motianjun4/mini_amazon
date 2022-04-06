@@ -35,11 +35,11 @@ window.datatable_config = {
     {
       title: "Action",
       data: "cid",
-      
+
       render: (data, type, row) => {
         return `<button class="btn btn-danger" onclick="remove_cart_item(${data})">Remove</button>`;
-      }
-    }
+      },
+    },
   ],
   "product-search-list": [
     {
@@ -71,15 +71,21 @@ window.datatable_config = {
     },
     { title: "Price", data: "price" },
     { title: "Quantity", data: "quantity" },
-    { title: "Action", data:"seller", orderable:false, width:"17em", render:(data, type, row)=>{
-      return `
+    {
+      title: "Action",
+      data: "seller",
+      orderable: false,
+      width: "17em",
+      render: (data, type, row) => {
+        return `
       <form class="form-inline my-2 my-lg-0 mr-2">
         <input id="key_${data.id}_quantity" type="number" class="form-control form-inline mr-1" min="1" style="width: 7em;" placeholder="Quantity">
         <a id="key_${data.id}_add_cart" class="btn btn-primary" style="width: 7em;" href="javascript:add_cart_button_onclick(${data.id}, ${data.id})">Add to cart</button>
       </form>
       
       `;
-    }}
+      },
+    },
   ],
   "recent-purchase": [
     {
@@ -139,24 +145,30 @@ window.datatable_config = {
       },
     },
     { title: "Price", data: "price" },
-    { title: "Quantity", data:"quantity"},
-    { title: "Action", data:"iid", orderable:false, width:"4em", render:(data, type, row)=>{
-      return `<a class="btn btn-primary" href="/inventory/${data}">Edit</a>`;
-    }}
+    { title: "Quantity", data: "quantity" },
+    {
+      title: "Action",
+      data: "iid",
+      orderable: false,
+      width: "4em",
+      render: (data, type, row) => {
+        return `<a class="btn btn-primary" href="/inventory/${data}">Edit</a>`;
+      },
+    },
   ],
-  "product-detail-review":[
-    {title:"ID", data:"id"},
-    {title:"User",data:"creator"},
-    {title:"Review", data:"review"},
-    {title:"Rates", data:"rate"},
-    {title:"Upvotes", data:"upvote_cnt"}
+  "product-detail-review": [
+    { title: "Create Date", data: "create_at" },
+    { title: "User", data: "creator" },
+    { title: "Review", data: "review" },
+    { title: "Rates", data: "rate" },
+    { title: "Upvotes", data: "upvote_cnt" },
   ],
-  "public-user-review":[
-    {title:"ID", data:"id"},
-    {title:"User",data:"creator"},
-    {title:"Review", data:"review"},
-    {title:"Rates", data:"rate"},
-    {title:"Upvotes", data:"upvote_cnt"}
+  "public-user-review": [
+    { title: "Create Date", data: "create_at" },
+    { title: "User", data: "creator" },
+    { title: "Review", data: "review" },
+    { title: "Rates", data: "rate" },
+    { title: "Upvotes", data: "upvote_cnt" },
   ],
   "order-fulfill":[
     {title:"Product", data:"product_name"}, //iid
@@ -171,6 +183,8 @@ window.datatable_config = {
   ],
   "reviews-for-product":[
     {title: "Time", data:"time"},
+  "reviews-for-product": [
+    { title: "Time", data: "time" },
     {
       title: "Product",
       data: "product",
@@ -178,27 +192,55 @@ window.datatable_config = {
         return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.id}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
       },
     },
-    {title: "Review", data:"review"},
-    {title: "Rate", data:"rate", width:"5em", render:(data,type, row)=> {return `<i class="bi bi-star-fill"></i>`.repeat(data) + `<i class="bi bi-star"></i>`.repeat(5 - data)}},
-    {title: "Action", data:"product", render:(data, type, row)=> {
-      return `<div><a href="/review/product/edit?pid=${data.id}&redirect=user">Edit</a></div><div> <a href="/review/product/remove?pid=${data.id}&redirect=user">Remove</a></div>`
-    }}
+    { title: "Review", data: "review" },
+    {
+      title: "Rate",
+      data: "rate",
+      width: "5em",
+      render: (data, type, row) => {
+        return (
+          `<i class="bi bi-star-fill"></i>`.repeat(data) +
+          `<i class="bi bi-star"></i>`.repeat(5 - data)
+        );
+      },
+    },
+    {
+      title: "Action",
+      data: "product",
+      render: (data, type, row) => {
+        return `<div><a href="/review/product/edit?pid=${data.id}&redirect=user">Edit</a></div><div> <a href="/review/product/remove?pid=${data.id}&redirect=user">Remove</a></div>`;
+      },
+    },
   ],
-  "reviews-for-seller":[
-    {title: "Time", data:"time"},
+  "reviews-for-seller": [
+    { title: "Time", data: "time" },
     {
       title: "Seller",
       data: "seller",
       render: (data, type, row) => {
         return `<a href="/user/${data.id}">${data.name}</a>`;
       },
-    },    
-    {title: "Review", data:"review"},
-    {title: "Rate", data:"rate", width:"5em", render:(data,type, row)=> {return `<i class="bi bi-star-fill"></i>`.repeat(data) + `<i class="bi bi-star"></i>`.repeat(5 - data)}},
-    {title: "Action", data:"seller", render:(data, type, row)=> {
-      return `<div><a href="/review/seller/edit?sid=${data.id}&redirect=user">Edit</a></div><div> <a href="/review/seller/remove?sid=${data.id}&redirect=user">Remove</a></div>`
-    }}
-  ]
+    },
+    { title: "Review", data: "review" },
+    {
+      title: "Rate",
+      data: "rate",
+      width: "5em",
+      render: (data, type, row) => {
+        return (
+          `<i class="bi bi-star-fill"></i>`.repeat(data) +
+          `<i class="bi bi-star"></i>`.repeat(5 - data)
+        );
+      },
+    },
+    {
+      title: "Action",
+      data: "seller",
+      render: (data, type, row) => {
+        return `<div><a href="/review/seller/edit?sid=${data.id}&redirect=user">Edit</a></div><div> <a href="/review/seller/remove?sid=${data.id}&redirect=user">Remove</a></div>`;
+      },
+    },
+  ],
 };
 
 window.datatable_created_row = {
@@ -236,7 +278,11 @@ window.datatable_created_row = {
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h4 class="card-title"><span class="text-secondary" style="font-size:0.7em">#${review.id} </span><a href="/user/${review.uid}">${review.creator}</a>
+                      <h4 class="card-title"><span class="text-secondary" style="font-size:0.7em">#${
+                        review.id
+                      } </span><a href="/user/${review.uid}">${
+      review.creator
+    }</a>
                       ${
                         window.current_user_id == review.uid
                           ? `<span class="text-secondary" style="font-size: 0.7em;">(You)</span>`
@@ -259,6 +305,9 @@ window.datatable_created_row = {
                     </div>
                   </div>
                   <p class="card-text">${review.review}</p>
+                  <div class="text-right">
+                      ${new Date(review.create_at).toDateString()+" "+new Date(review.create_at).toLocaleTimeString()}
+                  </div>
                 </div>
               </div>
       </td>
@@ -273,7 +322,9 @@ window.datatable_created_row = {
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h4 class="card-title"><span class="text-secondary" style="font-size:0.7em">#${review.id} </span><a href="/user/${review.uid}">${review.creator}</a>
+                      <h4 class="card-title">
+                      <span class="text-secondary" style="font-size:0.7em">#${review.id} </span>
+                      <a href="/user/${review.uid}">${review.creator}</a>
                       ${
                         window.current_user_id == review.uid
                           ? `<span class="text-secondary" style="font-size: 0.7em;">(You)</span>`
@@ -296,6 +347,13 @@ window.datatable_created_row = {
                     </div>
                   </div>
                   <p class="card-text">${review.review}</p>
+                  <div class="text-right">
+                      ${
+                        new Date(review.create_at).toDateString() +
+                        " " +
+                        new Date(review.create_at).toLocaleTimeString()
+                      }
+                  </div>
                 </div>
               </div>
       </td>

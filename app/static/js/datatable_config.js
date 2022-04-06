@@ -181,8 +181,6 @@ window.datatable_config = {
     {title:"Quantity", data:"total_amount"},
     {title:"Fulfill", data:"fulfillment"}
   ],
-  "reviews-for-product":[
-    {title: "Time", data:"time"},
   "reviews-for-product": [
     { title: "Time", data: "time" },
     {

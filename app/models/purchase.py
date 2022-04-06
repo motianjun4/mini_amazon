@@ -5,12 +5,13 @@ from .orm.orm_models import Purchase as PurchaseORM, Order as OrderORM, Inventor
 from sqlalchemy.orm.query import Query
 
 class Purchase():
-    def __init__(self, id, oid, iid, count, fulfillment):
+    def __init__(self, id, oid, iid, count, fulfillment, fulfill_at):
         self.id = id
         self.oid = oid
         self.iid = iid
         self.count = count
         self.fulfillment = fulfillment
+        self.fulfillat = fulfill_at
 
     @staticmethod
     def get(id:int)->PurchaseORM:

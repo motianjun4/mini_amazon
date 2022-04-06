@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Union, List
 from flask import current_app as app
 from ..db import DB
@@ -46,3 +47,12 @@ where "order".uid = :uid
         '''
         rows = app.db.execute(sql, uid=uid)
         return rows[0][0] or "0"
+
+    @staticmethod
+    def fulfill(id:int, fulfill_at:datetime)->bool:
+        app.db.execute('''
+            UPDATE purchase
+            SET fulfillment = TRUE, fulfill_at = :fulfill_at
+            WHERE id = :id
+        ''', id=id, fulfill_at=fulfill_at)
+        return True

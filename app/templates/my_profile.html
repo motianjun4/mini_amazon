@@ -3,7 +3,9 @@
 <div class="container">
   <br />
 
-  <div class="card">
+  <div class="flex">
+
+  <div class="card" style="flex-grow: 1;">
     <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
     <div class="card-body">
       <h4 class="card-title">Balance</h4>
@@ -91,6 +93,17 @@
     </div>
   </div>
 
+  {% if is_seller %}
+  <div class="card ml-3" style="flex-grow: 1;">
+    <div class="card-body">
+      <h4 class="card-title">Seller Management</h4>
+      <a class="btn btn-primary" href="#my-inventory" role="button">Inventory Management</a>
+      <a class="btn btn-primary" href="/orders" role="button">Order Management</a>
+    </div>
+
+  </div>
+  {% endif %}
+  </div>
   <br />
 
   <div class="card">
@@ -108,7 +121,7 @@
 
   <div class="card">
     <div class="card-body">
-      <h4 class="card-title" id="My-Inventory-123">My Inventory</h4>
+      <h4 class="card-title" id="my-inventory">My Inventory</h4>
       <div class="card-text">
         {% if is_seller %}
 

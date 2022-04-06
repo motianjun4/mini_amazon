@@ -80,3 +80,14 @@ function delete_review_like(rid) {
     }})
 
 }
+
+function confirm_purchase_fulfillment(pid){
+  $.post("/fulfill_purchase", { pid: pid }, (data) => {
+    if (data.status != "success") {
+      alert("error: " + data.msg);
+      return;
+    }
+    alert(`Order fulfilled!`);
+    location.reload();
+  });
+}

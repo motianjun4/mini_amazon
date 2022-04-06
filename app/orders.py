@@ -1,19 +1,13 @@
-from uuid import uuid1
+from datetime import datetime
 from app.models.inventory import Inventory
 from app.models.purchase import Purchase
 from app.models.user import User
 from app.models.order import Order
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user
-from flask_wtf import FlaskForm
-from flask_wtf.file import FileAllowed
-from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField
-from wtforms.validators import DataRequired
 from app.utils.json_response import ResponseType, json_response
-from libs.my_minio import put_file
+from app.utils.time import iso, localize
 
-from .models.product import Product
-from .models.cart import Cart
 from flask_login import current_user, login_required
 
 
@@ -29,12 +23,13 @@ def orderlist():
     order_obj_list = [{
         "oid": order.id,
         "iid": order.iid,
+        "purchase_id": order.purchase_id,
+        "product": {"pid": order.pid, "name": order.product_name},
         "product_name": order.product_name,
-        "buid": order.buid,
-        "name": f"{order.firstname} {order.lastname}",
+        "buyer": {"uid": order.buid, "name": f"{order.firstname} {order.lastname}"},
         "address": order.address,
         "tel": order.tel,
-        "create_at": order.create_at,
+        "create_at": iso(localize(order.create_at)),
         # "categories": order.count,
         "total_amount": order.total_amount,
         "fulfillment": order.fulfillment
@@ -60,3 +55,13 @@ def orderlist():
                            money_spent = money_spent,
                            is_seller = is_seller
                            )
+
+
+@bp.route('/fulfill_purchase', methods=['POST'])
+@login_required
+def fulfill_purchase():
+    pid = request.form.get('pid')
+    if pid is None:
+        return json_response(ResponseType.ERROR, "pid is required")
+    Purchase.fulfill(pid, datetime.now())
+    return json_response(ResponseType.SUCCESS, "purchase fulfilled")

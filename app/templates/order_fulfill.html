@@ -2,33 +2,16 @@
 
 <div class="container">
   <br />
-  <div class="card">
-    <div class="card-body">
-      <h4 class="card-title">{{user.firstname}} {{user.lastname}}</h4>
-      <div class="card-text" style="word-wrap: break-word;">
-        <pre>
-User ID: {{user.id}}        
-Summary:
-Money spent: ${{money_spent}}
-Item Bought: {{items_bought}} Items
-        </pre>
-      </div>
-    </div>
-  </div>
-  {% if is_seller %}
-  <br />
+  
   <div class="card">
     <div class="card-body">
       <h4 class="card-title">Orders</h4>
-      <div class="card-text">
+      <div class="card-text" style="font-size: 0.8em;">
           {%import 'datatable.html' as t%}
           {{t.datatable("order-fulfill", order_obj_list)}}
       </div>
     </div>
   </div>
-
-  </table>
-  {% endif %}
 
 </div>
 

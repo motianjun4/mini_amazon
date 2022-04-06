@@ -1,1 +1,1 @@
-sqlacodegen postgresql://postgres:Arghi73996@vcm.tinchun.top:54320/amazon1 --tables purchase
+sqlacodegen "postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME" --tables purchase

@@ -22,7 +22,7 @@ class DB:
     def __init__(self, app):
         self.engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'],
                                     execution_options={"isolation_level": "SERIALIZABLE"})
-        self.db_session = scoped_session(sessionmaker(autocommit=False,
+        self.db_session = scoped_session(sessionmaker(autocommit=True,
                                                  autoflush=False,
                                                       bind=self.engine))
         Base.query = self.db_session.query_property()

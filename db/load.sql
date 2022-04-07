@@ -37,3 +37,8 @@ SELECT pg_catalog.setval('public.review_id_seq',
 SELECT pg_catalog.setval('public.review_like_id_seq',
                          (SELECT MAX(id)+1 FROM public.review_like),
                          false);
+
+\COPY public.transaction FROM 'generated/Transaction.csv' WITH DELIMITER ',' NULL '' CSV
+SELECT pg_catalog.setval('public.transaction_id_seq',
+                         (SELECT MAX(id)+1 FROM public.transaction),
+                         false);

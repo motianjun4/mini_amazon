@@ -11,6 +11,7 @@ num_inventories = 4000
 num_orders = 100
 num_reviews = 10000
 num_review_likes = 10000
+num_transactions = 100000
 
 Faker.seed(0)
 fake = Faker()
@@ -162,12 +163,28 @@ def gen_review_like():
         print(f'{num_review_likes} generated')
     return
 
+def gen_transaction():
+    with open('./generated/Transaction.csv', 'w') as f:
+        writer = get_csv_writer(f)
+        print('Transaction...', end=' ', flush=True)
+        for id in range(1, num_transactions+1):
+            if id % 100 == 0:
+                print(f'{id}', end=' ', flush=True)
+            uid = get_id(num_users)
+            amount = f'{str(fake.random_int(max=1000))}.{fake.random_int(max=99):02}'
+            typ = fake.random_int(min=1, max=2)
+            create_at = fake.past_datetime().isoformat()
+            writer.writerow([id, uid, amount, typ, create_at])
+        print(f'{num_transactions} generated')
+    return
+
 
 # gen_users()
 # gen_products()
 # gen_cart()
 # gen_inventory()
 # gen_order()
-gen_purchases()
+# gen_purchases()
 # gen_review()
 # gen_review_like()
+gen_transaction()

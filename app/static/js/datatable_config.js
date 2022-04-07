@@ -372,7 +372,8 @@ window.datatable_created_row = {
             </div>
             
             <div class="ml-2" style="flex-grow:1">
-                <h4 class="card-title"><a href="/product/${item.id}">${item.name}</a></h4>
+
+                <h4 class="card-title"><span class="badge badge-secondary mr-2">${item.category}</span><a href="/product/${item.id}">${item.name}</a></h4>
                 <p class="card-text">${item.price !== "None"?"Starting from: $"+item.price:"No seller yet"}</p>
             </div>
             <div>

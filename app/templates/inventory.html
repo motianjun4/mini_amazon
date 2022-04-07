@@ -2,27 +2,37 @@
 
 {% block content %}
 
-<h1 align="center">Modify inventory product</h1>
-<h2 align="center">{{inven_iid.name}}</h1>
-<form action="" method="post" align="center" enctype="multipart/form-data">
-  {{ form.hidden_tag() }}
-  <p>
-    {{ form.quantity.label }}
-    {{ form.quantity(size=64) }}<br/>
-    {% for error in form.quantity.errors %}
-    <span style="color: red;">[{{ error }}]</span>
-    {% endfor %}
-  </p>
-  <p>
-    {{ form.price.label }}
-    {{ form.price(size=64) }}<br/>
-    {% for error in form.price.errors %}
-    <span style="color: red;">[{{ error }}]</span>
-    {% endfor %}
-  </p>
-  
-  <p>{{ form.submit() }}</p>
-  <p>{{ form.delete() }}</p>
-</form>
+<div class="container">
+  <br/>
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Modify Inventory: <a href="/product/{{inven_iid.pid}}">{{inven_iid.name}} </a></h4>
+      <div class="card-text">
+        <form action="" method="post" enctype="multipart/form-data">
+          {{ form.hidden_tag() }}
+          <div>
+            {{ form.quantity.label }}
+            {{ form.quantity(class="form-control") }}<br />
+            {% for error in form.quantity.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            {{ form.price.label }}
+            {{ form.price(class="form-control") }}<br />
+            {% for error in form.price.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+          </div>
+          <p>{{ form.submit(class="btn btn-primary") }}</p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+
+</div>
+
+
 
 {% endblock %}

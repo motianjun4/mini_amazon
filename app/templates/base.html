@@ -50,13 +50,8 @@
 
                     </script>
                   </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Sell</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{{ url_for('products.createProduct') }}">Create Product</a></li>
-                            <li><a class="dropdown-item" href="#!">Edit Product</a></li>
-                            <li><a class="dropdown-item" href="#!">Sell Product</a></li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('products.createProduct') }}" role="button">Sell</a>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0 mr-2" action="/search" method="get">

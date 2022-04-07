@@ -91,7 +91,7 @@ def my_profile():
     purchase_obj_list = [ {
         "product": {"pid": purchase.inventory.product.id, "name": purchase.inventory.product.name},
         "oid": purchase.oid,
-        "purchase_time": str(iso(localize(purchase.order.create_at))),
+        "purchase_time": strtime(localize(purchase.order.create_at)),
         "price":"$"+str(purchase.price),
         "count":purchase.count,
         "total":"$"+str(purchase.count*purchase.price),
@@ -114,7 +114,7 @@ def my_profile():
     if seller_review:
         seller_review_obj_list = [{
             "time": strtime(localize(item[5])),
-            "seller": {"id": item[4], "name": item[2]+item[3]},
+            "seller": {"id": item[4], "name": item[2]+" "+item[3]},
             "rate": item[0],
             "review": item[1],
         } for item in seller_review]

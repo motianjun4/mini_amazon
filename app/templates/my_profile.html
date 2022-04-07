@@ -93,19 +93,20 @@
     </div>
   </div>
 
-  {% if is_seller %}
   <div class="card ml-3" style="flex-grow: 1;">
     <div class="card-body">
       <h4 class="card-title">Seller Management</h4>
-      <a class="btn btn-primary" href="#my-inventory" role="button">Inventory Management</a>
-      <a class="btn btn-primary" href="/orders" role="button">Order Management</a>
-      <br />
-      <br />
-      <a class="btn btn-danger" href="/runningdown" role="button">Running Down List</a>
+      <div>
+        <a class="btn btn-primary" href="#my-inventory" role="button">Inventory Management</a>
+        <a class="btn btn-primary" href="/orders" role="button">Order Management</a>
+        <div style="height: 0.5em;"></div>
+        <a class="btn btn-primary" href="/sell" role="button">Sell Product</a>
+        <a class="btn btn-danger" href="/runningdown" role="button">Running Down List</a>
+      </div>
+      
     </div>
 
   </div>
-  {% endif %}
   </div>
   <br />
 

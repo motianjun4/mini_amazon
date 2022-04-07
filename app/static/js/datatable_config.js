@@ -119,12 +119,6 @@ window.datatable_config = {
     {
       title: "Purchase At",
       data: "purchase_time",
-      render: (data, type, row) => {
-        if (type != "display") {
-          return data;
-        }
-        return `${format_time(data)}`;
-      },
     },
     {
       title: "Price",
@@ -274,9 +268,17 @@ window.datatable_config = {
     },
   ],
   "run-down-list":[
-    { title: "Product", data: "name" },
+    { title: "Product", data: "name", render: (data, type, row) => {
+      if (type !=="display") {
+        return data;
+      }
+      return `<a href="/product/${row.pid}">${data}</a>`;
+    }},
     { title: "Price", data: "price" },
     { title: "Quantity", data: "quantity" },
+    { title: "Action", data: "iid", orderable: false, render: (data, type, row) => {
+      return `<a class="btn btn-primary" href="/inventory/${data}">Edit</a>`;
+    }},
   ],
   "reviews-for-product": [
     { title: "Time", data: "time" },
@@ -293,6 +295,9 @@ window.datatable_config = {
       data: "rate",
       width: "5em",
       render: (data, type, row) => {
+        if (type !== "display") {
+          return data;
+        }
         return (
           `<i class="bi bi-star-fill"></i>`.repeat(data) +
           `<i class="bi bi-star"></i>`.repeat(5 - data)
@@ -322,6 +327,9 @@ window.datatable_config = {
       data: "rate",
       width: "5em",
       render: (data, type, row) => {
+        if (type !== "display") {
+          return data;
+        }
         return (
           `<i class="bi bi-star-fill"></i>`.repeat(data) +
           `<i class="bi bi-star"></i>`.repeat(5 - data)

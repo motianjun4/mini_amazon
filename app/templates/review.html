@@ -2,24 +2,36 @@
 
 {% block content %}
 
-<h1 align="center">Submit Review</h1>
-<form action="" method="post" align="center" enctype="multipart/form-data">
+<div class="container">
+  <br/>
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Submit Review</h4>
+      <div>
+
+
+
+      
+<form action="" method="post" enctype="multipart/form-data">
   {{ form.hidden_tag() }}
   <p>
     {{ form.rate.label }}
-    {{ form.rate(size=32) }}<br/>
+    {{ form.rate(class="form-control") }}<br/>
     {% for error in form.rate.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
-  </p>
-  <p>
     {{ form.review.label }}
-    {{ form.review(size=32) }}<br/>
+    {{ form.review(class="form-control ") }}<br/>
     {% for error in form.review.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
   </p>
-  <p>{{ form.submit() }}</p>
+  <p>{{ form.submit(class="btn btn-primary") }}</p>
 </form>
+
+</div>
+</div>
+</div>
+</div>
 
 {% endblock %}

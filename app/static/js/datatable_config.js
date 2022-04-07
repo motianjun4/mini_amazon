@@ -10,7 +10,7 @@ window.datatable_config = {
       title: "Product",
       data: "product",
       render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
       },
     },
     {
@@ -56,7 +56,7 @@ window.datatable_config = {
       title: "Product",
       data: "product",
       render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.id}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.id}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
       },
     },
     { title: "Price", data: "price" },
@@ -92,7 +92,7 @@ window.datatable_config = {
       title: "Product",
       data: "product",
       render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
       },
     },
     {
@@ -148,7 +148,7 @@ window.datatable_config = {
       title: "Product",
       data: "product",
       render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
       },
     },
     {
@@ -186,7 +186,7 @@ window.datatable_config = {
       title: "Product",
       data: "product",
       render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.id}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.id}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
       },
     },
     { title: "Price", data: "price" },
@@ -273,7 +273,7 @@ window.datatable_config = {
       title: "Product",
       data: "product",
       render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.id}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.id}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
       },
     },
     { title: "Review", data: "review" },
@@ -330,18 +330,18 @@ window.datatable_config = {
 window.datatable_created_row = {
   "product-search-list": (row, item, index) =>{
     row.innerHTML = ""
-
+    
     html = `
       <td colspan="2">
       <div class="card">
         <div class="card-body" style="display:flex">
             <div>
-                <img src="/img/product_${item.id}.jpg" style="height: 5em; width:5em;">
+                <img data-src="/img/product_${item.id}.jpg" style="height: 5em; width:5em;">
             </div>
             
             <div class="ml-2" style="flex-grow:1">
                 <h4 class="card-title"><a href="/product/${item.id}">${item.name}</a></h4>
-                <p class="card-text">Starting from: $${item.price}</p>
+                <p class="card-text">${item.price !== "None"?"Starting from: $"+item.price:"No seller yet"}</p>
             </div>
             <div>
                 <input id="key_${item.id}_quantity" type="number" class="form-control mb-2" min="1" style="width: 7em;" placeholder="Quantity">

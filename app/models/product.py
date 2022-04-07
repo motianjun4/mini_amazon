@@ -26,16 +26,17 @@ WHERE id = :id
         return Product(*(rows[0])) if rows is not None else None
 
     @staticmethod
-    def get_all_by_keyword(has_seller=True, like:str="") -> List["Product"]:
+    def get_all_by_keyword(has_seller=True, like:str="", category:str="") -> List["Product"]:
         sql = f'''
 SELECT DISTINCT ON (product.id) product.id, product.uid, name, category, description, inventory.price, inventory.id
 FROM product
 LEFT OUTER JOIN inventory ON inventory.pid = product.id 
 WHERE LOWER(name) LIKE LOWER(:like)
 {"AND inventory.id is not NULL" if has_seller else ""}
+{"AND category = :category" if category else ""}
 ORDER BY product.id, inventory.price
 ''' 
-        rows = app.db.execute(sql, like=like)
+        rows = app.db.execute(sql, like=like, category=category)
         return [Product(*row) for row in rows]
 
     @staticmethod
@@ -70,3 +71,10 @@ RETURNING id
         iid = rows[0][0]
         return (pid, iid)
 
+    @staticmethod
+    def get_categories():
+        rows = app.db.execute("""
+SELECT DISTINCT category
+FROM product
+""")
+        return [row[0] for row in rows]

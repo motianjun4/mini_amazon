@@ -17,7 +17,10 @@
             data:data,
             columns: config,
             createdRow: createdRowCallback,
-            order: order
+            order: order,
+            drawCallback: () => {
+                $("img").Lazy()
+            }
         })
     }
     

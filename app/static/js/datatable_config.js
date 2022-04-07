@@ -27,6 +27,17 @@ window.datatable_config = {
     {
       title: "Quantity",
       data: "quantity",
+      render: (data, type, row) => {
+        if (type != "display") {
+          return data;
+        }
+        return `<input 
+                  id="quantity_input_${row.cid}" class="form-control" 
+                  type="number" value="${data}" min="1" max="100" onblur="update_cart_item_quantity('#quantity_input_${row.cid}',${row.cid})"
+                  data-toggle="tooltip" data-placement="top" title="Click elsewhere to submit"
+                  />
+                  `;
+      }
     },
     {
       title: "Total",

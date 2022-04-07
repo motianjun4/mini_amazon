@@ -10,7 +10,7 @@ window.datatable_config = {
       title: "Product",
       data: "product",
       render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
       },
     },
     {
@@ -27,6 +27,17 @@ window.datatable_config = {
     {
       title: "Quantity",
       data: "quantity",
+      render: (data, type, row) => {
+        if (type != "display") {
+          return data;
+        }
+        return `<input 
+                  id="quantity_input_${row.cid}" class="form-control" 
+                  type="number" value="${data}" min="1" max="100" onblur="update_cart_item_quantity('#quantity_input_${row.cid}',${row.cid})"
+                  data-toggle="tooltip" data-placement="top" title="Click elsewhere to submit"
+                  />
+                  `;
+      },
     },
     {
       title: "Total",
@@ -56,7 +67,7 @@ window.datatable_config = {
       title: "Product",
       data: "product",
       render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.id}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.id}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
       },
     },
     { title: "Price", data: "price" },
@@ -92,7 +103,7 @@ window.datatable_config = {
       title: "Product",
       data: "product",
       render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
       },
     },
     {
@@ -108,12 +119,6 @@ window.datatable_config = {
     {
       title: "Purchase At",
       data: "purchase_time",
-      render: (data, type, row) => {
-        if (type != "display") {
-          return data;
-        }
-        return `${format_time(data)}`;
-      },
     },
     {
       title: "Price",
@@ -128,7 +133,7 @@ window.datatable_config = {
       data: "total",
     },
     {
-      title:"Fulfillment",
+      title: "Fulfillment",
       data: "fulfillment",
       render: (data, type, row) => {
         if (data === true) {
@@ -136,8 +141,8 @@ window.datatable_config = {
         } else {
           return `<span class="badge badge-warning">Pending</span>`;
         }
-      }
-    }
+      },
+    },
   ],
   "order-purchase": [
     {
@@ -148,18 +153,18 @@ window.datatable_config = {
       title: "Product",
       data: "product",
       render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
       },
     },
     {
       title: "Seller",
       data: "seller",
       render: (data, type, row) => {
-        if(type!="display"){
+        if (type != "display") {
           return data.name;
         }
         return `<a href="/user/${data.uid}">${data.name}</a>`;
-      }
+      },
     },
     {
       title: "Price",
@@ -186,7 +191,7 @@ window.datatable_config = {
       title: "Product",
       data: "product",
       render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.id}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.id}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
       },
     },
     { title: "Price", data: "price" },
@@ -197,7 +202,7 @@ window.datatable_config = {
       orderable: false,
       width: "4em",
       render: (data, type, row) => {
-        return `<a class="btn btn-primary" href="/inventory/${data}">Edit</a> <a class="btn btn-danger" href="/deleteInventory/${data}">Delete</a>`;
+        return `<a class="btn btn-primary btn-sm mb-1" style="width:5em;" href="/inventory/${data}">Edit</a> <a class="btn btn-danger btn-sm" style="width:5em;" href="/deleteInventory/${data}">Delete</a>`;
       },
     },
   ],
@@ -221,7 +226,7 @@ window.datatable_config = {
       data: "oid",
       render: (data, type, row) => {
         if (type === "display") {
-        return `<a href="/order/${data}">#${data}</a>`;
+          return `<a href="/order/${data}">#${data}</a>`;
         }
         return data;
       },
@@ -262,10 +267,27 @@ window.datatable_config = {
       },
     },
   ],
-  "run-down-list":[
-    { title: "Product", data: "name" },
+  "run-down-list": [
+    {
+      title: "Product",
+      data: "name",
+      render: (data, type, row) => {
+        if (type !== "display") {
+          return data;
+        }
+        return `<a href="/product/${row.pid}">${data}</a>`;
+      },
+    },
     { title: "Price", data: "price" },
     { title: "Quantity", data: "quantity" },
+    {
+      title: "Action",
+      data: "iid",
+      orderable: false,
+      render: (data, type, row) => {
+        return `<a class="btn btn-primary" href="/inventory/${data}">Edit</a>`;
+      },
+    },
   ],
   "reviews-for-product": [
     { title: "Time", data: "time" },
@@ -273,7 +295,7 @@ window.datatable_config = {
       title: "Product",
       data: "product",
       render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" src="/img/product_${data.id}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.id}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
       },
     },
     { title: "Review", data: "review" },
@@ -282,6 +304,9 @@ window.datatable_config = {
       data: "rate",
       width: "5em",
       render: (data, type, row) => {
+        if (type !== "display") {
+          return data;
+        }
         return (
           `<i class="bi bi-star-fill"></i>`.repeat(data) +
           `<i class="bi bi-star"></i>`.repeat(5 - data)
@@ -291,8 +316,10 @@ window.datatable_config = {
     {
       title: "Action",
       data: "product",
+      orderable: false,
       render: (data, type, row) => {
-        return `<div><a href="/review/product/edit?pid=${data.id}&redirect=user">Edit</a></div><div> <a href="/review/product/remove?pid=${data.id}&redirect=user">Remove</a></div>`;
+        return `<div><a class="btn btn-sm btn-primary mb-1" style="width:5em" href="/review/product/edit?pid=${data.id}&redirect=user">Edit</a></div><div> 
+        <a class="btn btn-danger btn-sm" style="width:5em" href="/review/product/remove?pid=${data.id}&redirect=user">Remove</a></div>`;
       },
     },
   ],
@@ -311,6 +338,9 @@ window.datatable_config = {
       data: "rate",
       width: "5em",
       render: (data, type, row) => {
+        if (type !== "display") {
+          return data;
+        }
         return (
           `<i class="bi bi-star-fill"></i>`.repeat(data) +
           `<i class="bi bi-star"></i>`.repeat(5 - data)
@@ -320,8 +350,10 @@ window.datatable_config = {
     {
       title: "Action",
       data: "seller",
+      orderable: false,
       render: (data, type, row) => {
-        return `<div><a href="/review/seller/edit?sid=${data.id}&redirect=user">Edit</a></div><div> <a href="/review/seller/remove?sid=${data.id}&redirect=user">Remove</a></div>`;
+        return `<div><a class="btn btn-sm btn-primary mb-1" style="width:5em" href="/review/seller/edit?sid=${data.id}&redirect=user">Edit</a></div><div> 
+        <a class="btn btn-danger btn-sm" style="width:5em" href="/review/seller/remove?sid=${data.id}&redirect=user">Remove</a></div>`;
       },
     },
   ],
@@ -330,18 +362,18 @@ window.datatable_config = {
 window.datatable_created_row = {
   "product-search-list": (row, item, index) =>{
     row.innerHTML = ""
-
+    
     html = `
       <td colspan="2">
       <div class="card">
         <div class="card-body" style="display:flex">
             <div>
-                <img src="/img/product_${item.id}.jpg" style="height: 5em; width:5em;">
+                <img data-src="/img/product_${item.id}.jpg" style="height: 5em; width:5em;">
             </div>
             
             <div class="ml-2" style="flex-grow:1">
                 <h4 class="card-title"><a href="/product/${item.id}">${item.name}</a></h4>
-                <p class="card-text">Starting from: $${item.price}</p>
+                <p class="card-text">${item.price !== "None"?"Starting from: $"+item.price:"No seller yet"}</p>
             </div>
             <div>
                 <input id="key_${item.id}_quantity" type="number" class="form-control mb-2" min="1" style="width: 7em;" placeholder="Quantity">

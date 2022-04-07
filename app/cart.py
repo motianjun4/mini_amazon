@@ -110,7 +110,20 @@ def cart_cnt():
     return json_response(ResponseType.SUCCESS, {"count":cnt})
 
 @bp.route("/removeCart", methods=['POST'])
+@login_required
 def remove_cart():
     cid = request.form['cid']
     Cart.delete(cid)
     return json_response(ResponseType.SUCCESS, {"message": "Successfully removed from cart"})
+
+@bp.route("/update_cart_item_quantity", methods=['POST'])
+@login_required
+def update_cart_item_quantity():
+    try:
+
+        cid = request.form['cid']
+        quantity = request.form['quantity']
+    except:
+        return json_response(ResponseType.ERROR, {"message": "cid and quantity required"})
+    Cart.update_quantity(cid, quantity)
+    return json_response(ResponseType.SUCCESS, {"message": "Successfully updated"})

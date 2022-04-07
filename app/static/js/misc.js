@@ -1,19 +1,22 @@
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+});
+
 function format_time(time) {
   let date = new Date(time);
   return `${date.toLocaleString()}`;
 }
 
-
 // key should be used only once in a single page. example: id
-function add_cart_button_onclick(key, iid){
-    let quantity_selector = `#key_${key}_quantity`;
-    let quantity = $(quantity_selector).val();
-    if (quantity < 1) {
-      alert("The quantity should be greater than or equal to 1");
-      return;
-    }
-    console.log(iid, quantity)
-    add_item_to_cart(iid, quantity);
+function add_cart_button_onclick(key, iid) {
+  let quantity_selector = `#key_${key}_quantity`;
+  let quantity = $(quantity_selector).val();
+  if (quantity < 1) {
+    alert("The quantity should be greater than or equal to 1");
+    return;
+  }
+  console.log(iid, quantity);
+  add_item_to_cart(iid, quantity);
 }
 
 function add_item_to_cart(iid, quantity) {
@@ -23,6 +26,22 @@ function add_item_to_cart(iid, quantity) {
       return;
     }
     alert(`${quantity} item added!`);
+    location.reload();
+  });
+}
+
+function update_cart_item_quantity(selector,cid){
+  let quantity = $(selector).val();
+  if (quantity < 1) {
+    alert("The quantity should be greater than or equal to 1");
+    return;
+  }
+  $.post("/update_cart_item_quantity", { cid: cid, quantity: quantity }, (data) => {
+    if (data.status != "success") {
+      alert("error: " + data.msg);
+      return;
+    }
+    alert(`Quantity updated!`);
     location.reload();
   });
 }
@@ -44,7 +63,7 @@ function upvote_review(rid, is_upvoted) {
     delete_review_like(rid);
     return;
   }
-  $.post("/review_like", { rid: rid, action:"upvote" }, (data) => {
+  $.post("/review_like", { rid: rid, action: "upvote" }, (data) => {
     if (data.status != "success") {
       alert("error: " + data.msg);
       return;
@@ -56,7 +75,7 @@ function upvote_review(rid, is_upvoted) {
 
 function downvote_review(rid, is_downvoted) {
   console.log("downvote review", rid);
-  if (is_downvoted){
+  if (is_downvoted) {
     delete_review_like(rid);
     return;
   }
@@ -75,18 +94,18 @@ function delete_review_like(rid) {
     url: "/review_like",
     type: "DELETE",
     data: { rid: rid },
-    success: function(data) {
+    success: function (data) {
       if (data.status != "success") {
         alert("error: " + data.msg);
         return;
       }
       alert(`Canceled!`);
       location.reload();
-    }})
-
+    },
+  });
 }
 
-function confirm_purchase_fulfillment(pid){
+function confirm_purchase_fulfillment(pid) {
   $.post("/fulfill_purchase", { pid: pid }, (data) => {
     if (data.status != "success") {
       alert("error: " + data.msg);

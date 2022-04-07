@@ -66,3 +66,11 @@ WHERE cart.uid = :id and cart.iid = inventory.id and inventory.pid = product.id
                     delete from cart
                     where uid=:uid
         """, uid=uid)
+
+    @staticmethod
+    def update_quantity(cid, quantity):
+        app.db.execute("""
+UPDATE cart
+SET quantity = :quantity
+WHERE id = :id
+""", quantity=quantity, id=cid)

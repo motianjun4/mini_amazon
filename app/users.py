@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, flash, request
-from .utils.time import iso, localize
+from .utils.time import iso, localize, strtime
 from werkzeug.urls import url_parse
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -91,7 +91,7 @@ def my_profile():
     purchase_obj_list = [ {
         "product": {"pid": purchase.inventory.product.id, "name": purchase.inventory.product.name},
         "oid": purchase.oid,
-        "purchase_time": str(iso(localize(purchase.order.create_at))),
+        "purchase_time": strtime(localize(purchase.order.create_at)),
         "price":"$"+str(purchase.price),
         "count":purchase.count,
         "total":"$"+str(purchase.count*purchase.price),
@@ -113,8 +113,8 @@ def my_profile():
     seller_review_obj_list = []
     if seller_review:
         seller_review_obj_list = [{
-            "time": str(localize(item[5]).strftime("%m/%d/%Y %H:%M:%S")),
-            "seller": {"id": item[4], "name": item[2]+item[3]},
+            "time": strtime(localize(item[5])),
+            "seller": {"id": item[4], "name": item[2]+" "+item[3]},
             "rate": item[0],
             "review": item[1],
         } for item in seller_review]
@@ -122,7 +122,7 @@ def my_profile():
     product_review_obj_list = []
     if product_review:
         product_review_obj_list = [{
-            "time": str(localize(item[4]).strftime("%m/%d/%Y %H:%M:%S")),
+            "time": strtime(localize(item[4])),
             "product": {"id": item[3], "name": item[2]},
             "rate": item[0],
             "review": item[1],

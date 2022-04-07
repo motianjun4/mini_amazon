@@ -19,24 +19,22 @@
 <div class="container">
     <br />
     <div class="card">
+      <div class="card-body">
+
         <h4 class="card-title">Confirm Order</h4>
-        <form action="" method="post" align="center" enctype="multipart/form-data">
+        <form action="" method="post" enctype="multipart/form-data">
           {{ form.hidden_tag() }}
-          <p>
+          <div class="form-group">
             {{ form.address.label }}
-            {{ form.address(size=32) }}<br/>
+            {{ form.address(class="form-control") }}<br/>
             {% for error in form.address.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-          </p>
-          <p>
             {{ form.tel.label }}
-            {{ form.tel(size=32) }}<br/>
+            {{ form.tel(class="form-control") }}<br/>
             {% for error in form.tel.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-          </p>
-          <p>
             {% with messages = get_flashed_messages() %}
             {% if messages %}
             <ul>
@@ -46,9 +44,10 @@
             </ul>
             {% endif %}
             {% endwith %}
-          </p>
-          <p>{{ form.submit() }}</p>
+          </div>
+          <div>{{ form.submit(class="btn btn-success") }}</div>
         </form>
+      </div>
     </div> 
 </div>
 

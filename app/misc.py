@@ -20,3 +20,6 @@ def get_image(name):
     else:
         return abort(404)
 
+@bp.route('/categories', methods=['GET'])
+def get_categories():
+    return json_response(ResponseType.SUCCESS, Product.get_categories())

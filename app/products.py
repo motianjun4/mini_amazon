@@ -24,27 +24,32 @@ bp = Blueprint('products', __name__)
 @bp.route('/search')
 def search():
     args = request.args
-    query = args.get("q")
+    query = args.get("q") or ""
+    category = args.get("c") or ""
 
-    if query is None or query == "":
+    if (query is None or query == "") and category == "All":
         product_obj_list = []
         has_result=False
         flash("Please specify searching keyword.")
     else:
         has_result=True
-        product_list = Product.get_all_by_keyword(query, f"%{query}%")
+        product_list = Product.get_all_by_keyword(query, f"%{query}%", category if category != "All" else None)
         product_obj_list = [{
             "id": product.id,
             "name": product.name,
             "price": str(product.iMinPrice),
             "iid": product.minPriceIid,
         } for product in product_list]
+
+    categories = Product.get_categories()
     
     return render_template('search.html',
                             user=current_user,
                             has_result=has_result,
                             product_obj_list=product_obj_list,
                             query=query,
+                            categories=categories,
+                            category=category,
                            )
 
 class CreateProductForm(FlaskForm):

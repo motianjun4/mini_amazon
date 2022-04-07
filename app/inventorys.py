@@ -85,6 +85,8 @@ def addProduct():
 def runningdown():
     rdlist = Inventory.products_run_down(current_user.id)
     run_down_list = [{
+        "iid": run_down.id,
+        "pid": run_down.pid,
         "name": run_down.name,
         "price": str(run_down.price),
         "quantity": run_down.quantity,

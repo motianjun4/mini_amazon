@@ -52,6 +52,10 @@ window.datatable_config = {
       },
     },
   ],
+  "coworker_list":[
+    {title:"Name", data:"name"},
+    {title:"E-mail", data:"email"},
+  ],
   "product-search-list": [
     {
       title: "Name",

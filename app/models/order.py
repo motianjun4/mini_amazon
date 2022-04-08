@@ -206,7 +206,16 @@ class Order:
 
     @staticmethod
     def analy_buyer(uid): #this uid is for seller
-        pass
+        rows = app.db.execute('''
+                            SELECT DISTINCT ON(uid) uid, firstname, lastname, email
+                            FROM Review JOIN "user" ON Review.uid="user".id
+                            WHERE target_uid=:uid AND rate>=3
+                            ''', uid=uid)
+        co_worker = []
+        for row in rows:
+            name = row[1]+" "+row[2]
+            co_worker.append((name, row[3]))
+        return co_worker
 
 # place order
 

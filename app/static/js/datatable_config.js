@@ -289,6 +289,10 @@ window.datatable_config = {
       },
     },
   ],
+  "product_trend":[
+    {title:"Product", data:"name"},
+    {title:"Quantity", data:"num"},
+  ],
   "reviews-for-product": [
     { title: "Time", data: "time" },
     {

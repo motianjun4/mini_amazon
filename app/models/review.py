@@ -47,21 +47,25 @@ class Review:
 
     @staticmethod
     def submit(uid, type, target_uid, target_pid, rate, review):
-        app.db.execute('''
+        rows = app.db.execute('''
 INSERT INTO review(uid, type, target_uid, target_pid, rate, review)
 VALUES(:uid, :type, :target_uid, :target_pid, :rate, :review)
+RETURNING id
         ''', uid=uid, type=type, target_uid=target_uid, target_pid=target_pid, rate=rate, review=review)
+        return rows[0][0]
 
     @staticmethod
     def edit(uid, type, target_uid, target_pid, rate, review):
-        app.db.execute('''
+        rows = app.db.execute('''
 UPDATE review
 SET rate = :rate, review = :review, create_at=:create_at
 WHERE uid = :uid
 AND type = :type
 AND target_uid = :target_uid
 AND target_pid = :target_pid
+RETURNING id
         ''', uid=uid, type=type, target_uid=target_uid, target_pid=target_pid, rate=rate, review=review, create_at=str(get_now()))
+        return rows[0][0]
 
     @staticmethod
     def delete(uid, type, target_uid, target_pid):

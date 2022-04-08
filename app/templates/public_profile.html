@@ -52,6 +52,12 @@ Item Bought: {{items_bought}} Items
                       {% endfor %}</p>
               </div>
               <div class="row">
+                <p><strong>Images</strong>:
+                <img data-src="/img/review_{{review[0]}}_0.jpg" style="height: 5em; width:5em;">
+                <img data-src="/img/review_{{review[0]}}_1.jpg" style="height: 5em; width:5em;">
+                <img data-src="/img/review_{{review[0]}}_2.jpg" style="height: 5em; width:5em;"></p>
+              </div>
+              <div class="row">
                 <div class="col">
                   <a href="/review/seller/edit?sid={{user.id}}&redirect=seller">Edit Your Review</a>
                 </div>

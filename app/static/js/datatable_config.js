@@ -77,6 +77,24 @@ window.datatable_config = {
       },
     },
   ],
+  "coworker_list":[
+    {title:"Name", data:"name"},
+    {title:"E-mail", data:"email"},
+    {
+      title: "Rate",
+      data: "rate",
+      width: "5em",
+      render: (data, type, row) => {
+        if (type !== "display") {
+          return data;
+        }
+        return (
+          `<i class="bi bi-star-fill"></i>`.repeat(data) +
+          `<i class="bi bi-star"></i>`.repeat(5 - data)
+        );
+      },
+    },
+  ],
   "product-search-list": [
     {
       title: "Name",
@@ -210,6 +228,13 @@ window.datatable_config = {
         return `<a class="btn btn-primary" href="/user/${data}#my_review">View</a>`;
       },
     },
+    {
+      title: "Message",
+      data: "seller",
+      render: (data, type, row) => {
+        return `<a class="btn btn-primary" href="/user/chat/${data.uid}">Send</a>`;
+      },
+    }
   ],
   "my-inventory": [
     {

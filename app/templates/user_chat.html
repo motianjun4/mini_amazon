@@ -1,0 +1,40 @@
+{% extends "base.html" %} {% block content %}
+
+<script>
+    (function (t, a, l, k, j, s) {
+        s = a.createElement('script'); s.async = 1; s.src = "https://cdn.talkjs.com/talk.js"; a.head.appendChild(s)
+            ; k = t.Promise; t.Talk = {
+                v: 3, ready: {
+                    then: function (f) {
+                        if (k) return new k(function (r, e) { l.push([f, r, e]) }); l
+                            .push([f])
+                    }, catch: function () { return k && new k() }, c: l
+                }
+            };
+    })(window, document, []);
+</script>
+
+<div id="inbox-container" style="width: 90%; margin: 30px; height: 500px">
+    <i>Loading chat...</i>
+</div>
+
+<script>
+    let user_obj = {{ user_dict| tojson | safe}}
+    Talk.ready.then(function () {
+        var me = new Talk.User({
+            id: user_obj.id,
+            name: user_obj.name,
+            email: user_obj.email,
+            welcomeMessage: 'Hey there! How are you? :-)',
+        });
+        window.talkSession = new Talk.Session({
+            appId: 'tkzcRVNA',
+            me: me,
+        });
+
+        var inbox = window.talkSession.createInbox();
+        inbox.mount(document.getElementById('inbox-container'));
+    });
+</script>
+
+{% endblock %}

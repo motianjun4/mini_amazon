@@ -1,33 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="container">
 
-<h1 align="center">Add new inventory product</h1>
-<form action="" method="post" align="center" enctype="multipart/form-data">
+  <br/>
+
+  <div class="card">
+    <img class="card-img-top" src="holder.js/100x180/" alt="">
+    <div class="card-body">
+      <h4 class="card-title">Add new inventory produc</h4>
+      <div>
+
+<form action="" method="post" enctype="multipart/form-data">
   {{ form.hidden_tag() }}
   <p>
     {{ form.name.label }}
-    {{ form.name(size=64) }}<br/>
+    {{ form.name(size=64, class="form-control") }}<br/>
     {% for error in form.name.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
-  </p>
-  <p>
     {{ form.quantity.label }}
-    {{ form.quantity(size=64) }}<br/>
+    {{ form.quantity(size=64, class="form-control") }}<br/>
     {% for error in form.quantity.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
-  </p>
-  <p>
     {{ form.price.label }}
-    {{ form.price(size=64) }}<br/>
+    {{ form.price(size=64, class="form-control") }}<br/>
     {% for error in form.price.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
-  </p>
-  
-  <p>{{ form.add() }}</p>
+  <p>{{ form.add(class="btn btn-success") }}</p>
 </form>
 
+</div>
+</div>
+</div>
+</div>
 {% endblock %}

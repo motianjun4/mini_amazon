@@ -1,6 +1,6 @@
 from cmath import e
 from traceback import print_list
-from unicodedata import name
+from unicodedata import decimal, name
 from flask import render_template, redirect, request, url_for, flash
 from app.models.order import Order
 from flask_wtf import FlaskForm
@@ -18,7 +18,7 @@ from .models.user import User
 from .models.inventory import Inventory
 from .models.product import Product
 
-from flask import render_template, redirect, url_for, flash, request
+# from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user, login_required
 current_user:User
 
@@ -69,19 +69,20 @@ def deleteInventory(iid):
 def addProduct():
     form = AddProductForm()
     pid = Inventory.get_product_pid(form)
-    if pid:
-        if form.validate_on_submit():
+    # if form.quantity<0 and (type(form.price)==decimal(14,2) and form.price>0)
+    # if form.quantity<0 or form.price<0:
+    #     return render_template('inventory_add.html', title='Inventory-Adddd', form=form)
+    if pid and not Inventory.pid_in_inven(pid, current_user.id):
+        if form.validate_on_submit(): 
             Inventory.add_new_product(form, current_user.id, pid)
             return redirect(url_for('users.my_profile'))
     return render_template('inventory_add.html', title='Inventory-Adddd', form=form)
-#     pname = None
-#     try:
-#         pname = request.form['sid']
-#     except Exception as e:
-#         return json_response(ResponseType.ERROR, None, str(e))
-#     pid = Inventory.get_product_pid(pname)
-#     Inventory.add_new_product(current_user.id, pid, price=0)
-#     return json_response(ResponseType.SUCCESS, {"pid":str(pid)})
+    
+        # session['_flashes'].clear()
+        
+    
+
+
 @bp.route('/visual_ana')
 @login_required
 def visual_ana():

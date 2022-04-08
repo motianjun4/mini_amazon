@@ -128,9 +128,20 @@
   <div class="card">
     <div class="card-body">
       <h4 class="card-title">Account Summary</h4>
-      <div class="card-text">
-        <div id="balance-chart" style="width: 50%;height:15em;"></div>
-        <script src="{{url_for('static', filename='js/balance_chart.js')}}"></script>
+      <div class="card-text flex">
+        <div style="width:33%">
+          <div id="purchase-category-chart" style="width: 100%; height: 15em;"></div>
+          <script src="{{url_for('static', filename='js/purchase_category_chart.js')}}"></script>
+        </div>
+        <div style="width:33%">
+          <div id="balance-chart" style="width: 100%; height: 15em;"></div>
+          <script src="{{url_for('static', filename='js/balance_chart.js')}}"></script>
+        </div>
+        <div style="width:33%">
+          <!-- <div id="balance-chart" style="width: 100%; height: 15em;"></div> -->
+          <!-- <script src="{{url_for('static', filename='js/balance_chart.js')}}"></script> -->
+        </div>
+        
       </div>
     </div>
   </div>

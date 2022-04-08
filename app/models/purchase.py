@@ -27,6 +27,20 @@ class Purchase():
         return app.db.get_session().query(PurchaseORM).join(OrderORM).filter(OrderORM.uid==uid)
 
     @staticmethod
+    def get_categories_by_uid(uid)->List[str]:
+        rows = app.db.execute('''
+select category, count(category)
+from purchase
+join inventory ON purchase.iid = inventory.id
+join product ON product.id = inventory.pid
+join "order" ON "order".id = purchase.oid
+where "order".uid = :uid
+group by category
+        ''', uid=uid)
+
+        return rows
+
+    @staticmethod
     def get_money_spend_by_uid(uid)->str:
         sql = '''
         select sum(price*"count")

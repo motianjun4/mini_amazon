@@ -247,6 +247,16 @@ def balance_history_data():
     for item in balance_history]
     return json_response(ResponseType.SUCCESS, balance_list)
 
+# get purchase categories of a user
+@bp.route('/purchase_categories')
+@login_required
+def purchase_categories_data():
+    purchase_categories = Purchase.get_categories_by_uid(current_user.id)
+    purchase_categories_list = [
+        {"name": item[0], "count": item[1]}
+    for item in purchase_categories]
+    return json_response(ResponseType.SUCCESS, purchase_categories_list)
+
 
 # get transactions of a user
 @bp.route('/transaction')

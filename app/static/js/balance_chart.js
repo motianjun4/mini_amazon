@@ -1,4 +1,4 @@
-var myChart = echarts.init(document.getElementById("balance-chart"));
+var balance_chart = echarts.init(document.getElementById("balance-chart"));
 
 
 option = {
@@ -20,18 +20,18 @@ option = {
   },
   grid: {
     top: "30px",
-    // left: "px",
+    left: "60px",
     right: "15px",
     bottom: "20px",
   },
 };
 
-myChart.setOption(option);
+balance_chart.setOption(option);
 
 // get data from server
 $.getJSON("/balance_history", function (data) {
   console.log(data);
-  myChart.setOption({
+  balance_chart.setOption({
     xAxis: {
       data: data.data.map(function (item) {
         return item[0];

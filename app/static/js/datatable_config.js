@@ -505,6 +505,9 @@ window.datatable_created_row = {
                     </div>
                   </div>
                   <p class="card-text">${review.review}</p>
+                  <img data-src="/img/review_${review.id}_0.jpg" style="height: 5em; width:5em;">
+                  <img data-src="/img/review_${review.id}_1.jpg" style="height: 5em; width:5em;">
+                  <img data-src="/img/review_${review.id}_2.jpg" style="height: 5em; width:5em;">
                   <div class="text-right">
                       ${
                         //new Date(review.create_at).toDateString()+" "+new Date(review.create_at).toLocaleTimeString()
@@ -560,6 +563,9 @@ window.datatable_created_row = {
                     </div>
                   </div>
                   <p class="card-text">${review.review}</p>
+                  <img data-src="/img/review_${review.id}_0.jpg" style="height: 5em; width:5em;">
+                  <img data-src="/img/review_${review.id}_1.jpg" style="height: 5em; width:5em;">
+                  <img data-src="/img/review_${review.id}_2.jpg" style="height: 5em; width:5em;">
                   <div class="text-right">
                       ${
                         // new Date(review.create_at).toDateString() +

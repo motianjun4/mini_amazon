@@ -40,10 +40,9 @@
         <div class="card-text">
             <div class="container">
               <div class="row">
-                <div class="col">
                   <p><strong>Review</strong>: {{review[2]}}</p>
                 </div>
-                <div class="col">
+                <div class="row">
                   <p><strong>Rate</strong>: 
                   {% for i in range(review[1]) %} 
                   <i class="bi bi-star-fill"></i>
@@ -52,7 +51,12 @@
                   <i class="bi bi-star"></i>
                   {% endfor %}</p>
                 </div>
-                </div>
+              <div class="row">
+                <p><strong>Images</strong>:
+                  <img data-src="/img/review_{{review[0]}}_0.jpg" style="height: 5em; width:5em;">
+                  <img data-src="/img/review_{{review[0]}}_1.jpg" style="height: 5em; width:5em;">
+                  <img data-src="/img/review_{{review[0]}}_2.jpg" style="height: 5em; width:5em;"></p>
+              </div>
                 <div class="row">
                   <div class="col">
                     <a href="/review/product/edit?pid={{product.id}}&redirect=product">Edit Your Review</a>

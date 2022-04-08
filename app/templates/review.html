@@ -26,6 +26,23 @@
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
   </p>
+  <p>
+    {{ form.image0.label }}<br/>
+    {{ form.image0 }}<br/>
+    {% for error in form.image0.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+    <br/>
+    {{ form.image1 }}<br/>
+    {% for error in form.image1.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+    <br/>
+    {{ form.image2 }}<br/>
+    {% for error in form.image2.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
   <p>{{ form.submit(class="btn btn-primary") }}</p>
 </form>
 

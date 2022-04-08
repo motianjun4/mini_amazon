@@ -53,7 +53,7 @@ def search():
                             category=category,
                            )
 
-class CreateProductForm(FlaskForm):
+class ProductForm(FlaskForm):
     product_name = StringField('Product Name', validators=[DataRequired()])
     category = StringField('Category', validators=[DataRequired()])
     quantity = IntegerField('Quantity', validators=[DataRequired()])
@@ -63,34 +63,20 @@ class CreateProductForm(FlaskForm):
     submit = SubmitField('Create!')
 
 
-@bp.route('/sell', methods=['GET', 'POST'])
+@bp.route('/product_create', methods=['GET', 'POST'])
 @login_required
-def createProduct():
-    form = CreateProductForm()
+def product_create():
+    form = ProductForm()
     if form.validate_on_submit():
         file = request.files['image']
         tmp_filepath = f"/tmp/{uuid1()}.jpg"
         file.save(tmp_filepath)
-        pid, iid = Product.createProduct(form, current_user.id)
+        pid, iid = Product.product_create(form, current_user.id)
         if pid and iid:
             put_file('image', f'product_{pid}.jpg', tmp_filepath)
             flash('Congratulations, you create a new product!')
             return redirect(url_for('index.index'))
-    return render_template('sell.html', title='Sell', form=form)
-
-
-@bp.route('/addCart', methods=['POST'])
-@login_required
-def addCart():
-    iid = None
-    amount = None
-    try:
-        iid = request.form['iid']
-        amount = int(request.form['amount'])
-    except Exception as e:
-        return json_response(ResponseType.ERROR, None, str(e))
-    cart_items = Cart.addCart(iid, amount)
-    return json_response(ResponseType.SUCCESS, {"cart_items":str(cart_items)})
+    return render_template('product_create.html', title='Create Product', form=form)
 
 
 @bp.route('/searchCart', methods=['GET', 'POST'])
@@ -100,65 +86,46 @@ def searchCart():
     return render_template('main_page.html',
                            cart_items=cart_items)
 
-@bp.route('/product/<int:pid>')
+
+@bp.route('/product/<pid>', methods=['GET', 'POST'])
 @login_required
-def product_detail(pid):
-    # show product detail, list of seller and current stock, reviews
+def product(pid):
+    # find the products current user has created:
+    form = ProductForm()
     product = Product.get(pid)
+    if form.validate_on_submit():
+        # button="submit" if form.submit.data else "delete"
+        if form.submit.data:
+            Product.product_edit(form, pid)
+            return redirect(url_for('products.product_manage'))
+        # elif form.delete.data:
+        #     Inventory.remove_product(iid)
+    return render_template('product_edit.html', title='Modify Product', product=product, form=form)
 
-    seller_list = Inventory.get_seller_list(pid)
-    seller_obj_list = [{
-        "iid": item[5],
-        "seller": {"id": item[4], "name": f"{item[2]} {item[3]}"},
-        "price": str(item[0]),
-        "quantity": str(item[1]),
-    } for item in seller_list]
 
-    # check wether bought this product
-    has_bought = False
-    order_list = Order.order_page(current_user.id)
-    for order in order_list:
-        if(order[2] == pid):
-            has_bought = True
+@bp.route('/product_manage', methods=['GET', 'POST'])
+@login_required
+def product_manage():
+    product_list = Product.get_all_by_uid_ORM(current_user.id)
+    product_obj_list = [{
+        "product":{"pid":product.id, "name":product.name, "category":product.category, "description":product.description},
+    } for product in product_list]
+    print(product_obj_list)
+    return render_template('product_manage.html',
+                        product_obj_list=product_obj_list)
 
-    has_review = False
-    review = Review.show_review(current_user.id, 2, 0, pid)
-    if review:
-        has_review = True
 
-    review_obj_list = []
-    reviews = Review.get_all_by_tpid(pid)
-    review_obj_list = [{
-        "id": review.id,
-        "uid": review.uid,
-        "creator": f"{review.user.firstname} {review.user.lastname}",
-        "review": review.review,
-        "rate": review.rate,
-        "upvote_cnt": len(list(filter(lambda item: item.is_up, review.review_likes))),
-        "is_upvote": len(list(filter(lambda item: item.is_up and item.uid == current_user.id, review.review_likes))) > 0,
-        "downvote_cnt": len(list(filter(lambda item: not item.is_up, review.review_likes))),
-        "is_downvote": len(list(filter(lambda item: not item.is_up and item.uid == current_user.id, review.review_likes))) > 0,
-        "create_at": iso(localize(review.create_at)),
-    } for review in reviews]
-
-    # show summary review
-    summary_review = list(Review.show_summary_review(2,0,pid))
-    has_summary=False
-    has_half=False
-    if summary_review[0] is not None:
-        has_summary=True
-        summary_review.append(int(summary_review[0]))
-        if int(summary_review[0]) < summary_review[0]:
-            has_half=True
-
-    return render_template('product_detail.html',
-                           product=product, 
-                           has_bought=has_bought,
-                           has_review=has_review,
-                           review=review,
-                           seller_obj_list=seller_obj_list,
-                           review_obj_list=review_obj_list,
-                           has_half=has_half,
-                           has_summary=has_summary,
-                           summary_review = summary_review,
-                           )
+@bp.route('/product_edit/<int:pid>', methods=['GET', 'POST'])
+@login_required
+def product_edit(pid):
+    form = ProductForm()
+    if form.validate_on_submit():
+        file = request.files['image']
+        tmp_filepath = f"/tmp/{uuid1()}.jpg"
+        file.save(tmp_filepath)
+        pid, iid = Product.product_edit(form, current_user.id)
+        if pid and iid:
+            put_file('image', f'product_{pid}.jpg', tmp_filepath)
+            flash('Congratulations, you edit a product!')
+            return redirect(url_for('index.index'))
+    return render_template('product_create.html', title='Create Product', form=form)

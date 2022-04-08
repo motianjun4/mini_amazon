@@ -77,6 +77,49 @@ window.datatable_config = {
       },
     },
   ],
+  "product-manage-list": [
+    {
+      title: "ID",
+      data: "product.pid",
+    },
+    {
+      title: "Name",
+      data: "product.name",
+    },
+    {
+      title: "Picture",
+      data: "product",
+      render: (data, type, row) => {
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
+      },
+    },
+    {
+      title: "Category",
+      data: "product.category",
+    },
+    {
+      title: "Description",
+      data: "product.description",
+    },
+    {
+      title: "Action",
+      data: "product",
+      orderable: false,
+      width: "4em",
+      render: (data, type, row) => {
+        return `<div><a class="btn btn-sm btn-primary mb-1" style="width:5em" href="/product/${data.pid}">Edit</a></div><div>`;
+      },
+    },
+    // {
+    //   title: "Action",
+    //   data: "pid",
+
+    //   render: (data, type, row) => {
+    //     return `<button class="btn btn-danger" onclick="remove_product_item(${data})">Remove</button>`;
+    //   },
+    
+    // }
+  ],
   "coworker_list":[
     {title:"Name", data:"name"},
     {title:"E-mail", data:"email"},
@@ -196,7 +239,7 @@ window.datatable_config = {
       title: "Product",
       data: "product",
       render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product_edit/${data.pid}">${data.name}</a>`;
       },
     },
     {
@@ -353,6 +396,13 @@ window.datatable_config = {
       },
     },
     { title: "Review", data: "review" },
+    { title: "Iamges", data: "id",
+  render:(data, type, row)=>{
+    return `
+    <img data-src="/img/review_${data}_0.jpg" style="height: 2em; width:2em;">
+    <img data-src="/img/review_${data}_1.jpg" style="height: 2em; width:2em;">
+    <img data-src="/img/review_${data}_2.jpg" style="height: 2em; width:2em;">`
+  } },
     {
       title: "Rate",
       data: "rate",
@@ -387,6 +437,13 @@ window.datatable_config = {
       },
     },
     { title: "Review", data: "review" },
+    { title: "Iamges", data: "id",
+  render:(data, type, row)=>{
+    return `
+    <img data-src="/img/review_${data}_0.jpg" style="height: 2em; width:2em;">
+    <img data-src="/img/review_${data}_1.jpg" style="height: 2em; width:2em;">
+    <img data-src="/img/review_${data}_2.jpg" style="height: 2em; width:2em;">`
+  } },
     {
       title: "Rate",
       data: "rate",
@@ -488,6 +545,9 @@ window.datatable_created_row = {
                     </div>
                   </div>
                   <p class="card-text">${review.review}</p>
+                  <img data-src="/img/review_${review.id}_0.jpg" style="height: 5em; width:5em;">
+                  <img data-src="/img/review_${review.id}_1.jpg" style="height: 5em; width:5em;">
+                  <img data-src="/img/review_${review.id}_2.jpg" style="height: 5em; width:5em;">
                   <div class="text-right">
                       ${
                         //new Date(review.create_at).toDateString()+" "+new Date(review.create_at).toLocaleTimeString()
@@ -543,6 +603,9 @@ window.datatable_created_row = {
                     </div>
                   </div>
                   <p class="card-text">${review.review}</p>
+                  <img data-src="/img/review_${review.id}_0.jpg" style="height: 5em; width:5em;">
+                  <img data-src="/img/review_${review.id}_1.jpg" style="height: 5em; width:5em;">
+                  <img data-src="/img/review_${review.id}_2.jpg" style="height: 5em; width:5em;">
                   <div class="text-right">
                       ${
                         // new Date(review.create_at).toDateString() +

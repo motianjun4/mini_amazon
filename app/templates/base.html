@@ -51,9 +51,14 @@
 
                     </script>
                   </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('products.createProduct') }}" role="button">Sell</a>
-                    </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">Products</a>
+                    <ul id="category-dropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('products.product_create') }}">Create Product</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('products.product_manage') }}">Magage Product</a></li>
+                      </ul>
+                  </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0 mr-2" action="/search" method="get">
                   <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" value="{{query}}">

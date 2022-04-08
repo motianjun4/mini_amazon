@@ -2,6 +2,7 @@ from ctypes import Union
 from typing import List
 from flask import current_app as app
 from flask_login import current_user
+from .orm.orm_models import Product as ProductORM
 
 from app.models.utils import paginate_raw
 
@@ -40,6 +41,10 @@ ORDER BY product.id, inventory.price
         return [Product(*row) for row in rows]
 
     @staticmethod
+    def get_all_by_uid_ORM(uid)->List[ProductORM]:
+        return app.db.get_session().query(ProductORM).filter(ProductORM.uid == uid).all()
+
+    @staticmethod
     def get_all(has_seller=True, page=0, page_size=20):
        # a = if available_only: 1 else: 2
        # minPriceIid --> Sales volume (only in this function)
@@ -55,7 +60,7 @@ ORDER BY pt_num DESC
         return [Product(*row) for row in rows]
 
     @staticmethod
-    def createProduct(form, uid):
+    def product_create(form, uid):
         rows = app.db.execute("""
 INSERT INTO product(name, category, description, uid)
 VALUES(:name, :category, :description, :uid)
@@ -70,6 +75,15 @@ RETURNING id
 """, uid=current_user.id, pid=pid, price=form.price.data, quantity=form.quantity.data)
         iid = rows[0][0]
         return (pid, iid)
+
+    @staticmethod
+    def product_edit(form, pid):
+        rows = app.db.execute("""
+UPDATE product
+SET name=:name, category=:category, description=:description
+WHERE id = :pid
+""", name=form.product_name.data, category=form.category.data, description=form.description.data, pid=pid)
+        return rows
 
     @staticmethod
     def get_categories():

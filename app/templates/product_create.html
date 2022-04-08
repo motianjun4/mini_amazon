@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+  <br />
+  <div class="card">
+    <img class="card-img-top" src="holder.js/100x180/" alt="">
+    <div class="card-body">
+      <h4 class="card-title">Create Product</h4>
+      <div>
+        <form action="" method="post" enctype="multipart/form-data">
+          {{ form.hidden_tag() }}
+          <p>
+            {{ form.product_name.label }}
+            {{ form.product_name(class="form-control") }}<br />
+            {% for error in form.product_name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            {{ form.category.label }}
+            {{ form.category(class="form-control") }}<br />
+            {% for error in form.category.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            {{ form.quantity.label }}
+            {{ form.quantity(class="form-control") }}<br />
+            {% for error in form.quantity.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            {{ form.price.label }}
+            {{ form.price(class="form-control") }}<br />
+            {% for error in form.price.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            {{ form.description.label }}
+            {{ form.description(class="form-control") }}<br />
+            {% for error in form.description.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+          </p>
+          <p>
+            {{ form.image.label }}
+            {{ form.image }}<br />
+            {% for error in form.image.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+          </p>
+          <p>{{ form.submit(class="btn btn-success") }}</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

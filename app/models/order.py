@@ -209,7 +209,7 @@ class Order:
         rows = app.db.execute('''
                             SELECT DISTINCT ON(uid) uid, firstname, lastname, email
                             FROM Review JOIN "user" ON Review.uid="user".id
-                            WHERE target_uid=:uid AND rate>=3
+                            WHERE target_uid=:uid AND rate>=4
                             ''', uid=uid)
         co_worker = []
         for row in rows:

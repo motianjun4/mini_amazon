@@ -18,6 +18,7 @@
         aria-expanded="false" aria-controls="collapseWithdrawn">
         Withdrawn
       </button>
+      <a href="/transaction" class="btn btn-primary">Transactions</a>
       <div id="balanceCollapseGroup" class="mt-1">
         <div class="collapse" id="collapseDeposit" data-parent="#balanceCollapseGroup">
           <div class="card card-body">
@@ -123,6 +124,29 @@
   </div>
   </div>
   <br />
+
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Account Summary</h4>
+      <div class="card-text flex">
+        <div style="width:33%">
+          <div id="purchase-category-chart" style="width: 100%; height: 15em;"></div>
+          <script src="{{url_for('static', filename='js/purchase_category_chart.js')}}"></script>
+        </div>
+        <div style="width:33%">
+          <div id="balance-chart" style="width: 100%; height: 15em;"></div>
+          <script src="{{url_for('static', filename='js/balance_chart.js')}}"></script>
+        </div>
+        <div style="width:33%">
+          <div id="spending-summary-chart" style="width: 100%; height: 15em;"></div>
+          <script src="{{url_for('static', filename='js/spending_summary_chart.js')}}"></script>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <br/>
 
   <div class="card">
     <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->

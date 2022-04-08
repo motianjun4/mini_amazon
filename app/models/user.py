@@ -2,6 +2,8 @@ from flask_login import UserMixin
 from flask import current_app as app
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from app.models.transaction import Transaction
+
 from .. import login
 
 
@@ -77,6 +79,9 @@ SET balance = balance + :amount
 WHERE id = :id
 RETURNING balance
         ''', id=id, amount=amount)
+
+        Transaction.insert(id, amount, rows[0][0])
+
         balance = rows[0][0]
         return balance
 

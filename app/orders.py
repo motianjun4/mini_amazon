@@ -65,3 +65,4 @@ def fulfill_purchase():
         return json_response(ResponseType.ERROR, "pid is required")
     Purchase.fulfill(pid, get_now())
     return json_response(ResponseType.SUCCESS, "purchase fulfilled")
+

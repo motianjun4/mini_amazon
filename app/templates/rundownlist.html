@@ -13,6 +13,18 @@
     </div>
   </div>
 
+  <br />
+  
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Product Trend</h4>
+      <div class="card-text">
+          {%import 'datatable.html' as t%}
+          {{t.datatable("product_trend", product_trends)}}
+      </div>
+    </div>
+  </div>
+
 </div>
 
 {% endblock %}

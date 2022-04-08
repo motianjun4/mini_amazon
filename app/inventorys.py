@@ -1,6 +1,8 @@
 from cmath import e
+from traceback import print_list
 from unicodedata import name
 from flask import render_template, redirect, request, url_for, flash
+from app.models.order import Order
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField, ValidationError
@@ -80,9 +82,9 @@ def addProduct():
 #     pid = Inventory.get_product_pid(pname)
 #     Inventory.add_new_product(current_user.id, pid, price=0)
 #     return json_response(ResponseType.SUCCESS, {"pid":str(pid)})
-@bp.route('/runningdown')
+@bp.route('/visual_ana')
 @login_required
-def runningdown():
+def visual_ana():
     rdlist = Inventory.products_run_down(current_user.id)
     run_down_list = [{
         "iid": run_down.id,
@@ -91,5 +93,11 @@ def runningdown():
         "price": str(run_down.price),
         "quantity": run_down.quantity,
     } for run_down in rdlist]
+    pt_list = Order.products_trends(current_user.id)
+    product_trends = [{
+        "name": pt[2],
+        "num":pt[1],
+    }for pt in pt_list]
     return render_template('rundownlist.html',
-                           run_down_list=run_down_list)
+                           run_down_list=run_down_list,
+                           product_trends = product_trends)

@@ -37,6 +37,7 @@ def search():
         product_obj_list = [{
             "id": product.id,
             "name": product.name,
+            "category": product.category,
             "price": str(product.iMinPrice),
             "iid": product.minPriceIid,
         } for product in product_list]

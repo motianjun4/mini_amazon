@@ -1,4 +1,6 @@
 from flask import render_template, redirect, url_for, flash, request
+
+from app.models.transaction import Transaction
 from .utils.time import iso, localize, strtime
 from werkzeug.urls import url_parse
 from flask_login import login_required, login_user, logout_user, current_user
@@ -237,6 +239,52 @@ def public_profile(uid):
                            summary_review=summary_review,
                            )
 
+# get balance history of a user
+@bp.route('/balance_history')
+@login_required
+def balance_history_data():
+    balance_history = Transaction.get_balance_history_group_by_date(current_user.id)
+    balance_list = [
+        [strtime(item[0]), float(str(item[1]))]
+    for item in balance_history]
+    return json_response(ResponseType.SUCCESS, balance_list)
+
+# get purchase categories of a user
+@bp.route('/purchase_categories')
+@login_required
+def purchase_categories_data():
+    purchase_categories = Purchase.get_categories_by_uid(current_user.id)
+    purchase_categories_list = [
+        {"name": item[0], "count": item[1]}
+    for item in purchase_categories]
+    return json_response(ResponseType.SUCCESS, purchase_categories_list)
+
+# get spending of a user
+@bp.route('/spending_summary')
+@login_required
+def spending_summary_data():
+    spending = Purchase.get_spending_by_uid(current_user.id)
+    spending_list = [
+        [strtime(item[0]),float(str(item[1]))]
+    for item in spending]
+    return json_response(ResponseType.SUCCESS, spending_list)
+
+# get transactions of a user
+@bp.route('/transaction')
+@login_required
+def list_transactions():
+    transaction_list = Transaction.get_by_uid(current_user.id)
+    transaction_obj_list = [{
+        "id": item.id,
+        "uid": item.uid,
+        "amount": "$"+str(item.amount),
+        "create_at": strtime(localize(item.create_at)),
+        "type": item.type,
+        "balance": "$"+str(item.balance),
+    } for item in transaction_list]
+    return render_template('transactions.html',
+                            transaction_obj_list=transaction_obj_list,
+                            user=current_user)
 @bp.route('/user/chat/<int:sid>')
 def user_seller_chat(sid):
     user = User.get(current_user.id)

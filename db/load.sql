@@ -37,3 +37,31 @@ SELECT pg_catalog.setval('public.review_id_seq',
 SELECT pg_catalog.setval('public.review_like_id_seq',
                          (SELECT MAX(id)+1 FROM public.review_like),
                          false);
+
+\COPY public.transaction FROM 'generated/Transaction.csv' WITH DELIMITER ',' NULL '' CSV
+SELECT pg_catalog.setval('public.transaction_id_seq',
+                         (SELECT MAX(id)+1 FROM public.transaction),
+                         false);
+
+-- set balance field in transaction according to amount field
+UPDATE "transaction"
+SET balance = calc_balance
+FROM
+(select id, 
+SUM(
+	CASE
+		WHEN type = 1 THEN amount
+		WHEN type = 2 THEN -amount
+	END
+) OVER (PARTITION BY uid ORDER BY create_at) AS calc_balance
+from "transaction") AS calc
+WHERE calc.id="transaction".id
+
+-- set balance field in user according to balance field in transaction
+UPDATE "user"
+SET balance = latest_balance
+FROM
+(SELECT distinct on (uid) uid, balance as latest_balance
+FROM "transaction"
+ORDER BY uid asc, create_at desc) AS t
+WHERE id = uid

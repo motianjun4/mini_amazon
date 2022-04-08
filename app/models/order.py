@@ -187,25 +187,35 @@ class Order:
 ########################visualization/analytics
 
     @staticmethod
-    def products_trends():
+    def products_trends(uid):
         rows = app.db.execute('''
-                            SELECT pid AS pt_pid, SUM(purchase.count) AS pt_num
+                            SELECT pt_pid, pt_num, name
+                            FROM Product JOIN
+                            (SELECT pid AS pt_pid, SUM(purchase.count) AS pt_num
                             FROM Purchase JOIN Inventory ON Inventory.id=Purchase.iid
-                            WHERE fulfillment = TRUE
-                            GROUP BY Inventory.pid
+                            WHERE Inventory.uid = :uid
+                            GROUP BY Inventory.pid) AS V ON Product.id=V.pt_pid
                             ORDER BY pt_num DESC 
-                            LIMIT 15
-                            ''')
+                            ''', uid=uid)
         trends_list = []
         for row in rows:
-            trends_list.append((row[0], row[1])) #(name, num)
+            trends_list.append((row[0], row[1], row[2])) #(name, num)
         return trends_list
 
 # additional feature(s): Add analytics about buyers who have worked with this seller, e.g., ratings, number of messages, etc.
 
     @staticmethod
     def analy_buyer(uid): #this uid is for seller
-        pass
+        rows = app.db.execute('''
+                            SELECT DISTINCT ON(uid) uid, firstname, lastname, email, rate
+                            FROM Review JOIN "user" ON Review.uid="user".id
+                            WHERE target_uid=:uid AND rate>=4
+                            ''', uid=uid)
+        co_worker = []
+        for row in rows:
+            name = row[1]+" "+row[2]
+            co_worker.append((name, row[3], row[4]))
+        return co_worker
 
 # place order
 

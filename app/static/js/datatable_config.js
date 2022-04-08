@@ -93,7 +93,25 @@ window.datatable_config = {
     //     return `<button class="btn btn-danger" onclick="remove_product_item(${data})">Remove</button>`;
     //   },
     
-    // },
+    // }
+  ],
+  "coworker_list":[
+    {title:"Name", data:"name"},
+    {title:"E-mail", data:"email"},
+    {
+      title: "Rate",
+      data: "rate",
+      width: "5em",
+      render: (data, type, row) => {
+        if (type !== "display") {
+          return data;
+        }
+        return (
+          `<i class="bi bi-star-fill"></i>`.repeat(data) +
+          `<i class="bi bi-star"></i>`.repeat(5 - data)
+        );
+      },
+    },
   ],
   "product-search-list": [
     {
@@ -228,6 +246,13 @@ window.datatable_config = {
         return `<a class="btn btn-primary" href="/user/${data}#my_review">View</a>`;
       },
     },
+    {
+      title: "Message",
+      data: "seller",
+      render: (data, type, row) => {
+        return `<a class="btn btn-primary" href="/user/chat/${data.uid}">Send</a>`;
+      },
+    }
   ],
   "my-inventory": [
     {
@@ -331,6 +356,10 @@ window.datatable_config = {
         return `<a class="btn btn-primary" href="/inventory/${data}">Edit</a>`;
       },
     },
+  ],
+  "product_trend":[
+    {title:"Product", data:"name"},
+    {title:"Quantity", data:"num"},
   ],
   "reviews-for-product": [
     { title: "Time", data: "time" },

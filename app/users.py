@@ -127,6 +127,9 @@ def my_profile():
             "rate": item[0],
             "review": item[1],
         } for item in product_review]
+    
+    user_obj = User.get(current_user.id)
+    user_dict = {"id":user_obj.id, "name":user_obj.firstname+" "+user_obj.lastname, "email":user_obj.email}
 
     # render the page by adding information to the index.html file
     return render_template('my_profile.html',
@@ -135,7 +138,8 @@ def my_profile():
                            seller_review_obj_list=seller_review_obj_list,
                            product_review_obj_list=product_review_obj_list,
                            is_seller=is_seller,
-                           user=current_user,)
+                           user=current_user,
+                           user_dict=user_dict)
 
 
 @bp.route('/balance/deposit', methods=['POST'])
@@ -230,3 +234,27 @@ def public_profile(uid):
                            has_half=has_half,
                            summary_review=summary_review,
                            )
+
+@bp.route('/user/chat/<int:sid>')
+def user_seller_chat(sid):
+    user = User.get(current_user.id)
+    user_dict = {"id":user.id, "name":user.firstname+" "+user.lastname, "email":user.email}
+    has_seller = -1
+    seller_dict ={}
+    if sid != 0:
+        has_seller = 1
+        seller = User.get(sid)
+        seller_dict = {"id":seller.id, "name":seller.firstname+" "+seller.lastname, "email":seller.email}
+    return render_template('user_seller_chat.html',
+                            user_dict=user_dict,
+                            has_seller=has_seller,
+                            seller_dict=seller_dict, 
+    )
+
+@bp.route('/user/chat')
+def user_chat():
+    user = User.get(current_user.id)
+    user_dict = {"id":user.id, "name":user.firstname+" "+user.lastname, "email":user.email}
+    return render_template('user_chat.html',
+                            user_dict=user_dict,
+    )

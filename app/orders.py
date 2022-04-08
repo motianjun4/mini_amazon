@@ -57,6 +57,18 @@ def orderlist():
                            )
 
 
+@bp.route('/co_worker')
+@login_required
+def co_worker():
+    cw_list = Order.analy_buyer(current_user.id)
+    cws = [{
+        "name": cw[0],
+        "email": cw[1],
+        "rate": cw[2]
+    } for cw in cw_list]
+    return render_template('coworker.html',
+                           cws=cws)
+
 @bp.route('/fulfill_purchase', methods=['POST'])
 @login_required
 def fulfill_purchase():
@@ -65,3 +77,4 @@ def fulfill_purchase():
         return json_response(ResponseType.ERROR, "pid is required")
     Purchase.fulfill(pid, get_now())
     return json_response(ResponseType.SUCCESS, "purchase fulfilled")
+

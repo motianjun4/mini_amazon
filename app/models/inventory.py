@@ -76,6 +76,18 @@ class Inventory:
         else:
             print("cannot find product!")
             return None
+    
+    @staticmethod
+    def pid_in_inven(pid, uid):
+        row = app.db.execute('''
+                            SELECT *
+                            FROM Inventory
+                            WHERE pid = :pid and uid = :uid
+                            ''', pid=pid, uid=uid)
+        if row:
+            return True
+        else:
+            return False
 
     @staticmethod
     def get_by_uid_ORM(uid) -> List[InventoryORM]:

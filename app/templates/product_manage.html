@@ -1,0 +1,17 @@
+{% extends "base.html" %} 
+{% block content %}
+
+<div class="container">
+    <br />
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">My Products</h4>
+            <div class="card-text">
+                {%import 'datatable.html' as t%}
+                {{t.datatable("product-manage-list", product_obj_list)}}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

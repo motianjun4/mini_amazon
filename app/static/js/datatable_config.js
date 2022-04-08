@@ -52,6 +52,49 @@ window.datatable_config = {
       },
     },
   ],
+  "product-manage-list": [
+    {
+      title: "ID",
+      data: "product.pid",
+    },
+    {
+      title: "Name",
+      data: "product.name",
+    },
+    {
+      title: "Picture",
+      data: "product",
+      render: (data, type, row) => {
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
+      },
+    },
+    {
+      title: "Category",
+      data: "product.category",
+    },
+    {
+      title: "Description",
+      data: "product.description",
+    },
+    {
+      title: "Action",
+      data: "product",
+      orderable: false,
+      width: "4em",
+      render: (data, type, row) => {
+        return `<div><a class="btn btn-sm btn-primary mb-1" style="width:5em" href="/product/${data.pid}">Edit</a></div><div>`;
+      },
+    },
+    // {
+    //   title: "Action",
+    //   data: "pid",
+
+    //   render: (data, type, row) => {
+    //     return `<button class="btn btn-danger" onclick="remove_product_item(${data})">Remove</button>`;
+    //   },
+    
+    // },
+  ],
   "product-search-list": [
     {
       title: "Name",
@@ -153,7 +196,7 @@ window.datatable_config = {
       title: "Product",
       data: "product",
       render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product_edit/${data.pid}">${data.name}</a>`;
       },
     },
     {

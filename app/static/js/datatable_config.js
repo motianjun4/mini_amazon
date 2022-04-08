@@ -1,6 +1,31 @@
 // Use with datatable.html
 // Store configuration separately in this file
 window.datatable_config = {
+  "my-transactions": [
+    {
+      title: "ID",
+      data: "id",
+    },
+    {
+      title: "Amount",
+      data: "amount",
+    },
+    {
+      title: "Type",
+      data: "type",
+      render: function (data, type, row) {
+        return data == 1 ? "Debit" : "Credit";
+      },
+    },
+    {
+      title: "Balance",
+      data: "balance",
+    },
+    {
+      title: "Create At",
+      data: "create_at",
+    },
+  ],
   "cart-list": [
     {
       title: "ID",
@@ -289,9 +314,9 @@ window.datatable_config = {
       },
     },
   ],
-  "product_trend":[
-    {title:"Product", data:"name"},
-    {title:"Quantity", data:"num"},
+  product_trend: [
+    { title: "Product", data: "name" },
+    { title: "Quantity", data: "num" },
   ],
   "reviews-for-product": [
     { title: "Time", data: "time" },
@@ -515,4 +540,5 @@ window.datatable_order = {
   "seller-table":[[1, 'asc']],
   "recent-purchase":[[2, 'desc']],
   "order-fulfill":[[0, 'desc']],
+  "my-transactions":[[4, 'desc']],
 }

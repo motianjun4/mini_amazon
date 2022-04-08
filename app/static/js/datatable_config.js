@@ -371,6 +371,13 @@ window.datatable_config = {
       },
     },
     { title: "Review", data: "review" },
+    { title: "Iamges", data: "id",
+  render:(data, type, row)=>{
+    return `
+    <img data-src="/img/review_${data}_0.jpg" style="height: 2em; width:2em;">
+    <img data-src="/img/review_${data}_1.jpg" style="height: 2em; width:2em;">
+    <img data-src="/img/review_${data}_2.jpg" style="height: 2em; width:2em;">`
+  } },
     {
       title: "Rate",
       data: "rate",
@@ -405,6 +412,13 @@ window.datatable_config = {
       },
     },
     { title: "Review", data: "review" },
+    { title: "Iamges", data: "id",
+  render:(data, type, row)=>{
+    return `
+    <img data-src="/img/review_${data}_0.jpg" style="height: 2em; width:2em;">
+    <img data-src="/img/review_${data}_1.jpg" style="height: 2em; width:2em;">
+    <img data-src="/img/review_${data}_2.jpg" style="height: 2em; width:2em;">`
+  } },
     {
       title: "Rate",
       data: "rate",

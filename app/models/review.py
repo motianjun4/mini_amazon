@@ -92,7 +92,7 @@ AND target_pid = :target_pid
     def show_review_list_user(uid, type):
         if type == 2:
             rows =app.db.execute('''
-SELECT review.rate, review.review, product.name, product.id, review.create_at
+SELECT review.rate, review.review, product.name, product.id, review.create_at, review.id
 FROM review
 LEFT JOIN product ON product.id=review.target_pid
 WHERE review.uid = :uid
@@ -102,7 +102,7 @@ ORDER BY create_at DESC
             return rows
         elif type == 1:
             rows =app.db.execute('''
-SELECT review.rate, review.review, "user".firstname, "user".lastname, "user".id, review.create_at
+SELECT review.rate, review.review, "user".firstname, "user".lastname, "user".id, review.create_at, review.id
 FROM review
 LEFT JOIN "user" ON "user".id=review.target_uid
 WHERE review.uid = :uid

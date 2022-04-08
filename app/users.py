@@ -113,6 +113,7 @@ def my_profile():
     seller_review_obj_list = []
     if seller_review:
         seller_review_obj_list = [{
+            "id": item[6],
             "time": strtime(localize(item[5])),
             "seller": {"id": item[4], "name": item[2]+" "+item[3]},
             "rate": item[0],
@@ -122,6 +123,7 @@ def my_profile():
     product_review_obj_list = []
     if product_review:
         product_review_obj_list = [{
+            "id": item[5],
             "time": strtime(localize(item[4])),
             "product": {"id": item[3], "name": item[2]},
             "rate": item[0],

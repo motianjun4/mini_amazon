@@ -41,6 +41,18 @@ group by category
         return rows
 
     @staticmethod
+    def get_spending_by_uid(uid)->List[str]:
+        rows = app.db.execute('''
+select date(fulfill_at), sum(price)
+from purchase
+join "order" ON "order".id = purchase.oid
+where uid = :uid and fulfill_at is not NULL
+group by date(fulfill_at)
+order by date(fulfill_at)
+''', uid=uid)
+        return rows
+
+    @staticmethod
     def get_money_spend_by_uid(uid)->str:
         sql = '''
         select sum(price*"count")

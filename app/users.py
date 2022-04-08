@@ -243,7 +243,7 @@ def public_profile(uid):
 def balance_history_data():
     balance_history = Transaction.get_balance_history_group_by_date(current_user.id)
     balance_list = [
-        [item[0], float(str(item[1]))]
+        [strtime(item[0]), float(str(item[1]))]
     for item in balance_history]
     return json_response(ResponseType.SUCCESS, balance_list)
 
@@ -257,6 +257,15 @@ def purchase_categories_data():
     for item in purchase_categories]
     return json_response(ResponseType.SUCCESS, purchase_categories_list)
 
+# get spending of a user
+@bp.route('/spending_summary')
+@login_required
+def spending_summary_data():
+    spending = Purchase.get_spending_by_uid(current_user.id)
+    spending_list = [
+        [strtime(item[0]),float(str(item[1]))]
+    for item in spending]
+    return json_response(ResponseType.SUCCESS, spending_list)
 
 # get transactions of a user
 @bp.route('/transaction')

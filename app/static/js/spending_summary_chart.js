@@ -1,9 +1,9 @@
-var balance_chart = echarts.init(document.getElementById("balance-chart"));
+var spending_chart = echarts.init(document.getElementById("spending-summary-chart"));
 
 
 option = {
   title: {
-    text: "Balance History",
+    text: "Spending",
   },
   xAxis: {
     type: "time",
@@ -12,7 +12,7 @@ option = {
   series: [
     {
       data: [],
-      type: "line",
+      type: "bar",
     },
   ],
   tooltip: {
@@ -26,12 +26,12 @@ option = {
   },
 };
 
-balance_chart.setOption(option);
+spending_chart.setOption(option);
 
 // get data from server
-$.getJSON("/balance_history", function (data) {
+$.getJSON("/spending_summary", function (data) {
   console.log(data);
-  balance_chart.setOption({
+  spending_chart.setOption({
     series: [
       {
         data: data.data,

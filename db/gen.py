@@ -173,8 +173,9 @@ def gen_transaction():
             uid = get_id(num_users)
             amount = f'{str(fake.random_int(max=1000))}.{fake.random_int(max=99):02}'
             typ = fake.random_int(min=1, max=2)
+            balance = "0.00"
             create_at = fake.past_datetime().isoformat()
-            writer.writerow([id, uid, amount, typ, create_at])
+            writer.writerow([id, uid, amount, typ, balance, create_at])
         print(f'{num_transactions} generated')
     return
 

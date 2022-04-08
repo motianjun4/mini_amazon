@@ -66,8 +66,16 @@ def co_worker():
         "email": cw[1],
         "rate": cw[2]
     } for cw in cw_list]
+
+    cws_i_list = Order.analy_buyer_i(current_user.id)
+    cws_i = [{
+        "name": cwi[0],
+        "email": cwi[1],
+        "num": cwi[2]
+    }for cwi in cws_i_list]
     return render_template('coworker.html',
-                           cws=cws)
+                           cws=cws, 
+                           cws_i=cws_i)
 
 @bp.route('/fulfill_purchase', methods=['POST'])
 @login_required

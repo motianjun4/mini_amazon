@@ -185,6 +185,13 @@ window.datatable_config = {
         return `<a class="btn btn-primary" href="/user/${data}#my_review">View</a>`;
       },
     },
+    {
+      title: "Message",
+      data: "seller",
+      render: (data, type, row) => {
+        return `<a class="btn btn-primary" href="/user/chat/${data.uid}">Send</a>`;
+      },
+    }
   ],
   "my-inventory": [
     {

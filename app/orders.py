@@ -64,6 +64,7 @@ def co_worker():
     cws = [{
         "name": cw[0],
         "email": cw[1],
+        "rate": cw[2]
     } for cw in cw_list]
     return render_template('coworker.html',
                            cws=cws)

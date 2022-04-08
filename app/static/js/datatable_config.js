@@ -55,6 +55,20 @@ window.datatable_config = {
   "coworker_list":[
     {title:"Name", data:"name"},
     {title:"E-mail", data:"email"},
+    {
+      title: "Rate",
+      data: "rate",
+      width: "5em",
+      render: (data, type, row) => {
+        if (type !== "display") {
+          return data;
+        }
+        return (
+          `<i class="bi bi-star-fill"></i>`.repeat(data) +
+          `<i class="bi bi-star"></i>`.repeat(5 - data)
+        );
+      },
+    },
   ],
   "product-search-list": [
     {

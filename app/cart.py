@@ -39,14 +39,14 @@ def cart():
     } for cart in cart_list]
 
     saved_obj_list = [{
-        "product":{"pid":cart.inventory.pid, "name":cart.inventory.product.name},
-        "seller": {"id":cart.inventory.uid, "name":f"{cart.inventory.seller.firstname} {cart.inventory.seller.lastname}"},
-        "cid": cart.id,
-        "iid" : cart.iid,
-        "price" : f"${cart.inventory.price}",
-        "quantity" : cart.quantity,
-        "total" : f"${cart.inventory.price * cart.quantity}",
-    } for cart in saved_list]
+        "product":{"pid":item.inventory.pid, "name":item.inventory.product.name},
+        "seller": {"id":item.inventory.uid, "name":f"{item.inventory.seller.firstname} {item.inventory.seller.lastname}"},
+        "cid": item.id,
+        "iid" : item.iid,
+        "price" : f"${item.inventory.price}",
+        "quantity" : item.quantity,
+        "total" : f"${item.inventory.price * item.quantity}",
+    } for item in saved_list]
 
     total_price = 0
     for cart in cart_list:

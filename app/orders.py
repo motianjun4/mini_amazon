@@ -1,5 +1,6 @@
 from datetime import datetime
 from app.models.inventory import Inventory
+from app.models.orm.orm_models import Review
 from app.models.purchase import Purchase
 from app.models.user import User
 from app.models.order import Order
@@ -76,6 +77,25 @@ def co_worker():
     return render_template('coworker.html',
                            cws=cws, 
                            cws_i=cws_i)
+
+# get rating of buyers
+@bp.route('/rating_buyer')
+@login_required
+def buyer_rates_data():
+    rate_list = Order.get_score_by_uid(current_user.id)
+    buyer_rating_list = [
+        {"name": item[0], "count": item[1]}
+    for item in rate_list]
+    return json_response(ResponseType.SUCCESS, buyer_rating_list)
+
+@bp.route('/sell_history')
+@login_required
+def balance_history_data():
+    sell_history = Order.get_shis_by_uid(current_user.id)
+    sell_list = [
+        [strtime(item[0]), float(str(item[1]))]
+    for item in sell_history]
+    return json_response(ResponseType.SUCCESS, sell_list)
 
 @bp.route('/fulfill_purchase', methods=['POST'])
 @login_required

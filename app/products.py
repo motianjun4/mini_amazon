@@ -39,6 +39,8 @@ def search():
             "name": product.name,
             "price": str(product.iMinPrice),
             "iid": product.minPriceIid,
+            "avgRate": str(round(product.avgRate,2)),
+            "cnt": str(product.cnt) if product.cnt is not None else 0,
         } for product in product_list]
 
     categories = Product.get_categories()

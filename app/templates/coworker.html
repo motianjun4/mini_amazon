@@ -1,6 +1,23 @@
 {% extends "base.html" %} {% block content %}
 
+
 <div class="container">
+  <br />
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Buyer Analytics</h4>
+      <div class="card-text flex">
+        <div style="width:33%">
+          <div id="rating-chart" style="width: 100%; height: 15em;"></div>
+          <script src="{{url_for('static', filename='js/rating_chart.js')}}"></script>
+        </div>
+        <div style="width:33%">
+            <div id="sell-chart" style="width: 100%; height: 15em;"></div>
+            <script src="{{url_for('static', filename='js/sell_history_chart.js')}}"></script>
+          </div>
+      </div>
+    </div>
+  </div>
   <br />
   
   <div class="card">

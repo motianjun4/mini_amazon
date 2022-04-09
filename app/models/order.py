@@ -235,6 +235,27 @@ class Order:
             co_worker.append((name, row[3], row[4]))
         return co_worker
 
+
+    @staticmethod
+    def get_score_by_uid(uid):
+        rows = app.db.execute('''
+                            SELECT rate, COUNT(*) AS num
+                            FROM Review
+                            WHERE target_uid = :uid
+                            GROUP BY rate
+                            ORDER BY rate DESC
+                            ''',uid=uid)
+        return rows
+
+    @staticmethod
+    def get_shis_by_uid(uid):
+        rows = app.db.execute('''
+                            SELECT date(create_at), SUM(count)
+                            FROM "order" JOIN Purchase ON "order".id=Purchase.oid JOIN Inventory ON Inventory.id=Purchase.iid
+                            WHERE Inventory.uid = 3
+                            GROUP BY date(create_at)
+                            ''',uid=uid)
+        return rows
 # place order
 
     @staticmethod

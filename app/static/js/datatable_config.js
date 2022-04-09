@@ -138,6 +138,11 @@ window.datatable_config = {
       },
     },
   ],
+  "coworker_i_list":[
+    {title:"Name", data:"name"},
+    {title:"E-mail", data:"email"},
+    {title:"Total sell number", data:"num"},
+  ],
   "product-search-list": [
     {
       title: "Name",

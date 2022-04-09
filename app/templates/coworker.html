@@ -5,7 +5,7 @@
   
   <div class="card">
     <div class="card-body">
-      <h4 class="card-title">Co-worker List</h4>
+      <h4 class="card-title">Top Rating List</h4>
       <div class="card-text">
           {%import 'datatable.html' as t%}
           {{t.datatable("coworker_list", cws)}}
@@ -13,5 +13,16 @@
     </div>
   </div>
 
+  <br />
+  
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Top Buyer List</h4>
+      <div class="card-text">
+          {%import 'datatable.html' as t%}
+          {{t.datatable("coworker_i_list", cws_i)}}
+      </div>
+    </div>
+  </div>
 
 {% endblock %}

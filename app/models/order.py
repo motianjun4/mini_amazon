@@ -217,6 +217,24 @@ class Order:
             co_worker.append((name, row[3], row[4]))
         return co_worker
 
+    @staticmethod
+    def analy_buyer_i(uid):
+        rows = app.db.execute('''
+                            SELECT "user".id, firstname, lastname, email, t_num
+                            FROM "user" JOIN
+                            (SELECT "order".uid AS buid, SUM(count) AS t_num
+                            FROM Inventory JOIN Purchase ON Purchase.iid=Inventory.id JOIN "order" ON "order".id=Purchase.oid
+                            WHERE Inventory.uid = :uid
+                            GROUP BY buid
+                            ORDER BY t_num DESC
+                            LIMIT 15) AS v ON "user".id = v.buid
+                            ''', uid=uid)
+        co_worker = []
+        for row in rows:
+            name = row[1]+" "+row[2]
+            co_worker.append((name, row[3], row[4]))
+        return co_worker
+
 # place order
 
     @staticmethod

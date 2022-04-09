@@ -7,7 +7,7 @@ from .orm.orm_models import Product as ProductORM
 from app.models.utils import paginate_raw
 
 class Product:
-    def __init__(self, id, uid, name, category, description, iMinPrice=0, minPriceIid=None):
+    def __init__(self, id, uid, name, category, description, iMinPrice=0, minPriceIid=None, avgRate=0, cnt=0):
         self.id = id
         self.uid = uid
         self.name = name
@@ -15,6 +15,8 @@ class Product:
         self.description = description
         self.iMinPrice:Union[None, int] = iMinPrice
         self.minPriceIid = minPriceIid
+        self.avgRate=avgRate
+        self.cnt=cnt
 
     @staticmethod
     def get(id):
@@ -29,12 +31,16 @@ WHERE id = :id
     @staticmethod
     def get_all_by_keyword(has_seller=True, like:str="", category:str="") -> List["Product"]:
         sql = f'''
-SELECT DISTINCT ON (product.id) product.id, product.uid, name, category, description, inventory.price, inventory.id
+SELECT DISTINCT ON (product.id) product.id, product.uid, name, category, description, inventory.price, inventory.id, AVG(rate) AS avgRate, SUM(purchase.count) AS cnt
 FROM product
 LEFT OUTER JOIN inventory ON inventory.pid = product.id 
+LEFT JOIN review on product.id=review.target_pid
+LEFT JOIN purchase on purchase.iid=inventory.id
 WHERE LOWER(name) LIKE LOWER(:like)
 {"AND inventory.id is not NULL" if has_seller else ""}
 {"AND category = :category" if category else ""}
+AND review.type=2
+GROUP BY product.id, inventory.price, inventory.id
 ORDER BY product.id, inventory.price
 ''' 
         rows = app.db.execute(sql, like=like, category=category)

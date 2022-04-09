@@ -6,7 +6,7 @@ from app.models.order import Order
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField, ValidationError
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, NumberRange
 
 import datetime
 
@@ -29,15 +29,15 @@ bp = Blueprint('inventorys', __name__)
 # bp = Blueprint('accounts', __name__)
 
 class ModifyInventoryForm(FlaskForm):
-    quantity = IntegerField('Quantity', validators=[DataRequired()])
-    price = FloatField('Price', validators=[DataRequired()])
+    quantity = IntegerField('Quantity', validators=[DataRequired(), NumberRange(min=0)])
+    price = FloatField('Price', validators=[DataRequired(), NumberRange(min=0)])
     submit = SubmitField('Modify!')
     delete = SubmitField('Delete!')
 
 class AddProductForm(FlaskForm):
     name = StringField('Product Name', validators=[DataRequired()])
-    quantity = IntegerField('Quantity', validators=[DataRequired()])
-    price = FloatField('Price', validators=[DataRequired()])
+    quantity = IntegerField('Quantity', validators=[DataRequired(),NumberRange(min=0)])
+    price = FloatField('Price', validators=[DataRequired(),NumberRange(min=0)])
     add = SubmitField('ADD!')
 
 @bp.route('/inventory/<iid>', methods=['GET', 'POST'])

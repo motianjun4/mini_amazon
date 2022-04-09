@@ -2,6 +2,9 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip();
 });
 
+window.datatables = {};
+
+
 function format_time(time) {
   let date = new Date(time);
   return `${date.toLocaleString()}`;

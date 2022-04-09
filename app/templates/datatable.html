@@ -13,7 +13,7 @@
         let createdRowCallback = window.datatable_created_row['{{id}}']
         let order = window.datatable_order['{{id}}']
 
-        $("#table_{{id}}").DataTable({
+        window.datatables["{{id}}"] = $("#table_{{id}}").DataTable({
             data:data,
             columns: config,
             createdRow: createdRowCallback,

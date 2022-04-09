@@ -555,16 +555,21 @@ window.datatable_created_row = {
                 <img data-src="/img/product_${item.id}.jpg" style="height: 5em; width:5em;">
             </div>
             
-            <div class="ml-2" style="flex-grow:1">
+            <div class="ml-2 mr-2" style="flex-grow:1">
 
                 <h4 class="card-title"><span class="badge badge-secondary mr-2">${item.category}</span><a href="/product/${item.id}">${item.name}</a></h4>
-                <p class="card-text">${item.price !== "None"?"Starting from: $"+item.price:"No seller yet"}</p>
-            </div>
-            <div>
-              <p class="card-title" style="width:8em;">${item.avgRate} </p>
-            </div>
-            <div>
-              <p class="card-title" style="width:5em;">${item.cnt} </p>
+                <div class="card-text text-secondary flex" style="justify-content: space-between">
+                  <div>
+                  ${item.price !== "None"?"Starting from: $"+item.price:"No seller yet"}
+                  </div>
+                  <div>
+                      Average Rate: ${item.avgRate}/5.00
+                  </div>
+                  <div>
+                      Total Sales: ${item.cnt}
+                  </div>
+                </div>
+
             </div>
             <div>
                 <input id="key_${item.id}_quantity" type="number" class="form-control mb-2" min="1" style="width: 7em;" placeholder="Quantity">

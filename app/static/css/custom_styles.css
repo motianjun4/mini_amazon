@@ -1,3 +1,8 @@
 .flex {
     display: flex;
 }
+.yadcf-filter-reset-button {
+    border-radius:4px;
+    margin-left: 0.5em;
+    border-width: 1px;
+}

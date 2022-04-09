@@ -59,6 +59,7 @@ def cart():
         if User.check_balance_enough(current_user.id, total_price) == False:
             flash("Balance not enough to place order!")
             return render_template('cart.html',
+                            saved_obj_list=saved_obj_list,
                             cart_obj_list=cart_obj_list,
                             user=current_user,
                             total_price=total_price,
@@ -88,6 +89,7 @@ def cart():
             err_message=err_message[:-1]+"."
             flash(err_message)
             return render_template('cart.html',
+                            saved_obj_list=saved_obj_list,
                             cart_obj_list=cart_obj_list,
                             user=current_user,
                             total_price=total_price,

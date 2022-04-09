@@ -148,7 +148,6 @@ def add_to_cart():
 @login_required
 def update_cart_item_quantity():
     try:
-
         cid = request.form['cid']
         quantity = request.form['quantity']
     except:

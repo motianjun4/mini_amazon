@@ -180,15 +180,13 @@ def product_detail(pid):
 @bp.route('/addCart', methods=['POST'])
 @login_required
 def addCart():
-    iid = None
-    amount = None
-    try:
-        iid = request.form['iid']
-        amount = int(request.form['amount'])
-    except Exception as e:
-        return json_response(ResponseType.ERROR, None, str(e))
-    if iid is not None:
-        cart_items = Cart.addCart(iid, amount)
-        return json_response(ResponseType.SUCCESS, {"cart_items":str(cart_items)})
-    else:
-        return json_response(ResponseType.ERROR, None, "No inventory!")
+    iid_list = []
+    iid_list.append(request.form['iid'])
+    if iid_list[0] == '':
+        return json_response(ResponseType.ERROR, None, "Out of inventory!")
+    amount = int(request.form['amount'])
+    repo_inventory = Inventory.get_stock(iid_list)[0][1]
+    if amount > repo_inventory:
+        return json_response(ResponseType.ERROR, None, "Insufficient inventory at this price, click the item to see more details!")
+    cart_items = Cart.addCart(iid_list[0], amount)
+    return json_response(ResponseType.SUCCESS, {"cart_items":str(cart_items)})

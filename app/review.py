@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, ValidationError, AnyOf
 from app.utils.json_response import ResponseType, json_response
 from flask_wtf.file import FileAllowed
 from uuid import uuid1
@@ -16,9 +16,8 @@ from flask_login import current_user, login_required
 from flask import Blueprint
 bp = Blueprint('review', __name__)
 
-
 class CreateReviewForm(FlaskForm):
-    rate = StringField('Rate(Integer Min:0 Max:5)', validators=[DataRequired()])
+    rate = IntegerField('Rate(Integer Min:0 Max:5)', validators=[DataRequired(), AnyOf([0,1,2,3,4,5])])
     review = StringField('Review', validators=[DataRequired()])
     image0 = FileField(u'Image Files: (Optional)', validators=[FileAllowed(['jpg'])])
     image1 = FileField(u'', validators=[FileAllowed(['jpg'])])

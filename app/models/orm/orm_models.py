@@ -13,6 +13,7 @@ class Cart(Base):
     iid = Column(Integer, ForeignKey("inventory.id"), nullable=False)
     inventory:"Inventory" = relationship("Inventory", lazy=False)
     quantity = Column(Integer, nullable=False)
+    saved = Column(Boolean, nullable=False)
 
 
 class Inventory(Base):

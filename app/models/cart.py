@@ -25,8 +25,12 @@ WHERE cart.uid = :id and cart.iid = inventory.id and inventory.pid = product.id
         return [Cart(*row) for row in rows] if rows is not None else None
 
     @staticmethod
-    def get_all_by_uid_ORM(uid)->List[CartORM]:
-        return app.db.get_session().query(CartORM).filter(CartORM.uid == uid).all()
+    def get_cart_by_uid_ORM(uid)->List[CartORM]:
+        return app.db.get_session().query(CartORM).filter(CartORM.uid == uid).filter(CartORM.saved == False).all()
+
+    @staticmethod
+    def get_saved_by_uid_ORM(uid)->List[CartORM]:
+        return app.db.get_session().query(CartORM).filter(CartORM.uid == uid).filter(CartORM.saved == True).all()
 
     @staticmethod
     def delete(cid):
@@ -74,3 +78,19 @@ UPDATE cart
 SET quantity = :quantity
 WHERE id = :id
 """, quantity=quantity, id=cid)
+
+    @staticmethod
+    def add_to_cart(cid):
+        app.db.execute("""
+UPDATE cart
+SET saved = false
+WHERE id = :id
+""", id=cid)
+
+    @staticmethod
+    def save_cart_item(cid):
+        app.db.execute("""
+UPDATE cart
+SET saved = true
+WHERE id = :id
+""", id=cid)

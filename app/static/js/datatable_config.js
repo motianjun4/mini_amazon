@@ -71,9 +71,69 @@ window.datatable_config = {
     {
       title: "Action",
       data: "cid",
+      orderable: false,
+      width: "17em",
 
       render: (data, type, row) => {
-        return `<button class="btn btn-danger" onclick="remove_cart_item(${data})">Remove</button>`;
+        return `
+        <div class="mb-2"><button class="btn btn-info" onclick="save_cart_item(${data})">Saved for later</button></div>
+        <div><button class="btn btn-danger" onclick="remove_cart_item(${data})">Remove</button></div>   
+      `;
+      },
+    },
+  ],
+  "saved-list": [
+    {
+      title: "ID",
+      data: "cid",
+    },
+    {
+      title: "Product",
+      data: "product",
+      render: (data, type, row) => {
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
+      },
+    },
+    {
+      title: "Sold By",
+      data: "seller",
+      render: (data, type, row) => {
+        return `<a href="/user/${data.id}">${data.name}</a>`;
+      },
+    },
+    {
+      title: "Price",
+      data: "price",
+    },
+    {
+      title: "Quantity",
+      data: "quantity",
+      render: (data, type, row) => {
+        if (type != "display") {
+          return data;
+        }
+        return `<input 
+                  id="quantity_input_${row.cid}" class="form-control" 
+                  type="number" value="${data}" min="1" max="100" onblur="update_cart_item_quantity('#quantity_input_${row.cid}',${row.cid})"
+                  data-toggle="tooltip" data-placement="top" title="Click elsewhere to submit"
+                  />
+                  `;
+      },
+    },
+    {
+      title: "Total",
+      data: "total",
+    },
+    {
+      title: "Action",
+      data: "cid",
+      orderable: false,
+      width: "17em",
+      render: (data, type, row) => {
+        return `  
+          <div class="mb-2"><button class="btn btn-info" onclick="add_to_cart(${data})">Add to cart</button></div>
+          <div><button class="btn btn-danger" onclick="remove_cart_item(${data})">Remove</button></div>
+      `;
       },
     },
   ],
@@ -107,7 +167,7 @@ window.datatable_config = {
       orderable: false,
       width: "4em",
       render: (data, type, row) => {
-        return `<div><a class="btn btn-sm btn-primary mb-1" style="width:5em" href="/product/${data.pid}">Edit</a></div><div>`;
+        return `<div><a class="btn btn-sm btn-primary mb-1" style="width:5em" href="/product_edit/${data.pid}">Edit</a></div><div>`;
       },
     },
     // {

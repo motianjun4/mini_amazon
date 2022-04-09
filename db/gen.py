@@ -70,7 +70,8 @@ def gen_cart():
             uid = get_id(num_users)
             iid = get_id(num_inventories)
             quantity = fake.random_int(min=1, max=10)
-            writer.writerow([cid, uid, iid, quantity])
+            saved = False
+            writer.writerow([cid, uid, iid, quantity, saved])
         print(f'{num_cart} generated')
 
 def gen_inventory():

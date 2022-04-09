@@ -91,9 +91,9 @@ def searchCart():
                            cart_items=cart_items)
 
 
-@bp.route('/product/<pid>', methods=['GET', 'POST'])
+@bp.route('/product_edit/<pid>', methods=['GET', 'POST'])
 @login_required
-def product(pid):
+def product_edit(pid):
     # find the products current user has created:
     form = ProductForm()
     product = Product.get(pid)
@@ -121,3 +121,73 @@ def product_manage():
                         product_obj_list=product_obj_list)
 
 
+@bp.route('/product/<int:pid>')
+@login_required
+def product_detail(pid):
+    # show product detail, list of seller and current stock, reviews
+    product = Product.get(pid)
+    seller_list = Inventory.get_seller_list(pid)
+    seller_obj_list = [{
+        "iid": item[5],
+        "seller": {"id": item[4], "name": f"{item[2]} {item[3]}"},
+        "price": str(item[0]),
+        "quantity": str(item[1]),
+    } for item in seller_list]
+    # check wether bought this product
+    has_bought = False
+    order_list = Order.order_page(current_user.id)
+    for order in order_list:
+        if(order[2] == pid):
+            has_bought = True
+    has_review = False
+    review = Review.show_review(current_user.id, 2, 0, pid)
+    if review:
+        has_review = True
+    review_obj_list = []
+    reviews = Review.get_all_by_tpid(pid)
+    review_obj_list = [{
+        "id": review.id,
+        "uid": review.uid,
+        "creator": f"{review.user.firstname} {review.user.lastname}",
+        "review": review.review,
+        "rate": review.rate,
+        "upvote_cnt": len(list(filter(lambda item: item.is_up, review.review_likes))),
+        "is_upvote": len(list(filter(lambda item: item.is_up and item.uid == current_user.id, review.review_likes))) > 0,
+        "downvote_cnt": len(list(filter(lambda item: not item.is_up, review.review_likes))),
+        "is_downvote": len(list(filter(lambda item: not item.is_up and item.uid == current_user.id, review.review_likes))) > 0,
+        "create_at": iso(localize(review.create_at)),
+    } for review in reviews]
+
+# show summary review
+    summary_review = list(Review.show_summary_review(2,0,pid))
+    has_summary=False
+    has_half=False
+    if summary_review[0] is not None:
+        has_summary=True
+        summary_review.append(int(summary_review[0]))
+        if int(summary_review[0]) < summary_review[0]:
+            has_half=True
+    return render_template('product_detail.html',
+                           product=product, 
+                           has_bought=has_bought,
+                           has_review=has_review,
+                           review=review,
+                           seller_obj_list=seller_obj_list,
+                           review_obj_list=review_obj_list,
+                           has_half=has_half,
+                           has_summary=has_summary,
+                           summary_review = summary_review,
+                           )
+
+@bp.route('/addCart', methods=['POST'])
+@login_required
+def addCart():
+    iid = None
+    amount = None
+    try:
+        iid = request.form['iid']
+        amount = int(request.form['amount'])
+    except Exception as e:
+        return json_response(ResponseType.ERROR, None, str(e))
+    cart_items = Cart.addCart(iid, amount)
+    return json_response(ResponseType.SUCCESS, {"cart_items":str(cart_items)})

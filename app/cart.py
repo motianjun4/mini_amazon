@@ -25,7 +25,8 @@ class CreateCartForm(FlaskForm):
 @bp.route('/cart', methods=['GET', 'POST'])
 @login_required
 def cart():
-    cart_list = Cart.get_all_by_uid_ORM(current_user.id)
+    cart_list = Cart.get_cart_by_uid_ORM(current_user.id)
+    saved_list = Cart.get_saved_by_uid_ORM(current_user.id)
     
     cart_obj_list = [{
         "product":{"pid":cart.inventory.pid, "name":cart.inventory.product.name},
@@ -36,6 +37,16 @@ def cart():
         "quantity" : cart.quantity,
         "total" : f"${cart.inventory.price * cart.quantity}",
     } for cart in cart_list]
+
+    saved_obj_list = [{
+        "product":{"pid":cart.inventory.pid, "name":cart.inventory.product.name},
+        "seller": {"id":cart.inventory.uid, "name":f"{cart.inventory.seller.firstname} {cart.inventory.seller.lastname}"},
+        "cid": cart.id,
+        "iid" : cart.iid,
+        "price" : f"${cart.inventory.price}",
+        "quantity" : cart.quantity,
+        "total" : f"${cart.inventory.price * cart.quantity}",
+    } for cart in saved_list]
 
     total_price = 0
     for cart in cart_list:
@@ -96,6 +107,7 @@ def cart():
         return redirect(url_for('order.order_detail', oid=oid))
 
     return render_template('cart.html',
+                        saved_obj_list=saved_obj_list,
                         cart_obj_list=cart_obj_list,
                         user=current_user,
                         total_price=total_price,
@@ -115,6 +127,20 @@ def remove_cart():
     cid = request.form['cid']
     Cart.delete(cid)
     return json_response(ResponseType.SUCCESS, {"message": "Successfully removed from cart"})
+
+@bp.route("/save_cart_item", methods=['POST'])
+@login_required
+def save_cart():
+    cid = request.form['cid']
+    Cart.save_cart_item(cid)
+    return json_response(ResponseType.SUCCESS, {"message": "Item has been saved!"})
+
+@bp.route("/add_to_cart", methods=['POST'])
+@login_required
+def add_to_cart():
+    cid = request.form['cid']
+    Cart.add_to_cart(cid)
+    return json_response(ResponseType.SUCCESS, {"message": "Item has been added to cart!"})
 
 @bp.route("/update_cart_item_quantity", methods=['POST'])
 @login_required

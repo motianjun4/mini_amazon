@@ -44,7 +44,7 @@ WHERE id = :id
         cnt = app.db.execute('''
 SELECT COUNT(*)
 FROM product, cart, inventory
-WHERE cart.uid = :id and cart.iid = inventory.id and inventory.pid = product.id
+WHERE cart.uid = :id and cart.iid = inventory.id and inventory.pid = product.id and saved = false
 ''', id=uid)
         return cnt[0][0]
 
@@ -68,7 +68,7 @@ WHERE cart.uid = :id and cart.iid = inventory.id and inventory.pid = product.id
     def empty_cart(uid):
         app.db.execute("""
                     delete from cart
-                    where uid=:uid
+                    where uid=:uid and saved = false
         """, uid=uid)
 
     @staticmethod

@@ -189,5 +189,8 @@ def addCart():
         amount = int(request.form['amount'])
     except Exception as e:
         return json_response(ResponseType.ERROR, None, str(e))
-    cart_items = Cart.addCart(iid, amount)
-    return json_response(ResponseType.SUCCESS, {"cart_items":str(cart_items)})
+    if iid is not None:
+        cart_items = Cart.addCart(iid, amount)
+        return json_response(ResponseType.SUCCESS, {"cart_items":str(cart_items)})
+    else:
+        return json_response(ResponseType.ERROR, None, "No inventory!")

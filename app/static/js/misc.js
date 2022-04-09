@@ -57,6 +57,28 @@ function remove_cart_item(cid) {
   });
 }
 
+function add_to_cart(cid) {
+  $.post("/add_to_cart", { cid: cid }, (data) => {
+    if (data.status != "success") {
+      alert("error: " + data.msg);
+      return;
+    }
+    alert(`Item has been added to cart!`);
+    location.reload();
+  });
+}
+
+function save_cart_item(cid) {
+  $.post("/save_cart_item", { cid: cid }, (data) => {
+    if (data.status != "success") {
+      alert("error: " + data.msg);
+      return;
+    }
+    alert(`Item has been saved!`);
+    location.reload();
+  });
+}
+
 function upvote_review(rid, is_upvoted) {
   console.log("upvote review", rid);
   if (is_upvoted) {

@@ -1,4 +1,6 @@
 from uuid import uuid1
+
+from sqlalchemy import false
 from app.models.inventory import Inventory
 from app.models.order import Order
 from app.models.review import Review
@@ -75,7 +77,7 @@ def product_create():
         if pid and iid:
             put_file('image', f'product_{pid}.jpg', tmp_filepath)
             flash('Congratulations, you create a new product!')
-            return redirect(url_for('index.index'))
+            return redirect(url_for('products.product_manage'))
     return render_template('product_create.html', title='Create Product', form=form)
 
 
@@ -96,8 +98,10 @@ def product(pid):
     if form.validate_on_submit():
         # button="submit" if form.submit.data else "delete"
         if form.submit.data:
-            Product.product_edit(form, pid)
-            return redirect(url_for('products.product_manage'))
+            if not Product.get_all_by_name_ORM(form.product_name.data, pid):
+                Product.product_edit(form, pid)
+                return redirect(url_for('products.product_manage'))
+            flash('Product name existed!')
         # elif form.delete.data:
         #     Inventory.remove_product(iid)
     return render_template('product_edit.html', title='Modify Product', product=product, form=form)
@@ -115,17 +119,3 @@ def product_manage():
                         product_obj_list=product_obj_list)
 
 
-@bp.route('/product_edit/<int:pid>', methods=['GET', 'POST'])
-@login_required
-def product_edit(pid):
-    form = ProductForm()
-    if form.validate_on_submit():
-        file = request.files['image']
-        tmp_filepath = f"/tmp/{uuid1()}.jpg"
-        file.save(tmp_filepath)
-        pid, iid = Product.product_edit(form, current_user.id)
-        if pid and iid:
-            put_file('image', f'product_{pid}.jpg', tmp_filepath)
-            flash('Congratulations, you edit a product!')
-            return redirect(url_for('index.index'))
-    return render_template('product_create.html', title='Create Product', form=form)

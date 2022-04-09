@@ -45,6 +45,10 @@ ORDER BY product.id, inventory.price
         return app.db.get_session().query(ProductORM).filter(ProductORM.uid == uid).all()
 
     @staticmethod
+    def get_all_by_name_ORM(name, pid)->List[ProductORM]:
+        return app.db.get_session().query(ProductORM).filter(ProductORM.name == name).filter(ProductORM.id != pid).all()
+
+    @staticmethod
     def get_all(has_seller=True, page=0, page_size=20):
        # a = if available_only: 1 else: 2
        # minPriceIid --> Sales volume (only in this function)

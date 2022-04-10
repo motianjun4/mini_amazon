@@ -20,6 +20,8 @@
     {% for error in form.rate.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
+  </p>
+  <p>
     {{ form.review.label }}
     {{ form.review(class="form-control ") }}<br/>
     {% for error in form.review.errors %}

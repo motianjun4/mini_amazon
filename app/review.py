@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField
-from wtforms.validators import DataRequired, ValidationError, AnyOf
+from wtforms.validators import DataRequired, ValidationError, AnyOf, InputRequired
 from app.utils.json_response import ResponseType, json_response
 from flask_wtf.file import FileAllowed
 from uuid import uuid1
@@ -18,8 +18,8 @@ bp = Blueprint('review', __name__)
 
 
 class CreateReviewForm(FlaskForm):
-    rate = IntegerField('Rate(Integer Min:0 Max:5)', validators=[
-                        DataRequired(), AnyOf([0, 1, 2, 3, 4, 5])])
+    rate = IntegerField('Rate(Integer Min:1 Max:5)', validators=[
+                        InputRequired(), AnyOf([1, 2, 3, 4, 5])])
     review = StringField('Review', validators=[DataRequired()])
     image0 = FileField(u'Image Files: (Optional)',
                        validators=[FileAllowed(['jpg'])])
@@ -64,7 +64,7 @@ def editProductReview():
         if args['redirect'] == 'product':
             return redirect(url_for('products.product_detail', pid=args['pid'], _anchor="my_review"))
         elif args['redirect'] == 'user':
-            return redirect(url_for('users.my_profile'))
+            return redirect(url_for('users.user_review', _anchor="product-review"))
     return render_template('review.html', form=form)
 
 
@@ -76,7 +76,7 @@ def removeProductReview():
     if args['redirect'] == 'product':
         return redirect(url_for('products.product_detail', pid=args['pid'], _anchor="my_review"))
     elif args['redirect'] == 'user':
-        return redirect(url_for('users.my_profile'))
+        return redirect(url_for('users.user_review', _anchor="product-review"))
 
 
 @bp.route('/review/seller/submit', methods=['GET', 'POST'])
@@ -114,7 +114,7 @@ def editSellerReview():
         if args['redirect'] == 'seller':
             return redirect(url_for('users.public_profile', uid=args['sid'], _anchor="my_review"))
         elif args['redirect'] == 'user':
-            return redirect(url_for('users.my_profile'))
+            return redirect(url_for('users.user_review', _anchor="seller-review"))
     return render_template('review.html', form=form)
 
 
@@ -126,7 +126,7 @@ def removeSellerReview():
     if args['redirect'] == 'seller':
         return redirect(url_for('users.public_profile', uid=args['sid'], _anchor="my_review"))
     elif args['redirect'] == 'user':
-        return redirect(url_for('users.my_profile'))
+        return redirect(url_for('users.user_review', _anchor="seller-review"))
 
 
 @bp.route('/review_like', methods=['POST'])

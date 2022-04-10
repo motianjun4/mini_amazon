@@ -92,13 +92,14 @@ def my_profile():
     purchases = Purchase.get_all_by_uid(current_user.id).all()
     purchase_obj_list = [ {
         "product": {"pid": purchase.inventory.product.id, "name": purchase.inventory.product.name},
+        "seller": {"sid": purchase.inventory.seller.id, "name": purchase.inventory.seller.firstname + " " + purchase.inventory.seller.lastname},
         "oid": purchase.oid,
         "purchase_time": strtime(localize(purchase.order.create_at)),
         "price":"$"+str(purchase.price),
         "count":purchase.count,
         "total":"$"+str(purchase.count*purchase.price),
         "fulfillment":purchase.fulfillment,
-
+        "review": {"pid":purchase.inventory.product.id, "sid": purchase.inventory.seller.id}
     } for purchase in purchases]
 
     inventory_list = Inventory.get_by_uid_ORM(current_user.id)
@@ -109,28 +110,6 @@ def my_profile():
         "quantity": item.quantity,
     } for item in inventory_list]
     is_seller = inventory_list.count() > 0 
-
-    #seller review and product review
-    seller_review = Review.show_review_list_user(current_user.id, 1)
-    seller_review_obj_list = []
-    if seller_review:
-        seller_review_obj_list = [{
-            "id": item[6],
-            "time": strtime(localize(item[5])),
-            "seller": {"id": item[4], "name": item[2]+" "+item[3]},
-            "rate": item[0],
-            "review": item[1],
-        } for item in seller_review]
-    product_review = Review.show_review_list_user(current_user.id, 2)
-    product_review_obj_list = []
-    if product_review:
-        product_review_obj_list = [{
-            "id": item[5],
-            "time": strtime(localize(item[4])),
-            "product": {"id": item[3], "name": item[2]},
-            "rate": item[0],
-            "review": item[1],
-        } for item in product_review]
     
     user_obj = User.get(current_user.id)
     user_dict = {"id":user_obj.id, "name":user_obj.firstname+" "+user_obj.lastname, "email":user_obj.email}
@@ -139,8 +118,6 @@ def my_profile():
     return render_template('my_profile.html',
                            purchase_obj_list=purchase_obj_list,
                            inventory_obj_list=inventory_obj_list,
-                           seller_review_obj_list=seller_review_obj_list,
-                           product_review_obj_list=product_review_obj_list,
                            is_seller=is_seller,
                            user=current_user,
                            user_dict=user_dict)
@@ -156,6 +133,8 @@ def deposit():
         return json_response(ResponseType.ERROR, None, str(e))
     if amount <= 0:
         return json_response(ResponseType.ERROR, None, f'The amount must larger than 0.')
+    if amount > 10e10:
+        return json_response(ResponseType.ERROR, None, f'Adding too much!')
     current_balance = User.add_balance(current_user.id, amount)
     return json_response(ResponseType.SUCCESS, {"current_balance": int(current_balance)})
 
@@ -173,6 +152,32 @@ def withdrawn():
         return json_response(ResponseType.ERROR, None, f'The amount must larger than 0.')
     current_balance = User.add_balance(current_user.id, -amount)
     return json_response(ResponseType.SUCCESS, {"current_balance": int(current_balance)})
+
+
+class EditUserForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired()])
+    firstname = StringField('First Name', validators=[DataRequired()])
+    lastname = StringField('Last Name', validators=[DataRequired()])
+    password = PasswordField('New Password')
+    sell_address = StringField('Sell Address')
+    submit = SubmitField('Submit')
+
+    def validate_email(self, email):
+        if email.data != current_user.email and User.email_exists(email.data):
+            raise ValidationError('Already a user with this email.')
+
+@bp.route('/user_edit', methods=['GET', 'POST'])
+@login_required
+def user_edit():
+    user = current_user
+    form = EditUserForm(formdata=request.form,obj=user)
+    if form.validate_on_submit():
+        if form.password.data and form.password.data != "":
+            User.update_password(user.id, form.password.data)
+        # email = form.email.data if form.email.data 
+        User.update(user.id, form.email.data, form.firstname.data, form.lastname.data, form.sell_address.data)
+        return redirect(url_for('users.my_profile'))
+    return render_template('user_edit.html', title='Modify User Profile', user=current_user, form=form)
 
 
 @bp.route('/user/<int:uid>')
@@ -307,4 +312,32 @@ def user_chat():
     user_dict = {"id":user.id, "name":user.firstname+" "+user.lastname, "email":user.email}
     return render_template('user_chat.html',
                             user_dict=user_dict,
+    )
+
+@bp.route('/user/review')
+def user_review():
+    #seller review and product review
+    seller_review = Review.show_review_list_user(current_user.id, 1)
+    seller_review_obj_list = []
+    if seller_review:
+        seller_review_obj_list = [{
+            "id": item[6],
+            "time": strtime(localize(item[5])),
+            "seller": {"id": item[4], "name": item[2]+" "+item[3]},
+            "rate": item[0],
+            "review": item[1],
+        } for item in seller_review]
+    product_review = Review.show_review_list_user(current_user.id, 2)
+    product_review_obj_list = []
+    if product_review:
+        product_review_obj_list = [{
+            "id": item[5],
+            "time": strtime(localize(item[4])),
+            "product": {"id": item[3], "name": item[2]},
+            "rate": item[0],
+            "review": item[1],
+        } for item in product_review]
+    return render_template('my_review.html',
+                            seller_review_obj_list=seller_review_obj_list,
+                            product_review_obj_list=product_review_obj_list,
     )

@@ -37,8 +37,8 @@
     <div class="card">
       <div class="card-body">
 
-        <h4 class="card-title">Confirm Order</h4>
-        <form action="" method="post" enctype="multipart/form-data">
+        <h4 class="card-title"  id="order-confirm">Confirm Order</h4>
+        <form action="#order-confirm" method="post" enctype="multipart/form-data">
           {{ form.hidden_tag() }}
           <div class="form-group">
             {{ form.address.label }}

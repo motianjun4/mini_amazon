@@ -8,22 +8,32 @@
   <div class="card" style="flex-grow: 1;">
     <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
     <div class="card-body">
-      <h4 class="card-title">Balance</h4>
-      <p class="card-text">$<span>{{user.balance}}</span></p>
+      <h4 class="card-title">Account</h4>
+      <ul>
+        <li>Email: {{ user.email }}</li>
+        <li>First Name: {{ user.firstname }}</li>
+        <li>Last Name: {{ user.lastname }}</li>
+        <li>Sell Address: {{ user.sell_address }}</li>
+        <li>Balance: ${{user.balance}}</li>
+      </ul>
       <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDeposit"
         aria-expanded="false" aria-controls="collapseDeposit">
-        Deposit
+        Recharge
       </button>
       <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseWithdrawn"
         aria-expanded="false" aria-controls="collapseWithdrawn">
-        Withdrawn
+        Withdraw
       </button>
+      <a href="/user_edit" class="btn btn-primary">Edit Profile</a>
       <a href="/transaction" class="btn btn-primary">Transactions</a>
+      <a class="btn btn-primary" href="/user/chat" role="button">Messages</a>
+      <a class="btn btn-primary" href="/user/review" role="button">My Review</a>
+
       <div id="balanceCollapseGroup" class="mt-1">
         <div class="collapse" id="collapseDeposit" data-parent="#balanceCollapseGroup">
           <div class="card card-body">
             <div class="form-group">
-              <label for="amount">Amount deposit</label>
+              <label for="amount">Amount recharge</label>
               <div class="input-group mb-2">
                 <div class="input-group-prepend">
                   <div class="input-group-text">$</div>
@@ -48,7 +58,7 @@
                       alert('error: ' + data.msg)
                       return
                     }
-                    location.reload()
+                    window.location.href = window.location.href
                   })
                 })
               </script>
@@ -83,7 +93,7 @@
                       alert('error: ' + data.msg)
                       return
                     }
-                    location.reload()
+                    window.location.href = window.location.href
                   })
                 })
               </script>
@@ -98,8 +108,8 @@
     <div class="card-body">
       <h4 class="card-title">Seller Management</h4>
       <div>
-        <a class="btn btn-primary" href="/my_inventory" role="button">Inventory Management</a>
-        <a class="btn btn-primary" href="/orders" role="button">Order Management</a>
+        <a class="btn btn-primary" href="/my_inventory" role="button">My Inventories</a>
+        <a class="btn btn-primary" href="/orders" role="button">My Orders</a>
         <div style="height: 0.5em;"></div>
         <a class="btn btn-primary" href="/sell" role="button">Sell New Product</a>
         <a class="btn btn-primary" href="/visual_ana" role="button">Inventory Analytics</a>
@@ -112,23 +122,12 @@
 
   </div>
 
-  <div class="card ml-3" style="flex-grow: 1;">
-    <div class="card-body">
-      <h4 class="card-title">Message History</h4>
-      <div>
-       <p class="card-text">See Recent Messages Here</span></p>
-        <a class="btn btn-primary" href="/user/chat" role="button">View Messages</a>
-      </div>
-      
-    </div>
-
-  </div>
   </div>
   <br />
 
   <div class="card">
     <div class="card-body">
-      <h4 class="card-title">Account Summary</h4>
+      <h4 class="card-title">Summary</h4>
       <div class="card-text flex">
         <div style="width:33%">
           <div id="purchase-category-chart" style="width: 100%; height: 15em;"></div>
@@ -159,33 +158,7 @@
       </div>
     </div>
   </div>
-  
-  <br />
-  <div class="card">
-    <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
-    <div class="card-body">
-      <h4 class="card-title">My Reviews(For Product)</h4>
-      <div class="card-text">
-        {%import 'datatable.html' as t%}
-        {{t.datatable("reviews-for-product", product_review_obj_list)}}
-      </div>
-    </div>
-  </div>
-
-  <br />
-  <div class="card">
-    <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
-    <div class="card-body">
-      <h4 class="card-title">My Reviews(For Seller)</h4>
-      <div class="card-text">
-        {%import 'datatable.html' as t%}
-        {{t.datatable("reviews-for-seller", seller_review_obj_list)}}
-      </div>
-    </div>
-  </div>
 </div>
 </div>
-
-
 
 {% endblock %}

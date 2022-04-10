@@ -38,7 +38,9 @@ def gen_users():
             firstname = name_components[0]
             lastname = name_components[-1]
             balance = fake.random_int(min=10, max=1000)
-            writer.writerow([uid, email, password, firstname, lastname, balance])
+            address = profile['address']
+            writer.writerow([uid, email, password, firstname,
+                            lastname, balance, address])
         print(f'{num_users} generated')
     return
 
@@ -181,7 +183,7 @@ def gen_transaction():
     return
 
 
-# gen_users()
+gen_users()
 # gen_products()
 # gen_cart()
 # gen_inventory()
@@ -189,4 +191,4 @@ def gen_transaction():
 # gen_purchases()
 # gen_review()
 # gen_review_like()
-gen_transaction()
+# gen_transaction()

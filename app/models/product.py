@@ -4,8 +4,6 @@ from flask import current_app as app
 from flask_login import current_user
 from .orm.orm_models import Product as ProductORM
 
-from app.models.utils import paginate_raw
-
 class Product:
     def __init__(self, id, uid, name, category, description, iMinPrice=0, minPriceIid=None, avgRate=0, cnt=0):
         self.id = id
@@ -55,7 +53,7 @@ ORDER BY product.id, inventory.price
         return app.db.get_session().query(ProductORM).filter(ProductORM.name == name).filter(ProductORM.id != pid).all()
 
     @staticmethod
-    def get_all(has_seller=True, page=0, page_size=20):
+    def get_all(has_seller=True):
        # a = if available_only: 1 else: 2
        # minPriceIid --> Sales volume (only in this function)
         sql = f'''
@@ -64,9 +62,10 @@ FROM product LEFT OUTER JOIN inventory ON inventory.pid = product.id JOIN Purcha
 WHERE fulfillment = TRUE 
 GROUP BY product.id
 ORDER BY pt_num DESC 
+LIMIT 20
 '''
 # {"AND inventory.id is not NULL" if has_seller else ""}
-        rows = app.db.execute(paginate_raw(sql, page, page_size))
+        rows = app.db.execute(sql)
         return [Product(*row) for row in rows]
 
     @staticmethod

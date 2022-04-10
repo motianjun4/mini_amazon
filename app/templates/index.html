@@ -11,80 +11,36 @@
             </div>
         </header>
         <!-- Section-->
-        <section class="py-5">
+        <section class="py-1">
             <div class="container px-4 px-lg-5 mt-5">
                 <h2>Top Sells</h2>
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-2 row-cols-xl-2 justify-content-center">
                     {% for product in avail_products%}
-                        <div class="col mb-5">
-                            <div class="card h-100">
-                                <!-- Product image-->
-                                <img class="card-img-top" src="/img/product_{{product.id}}.jpg" alt="..." />
-                                <!-- Product details-->
-                                <div class="card-body p-4">
-                                    <div class="text-center">
-                                        <!-- Product name-->
-                                        <h5 class="fw-bolder"><a href="/product/{{product.id}}">{{product.name}}</a></h5>
-                                        <!-- Product price-->
-                                        Lowest Price: ${{product.iMinPrice}}
-                                        <br/>
-                                        Sales volume: {{product.minPriceIid}} 
-                                    </div>
-                                </div>
-                                <!-- Product actions-->
-                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <span data-pid="{{ product.id }}"></span>
-                                    <div class="text-center">
-                                        <a class="btn btn-outline-dark mt-auto" href="/product/{{product.id}}" role="button" aria-expanded="false" aria-controls="collapseDetails{{product.id}}">
-                                            Details
-                                        </a>
-                                        <div class="collapse" id="collapseDetails{{product.id}}">
-                                            <div class="card card-body">
-                                            Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                        <div class="col-sm-12 col-md-6 mb-2">
+                            <div class="card">
+                                <div class="flex">
+                                    <img class="card-img-top" style="height: 150px; width: 150px" src="/img/product_{{product.id}}.jpg" alt="..." />
+                                    <div class="card-body flex" style="flex-direction: column;justify-content: space-between;">
+                                        <div>
+                                            <h6 class="card-title"><a href="/product/{{product.id}}">{{product.name}}</a></h6>
+                                        </div>
+                                        <div class="flex" style="justify-content: space-between; font-size: 0.9em;">
+                                            <div>
+                                                Starting From: ${{product.iMinPrice}}
+                                            </div>
+                                            <div>
+                                                Total Sales: {{product.minPriceIid}}
+
                                             </div>
                                         </div>
-                                        <!-- <a class="btn btn-outline-dark mt-auto" data-bs-toggle="collapse" href="#collapseAdd{{product.id}}" role="button" aria-expanded="false" aria-controls="collapseAdd{{product.id}}">
-                                            Add to cart
-                                        </a>
-                                        <div class="collapse" id="collapseAdd{{product.id}}">
-                                            <select class="form-select" id="numOfItems{{product.id}}" aria-label="Default select example">
-                                                <option selected>Number of items</option>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
-                                                <option value="4">Four</option>
-                                                <option value="5">Five</option>
-                                            </select>
-                                            <div class="col-sm-10">
-                                                <button id="add-submit{{product.id}}" class="btn btn-primary"  data-pid="{{ product.id }}" data-iid="{{product.iid}}">Confirm</button>
-                                            </div>      
-                                            <script>
-                                                $('#add-submit{{product.id}}').on('click', (event)=>{
-                                                  let amount = $('#numOfItems{{product.id}}').val()
-                                                  var iid = $('#add-submit{{product.id}}').data('iid')
-                                                  $.post("/addCart", {amount:Number(amount), iid:iid}, (data)=>{
-                                                    if (data.status != "success"){
-                                                      alert('error: '+data.msg)
-                                                      return
-                                                    }
-                                                    location.reload()
-                                                  })
-                                                })
-                                            </script>                                     
-                                        </div> -->
-                                    </form>
                                     </div>
                                 </div>
+                            
                             </div>
                         </div>
                     {% endfor %}
                 </div>
             </div>
         </section>
-        <!-- Footer-->
-        <footer class="py-5 bg-dark">
-            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p></div>
-        </footer>
-        <!-- Bootstrap core JS-->
     
 {% endblock %}

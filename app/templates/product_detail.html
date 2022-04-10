@@ -45,7 +45,16 @@
         </div>
         <br />
         <div style = "text-align:right;">
-        <a class="btn btn-primary" href="/addInventory" role="button">Add to My Inventory</a>
+        <a class="btn btn-primary" href="/addInventory/{{product.id}}" role="button">Add to My Inventory</a>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+              {% for message in messages %}
+              <li>{{ message }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
         </div>
       </div>
     </div>

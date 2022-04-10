@@ -32,10 +32,10 @@ class ModifyInventoryForm(FlaskForm):
     quantity = IntegerField('Quantity', validators=[DataRequired(), NumberRange(min=0)])
     price = FloatField('Price', validators=[DataRequired(), NumberRange(min=0)])
     submit = SubmitField('Modify!')
-    delete = SubmitField('Delete!')
+    # delete = SubmitField('Delete!')
 
 class AddProductForm(FlaskForm):
-    name = StringField('Product Name', validators=[DataRequired()])
+    # name = StringField('Product Name', validators=[DataRequired()])
     quantity = IntegerField('Quantity', validators=[DataRequired(),NumberRange(min=0)])
     price = FloatField('Price', validators=[DataRequired(),NumberRange(min=0)])
     add = SubmitField('ADD!')
@@ -53,7 +53,7 @@ def inventory(iid):
         # button="submit" if form.submit.data else "delete"
         if form.submit.data:
             Inventory.modify_quantity(form, iid)
-            return redirect(url_for('users.my_profile'))
+            return redirect(url_for('inventorys.show_inventory'))
         # elif form.delete.data:
         #     Inventory.remove_product(iid)
     return render_template('inventory.html', title='Inventory', inven_iid=inven_iid, form=form)
@@ -62,23 +62,26 @@ def inventory(iid):
 @login_required
 def deleteInventory(iid):
     Inventory.remove_product(iid)
-    return redirect(url_for('users.my_profile'))
+    return redirect(url_for('inventorys.show_inventory'))
 
-@bp.route('/addInventory', methods=['GET', 'POST'])
+@bp.route('/addInventory/<pid>', methods=['GET', 'POST'])
 @login_required
-def addProduct():
+def addProduct(pid):
     form = AddProductForm()
-    pid = Inventory.get_product_pid(form)
+    # args = request.args  
+    # pid = Inventory.get_product_pid(form)
     # if form.quantity<0 and (type(form.price)==decimal(14,2) and form.price>0)
     # if form.quantity<0 or form.price<0:
     #     return render_template('inventory_add.html', title='Inventory-Adddd', form=form)
-    if pid and not Inventory.pid_in_inven(pid, current_user.id):
+    if Inventory.pid_in_inven(pid, current_user.id):
+        flash("You have already add this product to you inventory!")
+        return redirect(url_for('products.product_detail', pid=pid))
+    else:
         if form.validate_on_submit(): 
             Inventory.add_new_product(form, current_user.id, pid)
-            return redirect(url_for('users.my_profile'))
+            return redirect(url_for('inventorys.show_inventory'))
     return render_template('inventory_add.html', title='Inventory-Adddd', form=form)
-    
-        # session['_flashes'].clear()
+
         
 @bp.route('/my_inventory', methods=['GET', 'POST'])
 @login_required

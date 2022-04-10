@@ -175,6 +175,32 @@ def withdrawn():
     return json_response(ResponseType.SUCCESS, {"current_balance": int(current_balance)})
 
 
+class EditUserForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired()])
+    firstname = StringField('First Name', validators=[DataRequired()])
+    lastname = StringField('Last Name', validators=[DataRequired()])
+    password = PasswordField('New Password')
+    sell_address = StringField('Sell Address')
+    submit = SubmitField('Submit')
+
+    def validate_email(self, email):
+        if email.data != current_user.email and User.email_exists(email.data):
+            raise ValidationError('Already a user with this email.')
+
+@bp.route('/user_edit', methods=['GET', 'POST'])
+@login_required
+def user_edit():
+    user = current_user
+    form = EditUserForm(formdata=request.form,obj=user)
+    if form.validate_on_submit():
+        if form.password.data and form.password.data != "":
+            User.update_password(user.id, form.password.data)
+        # email = form.email.data if form.email.data 
+        User.update(user.id, form.email.data, form.firstname.data, form.lastname.data, form.sell_address.data)
+        return redirect(url_for('users.my_profile'))
+    return render_template('user_edit.html', title='Modify User Profile', user=current_user, form=form)
+
+
 @bp.route('/user/<int:uid>')
 def public_profile(uid):
     # show id, name, summary: total number of item buyed, total money spend, 

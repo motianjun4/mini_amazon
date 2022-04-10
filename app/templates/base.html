@@ -100,47 +100,16 @@
             </div>
         <!-- </div> -->
     </nav>
-
-    {#
-    {% if current_user.is_authenticated %}
-    <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
-      <div class="offcanvas-header">
-        <h5 id="offcanvasTopLabel">Cart</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <section class="py-10">
-          <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-              {% for cart_item in cart_items %}
-              <div class="col mb-5">
-                <div class="card h-100">
-                  <!-- Product image-->
-                  <img class="card-img-top" src="/img/product_{{cart_item.pid}}.jpg" alt="..." />
-                  <!-- Product details-->
-                  <div class="card-body p-4">
-                    <div class="text-center">
-                      <!-- Product name-->
-                      <h5 class="fw-bolder">{{cart_item.pName}}</h5>
-                      <!-- Product price-->
-                      ${{cart_item.pPrice}}
-                      quantity:{{cart_item.pQuantity}}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {% endfor %}
-            </div>
-          </div>
-        </section>
-      </div>
-    </div>
-    {% endif %}
-    #}
   </head>
   <body>
     <div class="main">
       {% block content %}{% endblock %}
     </div>
+    <!-- Footer-->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Duke COMPSCI 516 Project: Tianjun Mo, Enmiao Feng, Dingzhou Wang, Zheng Zhang</p>
+      </div>
+    </footer>
   </body>
 </html>

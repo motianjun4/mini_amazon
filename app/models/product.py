@@ -62,6 +62,7 @@ FROM product LEFT OUTER JOIN inventory ON inventory.pid = product.id JOIN Purcha
 WHERE fulfillment = TRUE 
 GROUP BY product.id
 ORDER BY pt_num DESC 
+LIMIT 20
 '''
 # {"AND inventory.id is not NULL" if has_seller else ""}
         rows = app.db.execute(sql)

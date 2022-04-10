@@ -32,7 +32,7 @@
         <div class="collapse" id="collapseDeposit" data-parent="#balanceCollapseGroup">
           <div class="card card-body">
             <div class="form-group">
-              <label for="amount">Amount deposit</label>
+              <label for="amount">Amount recharge</label>
               <div class="input-group mb-2">
                 <div class="input-group-prepend">
                   <div class="input-group-text">$</div>
@@ -57,7 +57,7 @@
                       alert('error: ' + data.msg)
                       return
                     }
-                    location.reload()
+                    window.location.href = window.location.href
                   })
                 })
               </script>
@@ -92,7 +92,7 @@
                       alert('error: ' + data.msg)
                       return
                     }
-                    location.reload()
+                    window.location.href = window.location.href
                   })
                 })
               </script>

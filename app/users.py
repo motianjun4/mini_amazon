@@ -157,6 +157,8 @@ def deposit():
         return json_response(ResponseType.ERROR, None, str(e))
     if amount <= 0:
         return json_response(ResponseType.ERROR, None, f'The amount must larger than 0.')
+    if amount > 10e10:
+        return json_response(ResponseType.ERROR, None, f'Adding too much!')
     current_balance = User.add_balance(current_user.id, amount)
     return json_response(ResponseType.SUCCESS, {"current_balance": int(current_balance)})
 

@@ -27,7 +27,7 @@ bp = Blueprint('products', __name__)
 def search():
     args = request.args
     query = args.get("q") or ""
-    category = args.get("c") or ""
+    category = args.get("c") or "All"
 
     if (query is None or query == "") and category == "All":
         product_obj_list = []

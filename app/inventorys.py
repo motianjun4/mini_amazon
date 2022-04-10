@@ -80,7 +80,20 @@ def addProduct():
     
         # session['_flashes'].clear()
         
-    
+@bp.route('/my_inventory', methods=['GET', 'POST'])
+@login_required
+def show_inventory():
+    inventory_list = Inventory.get_by_uid_ORM(current_user.id)
+    inventory_obj_list = [{
+        "iid": item.id,
+        "product": {"id": item.product.id, "name": item.product.name},
+        "price": str(item.price),
+        "quantity": item.quantity,
+    } for item in inventory_list]
+    is_seller = inventory_list.count() > 0 
+    return render_template('my_inventory.html', 
+                            inventory_obj_list=inventory_obj_list,
+                            is_seller=is_seller)  
 
 
 @bp.route('/visual_ana')

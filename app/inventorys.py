@@ -6,7 +6,7 @@ from app.models.order import Order
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField, ValidationError
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, NumberRange
 
 import datetime
 
@@ -29,15 +29,15 @@ bp = Blueprint('inventorys', __name__)
 # bp = Blueprint('accounts', __name__)
 
 class ModifyInventoryForm(FlaskForm):
-    quantity = IntegerField('Quantity', validators=[DataRequired()])
-    price = FloatField('Price', validators=[DataRequired()])
+    quantity = IntegerField('Quantity', validators=[DataRequired(), NumberRange(min=0)])
+    price = FloatField('Price', validators=[DataRequired(), NumberRange(min=0)])
     submit = SubmitField('Modify!')
-    delete = SubmitField('Delete!')
+    # delete = SubmitField('Delete!')
 
 class AddProductForm(FlaskForm):
-    name = StringField('Product Name', validators=[DataRequired()])
-    quantity = IntegerField('Quantity', validators=[DataRequired()])
-    price = FloatField('Price', validators=[DataRequired()])
+    # name = StringField('Product Name', validators=[DataRequired()])
+    quantity = IntegerField('Quantity', validators=[DataRequired(),NumberRange(min=0)])
+    price = FloatField('Price', validators=[DataRequired(),NumberRange(min=0)])
     add = SubmitField('ADD!')
 
 @bp.route('/inventory/<iid>', methods=['GET', 'POST'])
@@ -53,7 +53,7 @@ def inventory(iid):
         # button="submit" if form.submit.data else "delete"
         if form.submit.data:
             Inventory.modify_quantity(form, iid)
-            return redirect(url_for('users.my_profile'))
+            return redirect(url_for('inventorys.show_inventory'))
         # elif form.delete.data:
         #     Inventory.remove_product(iid)
     return render_template('inventory.html', title='Inventory', inven_iid=inven_iid, form=form)
@@ -62,25 +62,41 @@ def inventory(iid):
 @login_required
 def deleteInventory(iid):
     Inventory.remove_product(iid)
-    return redirect(url_for('users.my_profile'))
+    return redirect(url_for('inventorys.show_inventory'))
 
-@bp.route('/addInventory', methods=['GET', 'POST'])
+@bp.route('/addInventory/<pid>', methods=['GET', 'POST'])
 @login_required
-def addProduct():
+def addProduct(pid):
     form = AddProductForm()
-    pid = Inventory.get_product_pid(form)
+    # args = request.args  
+    # pid = Inventory.get_product_pid(form)
     # if form.quantity<0 and (type(form.price)==decimal(14,2) and form.price>0)
     # if form.quantity<0 or form.price<0:
     #     return render_template('inventory_add.html', title='Inventory-Adddd', form=form)
-    if pid and not Inventory.pid_in_inven(pid, current_user.id):
+    if Inventory.pid_in_inven(pid, current_user.id):
+        flash("You have already add this product to you inventory!")
+        return redirect(url_for('products.product_detail', pid=pid))
+    else:
         if form.validate_on_submit(): 
             Inventory.add_new_product(form, current_user.id, pid)
-            return redirect(url_for('users.my_profile'))
+            return redirect(url_for('inventorys.show_inventory'))
     return render_template('inventory_add.html', title='Inventory-Adddd', form=form)
-    
-        # session['_flashes'].clear()
+
         
-    
+@bp.route('/my_inventory', methods=['GET', 'POST'])
+@login_required
+def show_inventory():
+    inventory_list = Inventory.get_by_uid_ORM(current_user.id)
+    inventory_obj_list = [{
+        "iid": item.id,
+        "product": {"id": item.product.id, "name": item.product.name},
+        "price": str(item.price),
+        "quantity": item.quantity,
+    } for item in inventory_list]
+    is_seller = inventory_list.count() > 0 
+    return render_template('my_inventory.html', 
+                            inventory_obj_list=inventory_obj_list,
+                            is_seller=is_seller)  
 
 
 @bp.route('/visual_ana')
@@ -102,3 +118,12 @@ def visual_ana():
     return render_template('rundownlist.html',
                            run_down_list=run_down_list,
                            product_trends = product_trends)
+
+@bp.route('/sell_fulfill')
+@login_required
+def seller_fulfill_rate():
+    fulfill_list = Inventory.inventory_fulfill(current_user.id)
+    seller_fulfill_list = [
+        {"name": item[1], "count": item[0]}
+    for item in fulfill_list]
+    return json_response(ResponseType.SUCCESS, seller_fulfill_list)

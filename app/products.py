@@ -9,7 +9,7 @@ from flask_login import current_user
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, NumberRange
 from app.utils.json_response import ResponseType, json_response
 from app.utils.time import iso, localize
 from libs.my_minio import put_file
@@ -27,7 +27,7 @@ bp = Blueprint('products', __name__)
 def search():
     args = request.args
     query = args.get("q") or ""
-    category = args.get("c") or ""
+    category = args.get("c") or "All"
 
     if (query is None or query == "") and category == "All":
         product_obj_list = []
@@ -42,6 +42,8 @@ def search():
             "category": product.category,
             "price": str(product.iMinPrice),
             "iid": product.minPriceIid,
+            "avgRate": str(round(product.avgRate,2)),
+            "cnt": str(product.cnt) if product.cnt is not None else 0,
         } for product in product_list]
 
     categories = Product.get_categories()
@@ -123,6 +125,7 @@ def product_manage():
 def product_detail(pid):
     # show product detail, list of seller and current stock, reviews
     product = Product.get(pid)
+    total_sales = Product.get_total_sales(pid)
     seller_list = Inventory.get_seller_list(pid)
     seller_obj_list = [{
         "iid": item[5],
@@ -174,6 +177,7 @@ def product_detail(pid):
                            has_half=has_half,
                            has_summary=has_summary,
                            summary_review = summary_review,
+                           total_sales=total_sales
                            )
 
 @bp.route('/addCart', methods=['POST'])

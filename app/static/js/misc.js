@@ -2,6 +2,9 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip();
 });
 
+window.datatables = {};
+
+
 function format_time(time) {
   let date = new Date(time);
   return `${date.toLocaleString()}`;
@@ -26,7 +29,7 @@ function add_item_to_cart(iid, quantity) {
       return;
     }
     alert(`${quantity} item added!`);
-    location.reload();
+    window.location.href = window.location.href;
   });
 }
 
@@ -42,7 +45,7 @@ function update_cart_item_quantity(selector,cid){
       return;
     }
     alert(`Quantity updated!`);
-    location.reload();
+    window.location.href = window.location.href;
   });
 }
 
@@ -53,7 +56,7 @@ function remove_cart_item(cid) {
       return;
     }
     alert(`Item removed!`);
-    location.reload();
+    window.location.href = window.location.href;
   });
 }
 
@@ -64,7 +67,7 @@ function add_to_cart(cid) {
       return;
     }
     alert(`Item has been added to cart!`);
-    location.reload();
+    window.location.href = window.location.href;
   });
 }
 
@@ -75,7 +78,7 @@ function save_cart_item(cid) {
       return;
     }
     alert(`Item has been saved!`);
-    location.reload();
+    window.location.href = window.location.href;
   });
 }
 
@@ -91,7 +94,7 @@ function upvote_review(rid, is_upvoted) {
       return;
     }
     alert(`Review upvoted!`);
-    location.reload();
+    window.location.href = window.location.href;
   });
 }
 
@@ -107,7 +110,7 @@ function downvote_review(rid, is_downvoted) {
       return;
     }
     alert(`Review downvoted!`);
-    location.reload();
+    window.location.href = window.location.href;
   });
 }
 
@@ -122,7 +125,7 @@ function delete_review_like(rid) {
         return;
       }
       alert(`Canceled!`);
-      location.reload();
+      window.location.href = window.location.href;
     },
   });
 }
@@ -134,6 +137,6 @@ function confirm_purchase_fulfillment(pid) {
       return;
     }
     alert(`Order fulfilled!`);
-    location.reload();
+    window.location.href = window.location.href;
   });
 }

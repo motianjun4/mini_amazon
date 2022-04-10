@@ -92,13 +92,14 @@ def my_profile():
     purchases = Purchase.get_all_by_uid(current_user.id).all()
     purchase_obj_list = [ {
         "product": {"pid": purchase.inventory.product.id, "name": purchase.inventory.product.name},
+        "seller": {"sid": purchase.inventory.seller.id, "name": purchase.inventory.seller.firstname + " " + purchase.inventory.seller.lastname},
         "oid": purchase.oid,
         "purchase_time": strtime(localize(purchase.order.create_at)),
         "price":"$"+str(purchase.price),
         "count":purchase.count,
         "total":"$"+str(purchase.count*purchase.price),
         "fulfillment":purchase.fulfillment,
-
+        "review": {"pid":purchase.inventory.product.id, "sid": purchase.inventory.seller.id}
     } for purchase in purchases]
 
     inventory_list = Inventory.get_by_uid_ORM(current_user.id)

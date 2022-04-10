@@ -110,3 +110,4 @@ class User(Base):
     firstname = Column(String(255), nullable=False)
     lastname = Column(String(255), nullable=False)
     balance = Column(Numeric(12, 2), nullable=False)
+    sell_address = Column(String(255), nullable=False)

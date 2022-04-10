@@ -17,7 +17,7 @@ class Transaction():
         rows = app.db.execute('''
         select distinct on (date(create_at)) date(create_at), balance
 from "transaction"
-where uid = 3
+where uid = :uid
 order by date(create_at) asc, create_at desc
         ''', uid=uid)
         return rows

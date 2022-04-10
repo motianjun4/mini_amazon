@@ -9,7 +9,7 @@ from flask_login import current_user
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, NumberRange
 from app.utils.json_response import ResponseType, json_response
 from app.utils.time import iso, localize
 from libs.my_minio import put_file

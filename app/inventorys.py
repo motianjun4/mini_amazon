@@ -6,7 +6,7 @@ from app.models.order import Order
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField, ValidationError
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, NumberRange
 
 import datetime
 
@@ -29,15 +29,15 @@ bp = Blueprint('inventorys', __name__)
 # bp = Blueprint('accounts', __name__)
 
 class ModifyInventoryForm(FlaskForm):
-    quantity = IntegerField('Quantity', validators=[DataRequired()])
-    price = FloatField('Price', validators=[DataRequired()])
+    quantity = IntegerField('Quantity', validators=[DataRequired(), NumberRange(min=0)])
+    price = FloatField('Price', validators=[DataRequired(), NumberRange(min=0)])
     submit = SubmitField('Modify!')
     delete = SubmitField('Delete!')
 
 class AddProductForm(FlaskForm):
     name = StringField('Product Name', validators=[DataRequired()])
-    quantity = IntegerField('Quantity', validators=[DataRequired()])
-    price = FloatField('Price', validators=[DataRequired()])
+    quantity = IntegerField('Quantity', validators=[DataRequired(),NumberRange(min=0)])
+    price = FloatField('Price', validators=[DataRequired(),NumberRange(min=0)])
     add = SubmitField('ADD!')
 
 @bp.route('/inventory/<iid>', methods=['GET', 'POST'])
@@ -80,7 +80,20 @@ def addProduct():
     
         # session['_flashes'].clear()
         
-    
+@bp.route('/my_inventory', methods=['GET', 'POST'])
+@login_required
+def show_inventory():
+    inventory_list = Inventory.get_by_uid_ORM(current_user.id)
+    inventory_obj_list = [{
+        "iid": item.id,
+        "product": {"id": item.product.id, "name": item.product.name},
+        "price": str(item.price),
+        "quantity": item.quantity,
+    } for item in inventory_list]
+    is_seller = inventory_list.count() > 0 
+    return render_template('my_inventory.html', 
+                            inventory_obj_list=inventory_obj_list,
+                            is_seller=is_seller)  
 
 
 @bp.route('/visual_ana')
@@ -102,3 +115,12 @@ def visual_ana():
     return render_template('rundownlist.html',
                            run_down_list=run_down_list,
                            product_trends = product_trends)
+
+@bp.route('/sell_fulfill')
+@login_required
+def seller_fulfill_rate():
+    fulfill_list = Inventory.inventory_fulfill(current_user.id)
+    seller_fulfill_list = [
+        {"name": item[1], "count": item[0]}
+    for item in fulfill_list]
+    return json_response(ResponseType.SUCCESS, seller_fulfill_list)

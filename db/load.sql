@@ -8,14 +8,14 @@ SELECT pg_catalog.setval('public.product_id_seq',
                          (SELECT MAX(id)+1 FROM public.product),
                          false);
 
-\COPY public.cart FROM 'generated/Cart.csv' WITH DELIMITER ',' NULL '' CSV
-SELECT pg_catalog.setval('public.cart_id_seq',
-                         (SELECT MAX(id)+1 FROM public.cart),
-                         false);
-
 \COPY public.inventory FROM 'generated/Inventory.csv' WITH DELIMITER ',' NULL '' CSV
 SELECT pg_catalog.setval('public.inventory_id_seq',
                          (SELECT MAX(id)+1 FROM public.inventory),
+                         false);
+
+\COPY public.cart FROM 'generated/Cart.csv' WITH DELIMITER ',' NULL '' CSV
+SELECT pg_catalog.setval('public.cart_id_seq',
+                         (SELECT MAX(id)+1 FROM public.cart),
                          false);
 
 \COPY public.Order FROM 'generated/Order.csv' WITH DELIMITER ',' NULL '' CSV
@@ -55,7 +55,7 @@ SUM(
 	END
 ) OVER (PARTITION BY uid ORDER BY create_at) AS calc_balance
 from "transaction") AS calc
-WHERE calc.id="transaction".id
+WHERE calc.id="transaction".id;
 
 -- set balance field in user according to balance field in transaction
 UPDATE "user"
@@ -64,4 +64,4 @@ FROM
 (SELECT distinct on (uid) uid, balance as latest_balance
 FROM "transaction"
 ORDER BY uid asc, create_at desc) AS t
-WHERE id = uid
+WHERE id = uid;

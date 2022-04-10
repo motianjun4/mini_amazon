@@ -16,6 +16,7 @@
             {% for error in form.quantity.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
+            <br />
             {{ form.price.label }}
             {{ form.price(class="form-control") }}<br />
             {% for error in form.price.errors %}

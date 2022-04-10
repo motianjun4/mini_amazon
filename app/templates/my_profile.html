@@ -8,17 +8,26 @@
   <div class="card" style="flex-grow: 1;">
     <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
     <div class="card-body">
-      <h4 class="card-title">Balance</h4>
-      <p class="card-text">$<span>{{user.balance}}</span></p>
+      <h4 class="card-title">Account</h4>
+      <ul>
+        <li>Email: {{ user.email }}</li>
+        <li>First Name: {{ user.firstname }}</li>
+        <li>Last Name: {{ user.lastname }}</li>
+        <li>Sell Address: {{ user.sell_address }}</li>
+        <li>Balance: ${{user.balance}}</li>
+      </ul>
       <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDeposit"
         aria-expanded="false" aria-controls="collapseDeposit">
-        Deposit
+        Recharge
       </button>
       <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseWithdrawn"
         aria-expanded="false" aria-controls="collapseWithdrawn">
-        Withdrawn
+        Withdraw
       </button>
+      <a href="/user_edit" class="btn btn-primary">Edit Profile</a>
       <a href="/transaction" class="btn btn-primary">Transactions</a>
+      <a class="btn btn-primary" href="/user/chat" role="button">Messages</a>
+
       <div id="balanceCollapseGroup" class="mt-1">
         <div class="collapse" id="collapseDeposit" data-parent="#balanceCollapseGroup">
           <div class="card card-body">
@@ -98,37 +107,26 @@
     <div class="card-body">
       <h4 class="card-title">Seller Management</h4>
       <div>
-        <a class="btn btn-primary" href="#my-inventory" role="button">Inventory Management</a>
-        <a class="btn btn-primary" href="/orders" role="button">Order Management</a>
+        <a class="btn btn-primary" href="/my_inventory" role="button">My Inventories</a>
+        <a class="btn btn-primary" href="/orders" role="button">My Orders</a>
         <div style="height: 0.5em;"></div>
-        <a class="btn btn-primary" href="/addInventory" role="button">Add Inventory</a>
         <a class="btn btn-primary" href="/sell" role="button">Sell New Product</a>
+        <a class="btn btn-primary" href="/visual_ana" role="button">Inventory Analytics</a>
         <div style="height: 0.5em;"></div>
         <a class="btn btn-primary" href="/co_worker" role="button">Buyer Analytics</a>
-        <a class="btn btn-primary" href="/visual_ana" role="button">Inventory Analytics</a>
+        
       </div>
       
     </div>
 
   </div>
 
-  <div class="card ml-3" style="flex-grow: 1;">
-    <div class="card-body">
-      <h4 class="card-title">Message History</h4>
-      <div>
-       <p class="card-text">See Recent Messages Here</span></p>
-        <a class="btn btn-primary" href="/user/chat" role="button">View Messages</a>
-      </div>
-      
-    </div>
-
-  </div>
   </div>
   <br />
 
   <div class="card">
     <div class="card-body">
-      <h4 class="card-title">Account Summary</h4>
+      <h4 class="card-title">Summary</h4>
       <div class="card-text flex">
         <div style="width:33%">
           <div id="purchase-category-chart" style="width: 100%; height: 15em;"></div>
@@ -156,24 +154,6 @@
       <div class="card-text">
         {%import 'datatable.html' as t%}
         {{t.datatable("recent-purchase", purchase_obj_list)}}
-      </div>
-    </div>
-  </div>
-
-  <br />
-
-  <div class="card">
-    <div class="card-body">
-      <h4 class="card-title" id="my-inventory">My Inventory</h4>
-      <div class="card-text">
-        {% if is_seller %}
-
-        {%import 'datatable.html' as t%}
-        {{t.datatable("my-inventory", inventory_obj_list)}}
-
-        {%else%}
-        You don't have anything to sell yet. <a href="/sell">Start to sell something now!</a>
-        {% endif %}
       </div>
     </div>
   </div>

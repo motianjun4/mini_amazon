@@ -64,6 +64,16 @@ def cart():
                             user=current_user,
                             total_price=total_price,
                             form=form)
+        # check if cart empty
+        if len(cart_list) == 0:
+            err_message =  "Cannot place order with empty cart!"
+            flash(err_message)
+            return render_template('cart.html',
+                            saved_obj_list=saved_obj_list,
+                            cart_obj_list=cart_obj_list,
+                            user=current_user,
+                            total_price=total_price,
+                            form=form)
         # check inventory for all items
         iid_list = []
         iid_dict = {}

@@ -177,12 +177,12 @@ window.datatable_config = {
     //   render: (data, type, row) => {
     //     return `<button class="btn btn-danger" onclick="remove_product_item(${data})">Remove</button>`;
     //   },
-    
+
     // }
   ],
-  "coworker_list":[
-    {title:"Name", data:"name"},
-    {title:"E-mail", data:"email"},
+  "coworker_list": [
+    { title: "Name", data: "name" },
+    { title: "E-mail", data: "email" },
     {
       title: "Rate",
       data: "rate",
@@ -198,10 +198,10 @@ window.datatable_config = {
       },
     },
   ],
-  "coworker_i_list":[
-    {title:"Name", data:"name"},
-    {title:"E-mail", data:"email"},
-    {title:"Total sell number", data:"num"},
+  "coworker_i_list": [
+    { title: "Name", data: "name" },
+    { title: "E-mail", data: "email" },
+    { title: "Total sell number", data: "num" },
   ],
   "product-search-list": [
     {
@@ -259,13 +259,6 @@ window.datatable_config = {
   ],
   "recent-purchase": [
     {
-      title: "Product",
-      data: "product",
-      render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
-      },
-    },
-    {
       title: "Order",
       data: "oid",
       render: (data, type, row) => {
@@ -276,7 +269,21 @@ window.datatable_config = {
       },
     },
     {
-      title: "Purchase At",
+      title: "Product",
+      data: "product",
+      render: (data, type, row) => {
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
+      },
+    },
+    {
+      title: "Seller",
+      data: "seller",
+      render: (data, type, row) => {
+        return `<a href="/user/${data.sid}">${data.name}</a>`;
+      },
+    },
+    {
+      title: "Date",
       data: "purchase_time",
     },
     {
@@ -302,6 +309,15 @@ window.datatable_config = {
         }
       },
     },
+    {
+      title: "Review",
+      data: "review",
+      orderable: false,
+      render: (data, type, row) => {
+        return `<div><a class="btn btn-sm btn-primary mb-1" style="width:5em" href="/user/${data.sid}#my_review">Seller</a></div><div> 
+        <a class="btn btn-primary btn-sm" style="width:5em" href="/product/${data.pid}#my_review">Product</a></div>`;
+      },
+    }
   ],
   "order-purchase": [
     {
@@ -469,13 +485,15 @@ window.datatable_config = {
       },
     },
     { title: "Review", data: "review" },
-    { title: "Iamges", data: "id",
-  render:(data, type, row)=>{
-    return `
+    {
+      title: "Images", data: "id",
+      render: (data, type, row) => {
+        return `
     <img data-src="/img/review_${data}_0.jpg" style="height: 2em; width:2em;">
     <img data-src="/img/review_${data}_1.jpg" style="height: 2em; width:2em;">
     <img data-src="/img/review_${data}_2.jpg" style="height: 2em; width:2em;">`
-  } },
+      }
+    },
     {
       title: "Rate",
       data: "rate",
@@ -510,13 +528,15 @@ window.datatable_config = {
       },
     },
     { title: "Review", data: "review" },
-    { title: "Iamges", data: "id",
-  render:(data, type, row)=>{
-    return `
+    {
+      title: "Images", data: "id",
+      render: (data, type, row) => {
+        return `
     <img data-src="/img/review_${data}_0.jpg" style="height: 2em; width:2em;">
     <img data-src="/img/review_${data}_1.jpg" style="height: 2em; width:2em;">
     <img data-src="/img/review_${data}_2.jpg" style="height: 2em; width:2em;">`
-  } },
+      }
+    },
     {
       title: "Rate",
       data: "rate",
@@ -544,9 +564,9 @@ window.datatable_config = {
 };
 
 window.datatable_created_row = {
-  "product-search-list": (row, item, index) =>{
+  "product-search-list": (row, item, index) => {
     row.innerHTML = ""
-    
+
     html = `
       <td colspan="4">
       <div class="card">
@@ -560,7 +580,7 @@ window.datatable_created_row = {
                 <h4 class="card-title"><span class="badge badge-secondary mr-2">${item.category}</span><a href="/product/${item.id}">${item.name}</a></h4>
                 <div class="card-text text-secondary flex" style="justify-content: space-between">
                   <div>
-                  ${item.price !== "None"?"Starting from: $"+item.price:"No seller yet"}
+                  ${item.price !== "None" ? "Starting from: $" + item.price : "No seller yet"}
                   </div>
                   <div>
                       Average Rate: ${item.avgRate}/5.00
@@ -583,48 +603,38 @@ window.datatable_created_row = {
     row.innerHTML = html
   },
   "public-user-review": (row, review, index) => {
-    row.innerHTML=""
+    row.innerHTML = ""
     html = `
       <td colspan="5">
       <div class="card text-left">
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <h4 class="card-title"><span class="text-secondary" style="font-size:0.7em">#${
-                        review.id
-                      } </span><a href="/user/${review.uid}">${
-      review.creator
-    }</a>
-                      ${
-                        window.current_user_id == review.uid
-                          ? `<span class="text-secondary" style="font-size: 0.7em;">(You)</span>`
-                          : ""
-                      }
+                      <h4 class="card-title"><span class="text-secondary" style="font-size:0.7em">#${review.id
+      } </span><a href="/user/${review.uid}">${review.creator
+      }</a>
+                      ${window.current_user_id == review.uid
+        ? `<span class="text-secondary" style="font-size: 0.7em;">(You)</span>`
+        : ""
+      }
                       </h4>
                     </div>
                     <div class="col" style="text-align: right;">
-                    ${
-                      `<i class="bi bi-star-fill"></i>`.repeat(review.rate) +
-                      `<i class="bi bi-star"></i>`.repeat(5 - review.rate)
-                    }
-                      <button type="button" class="btn ${
-                        review.is_upvote ? "btn-dark" : "btn-light"
-                      }" 
-                        onclick="upvote_review(${review.id}, ${
-      review.is_upvote
-    })">
-                        <i class="bi bi-hand-thumbs-up"></i>${
-                          review.upvote_cnt
-                        }</button>
-                      <button type="button" class="btn ${
-                        review.is_downvote ? "btn-dark" : "btn-light"
-                      } mr-2"
-                        onclick="downvote_review(${review.id}, ${
-      review.is_downvote
-    })">
-                        <i class="bi bi-hand-thumbs-down"></i>${
-                          review.downvote_cnt
-                        }</button>
+                    ${`<i class="bi bi-star-fill"></i>`.repeat(review.rate) +
+      `<i class="bi bi-star"></i>`.repeat(5 - review.rate)
+      }
+                      <button type="button" class="btn ${review.is_upvote ? "btn-dark" : "btn-light"
+      }" 
+                        onclick="upvote_review(${review.id}, ${review.is_upvote
+      })">
+                        <i class="bi bi-hand-thumbs-up"></i>${review.upvote_cnt
+      }</button>
+                      <button type="button" class="btn ${review.is_downvote ? "btn-dark" : "btn-light"
+      } mr-2"
+                        onclick="downvote_review(${review.id}, ${review.is_downvote
+      })">
+                        <i class="bi bi-hand-thumbs-down"></i>${review.downvote_cnt
+      }</button>
                       
                     </div>
                   </div>
@@ -634,18 +644,18 @@ window.datatable_created_row = {
                   <img data-src="/img/review_${review.id}_2.jpg" style="height: 5em; width:5em;">
                   <div class="text-right">
                       ${
-                        //new Date(review.create_at).toDateString()+" "+new Date(review.create_at).toLocaleTimeString()
-                        format_time(review.create_at)
-                      }
+      //new Date(review.create_at).toDateString()+" "+new Date(review.create_at).toLocaleTimeString()
+      format_time(review.create_at)
+      }
                   </div>
                 </div>
               </div>
       </td>
       `;
-      row.innerHTML = html
+    row.innerHTML = html
   },
   "product-detail-review": (row, review, index) => {
-    row.innerHTML=""
+    row.innerHTML = ""
     html = `
       <td colspan="5">
       <div class="card text-left">
@@ -653,36 +663,29 @@ window.datatable_created_row = {
                   <div class="row">
                     <div class="col">
                       <h4 class="card-title">
-                      <span class="text-secondary" style="font-size:0.7em">#${
-                        review.id
-                      } </span>
+                      <span class="text-secondary" style="font-size:0.7em">#${review.id
+      } </span>
                       <a href="/user/${review.uid}">${review.creator}</a>
-                      ${
-                        window.current_user_id == review.uid
-                          ? `<span class="text-secondary" style="font-size: 0.7em;">(You)</span>`
-                          : ""
-                      }
+                      ${window.current_user_id == review.uid
+        ? `<span class="text-secondary" style="font-size: 0.7em;">(You)</span>`
+        : ""
+      }
                       </h4>
                     </div>
                     <div class="col" style="text-align: right;">
-                    ${
-                      `<i class="bi bi-star-fill"></i>`.repeat(review.rate) +
-                      `<i class="bi bi-star"></i>`.repeat(5 - review.rate)
-                    }
-                      <button type="button" class="btn ${
-                        review.is_upvote ? "btn-dark" : "btn-light"
-                      }" 
-                        onclick="upvote_review(${review.id}, ${
-      review.is_upvote
-    })">
-                        <i class="bi bi-hand-thumbs-up"></i>${
-                          review.upvote_cnt
-                        }</button>
-                      <button type="button" class="btn ${review.is_downvote?"btn-dark":"btn-light"} mr-2"
+                    ${`<i class="bi bi-star-fill"></i>`.repeat(review.rate) +
+      `<i class="bi bi-star"></i>`.repeat(5 - review.rate)
+      }
+                      <button type="button" class="btn ${review.is_upvote ? "btn-dark" : "btn-light"
+      }" 
+                        onclick="upvote_review(${review.id}, ${review.is_upvote
+      })">
+                        <i class="bi bi-hand-thumbs-up"></i>${review.upvote_cnt
+      }</button>
+                      <button type="button" class="btn ${review.is_downvote ? "btn-dark" : "btn-light"} mr-2"
                         onclick="downvote_review(${review.id}, ${review.is_downvote})">
-                        <i class="bi bi-hand-thumbs-down"></i>${
-                        review.downvote_cnt
-                      }</button>
+                        <i class="bi bi-hand-thumbs-down"></i>${review.downvote_cnt
+      }</button>
                       
                     </div>
                   </div>
@@ -692,25 +695,25 @@ window.datatable_created_row = {
                   <img data-src="/img/review_${review.id}_2.jpg" style="height: 5em; width:5em;">
                   <div class="text-right">
                       ${
-                        // new Date(review.create_at).toDateString() +
-                        // " " +
-                        // new Date(review.create_at).toLocaleTimeString()
-                        format_time(review.create_at)
-                      }
+      // new Date(review.create_at).toDateString() +
+      // " " +
+      // new Date(review.create_at).toLocaleTimeString()
+      format_time(review.create_at)
+      }
                   </div>
                 </div>
               </div>
       </td>
       `;
-      row.innerHTML = html
+    row.innerHTML = html
   },
 };
 
 window.datatable_order = {
-  "reviews-for-product":[[0, 'desc']],
-  "reviews-for-seller":[[0, 'desc']],
-  "seller-table":[[1, 'asc']],
-  "recent-purchase":[[2, 'desc']],
-  "order-fulfill":[[0, 'desc']],
-  "my-transactions":[[4, 'desc']],
+  "reviews-for-product": [[0, 'desc']],
+  "reviews-for-seller": [[0, 'desc']],
+  "seller-table": [[1, 'asc']],
+  "recent-purchase": [[2, 'desc']],
+  "order-fulfill": [[0, 'desc']],
+  "my-transactions": [[4, 'desc']],
 }

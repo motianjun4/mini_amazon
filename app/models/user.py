@@ -95,3 +95,21 @@ WHERE id = :id
         ''', id=uid)
         balance = rows[0][0]
         return True if balance >= price else False
+
+    @staticmethod
+    def update(id, email, firstname, lastname, sell_address):
+        app.db.execute('''
+UPDATE "user"
+SET email = :email, firstname = :firstname, lastname = :lastname, sell_address = :sell_address
+WHERE id = :id
+        ''', id=id, email=email, firstname=firstname, lastname=lastname, sell_address=sell_address)
+        return
+
+    @staticmethod
+    def update_password(id, password):
+        app.db.execute('''
+UPDATE "user"
+SET password = :password
+WHERE id = :id
+        ''', id=id, password=generate_password_hash(password))
+        return

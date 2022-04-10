@@ -76,7 +76,6 @@ def product_create():
         pid, iid = Product.product_create(form, current_user.id)
         if pid and iid:
             put_file('image', f'product_{pid}.jpg', tmp_filepath)
-            flash('Congratulations, you create a new product!')
             return redirect(url_for('products.product_manage'))
     return render_template('product_create.html', title='Create Product', form=form)
 

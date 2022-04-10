@@ -1,6 +1,8 @@
 
 from flask import current_app as app
 from typing import List
+
+# from numpy import true_divide
 from .product import Product
 from .orm.orm_models import Inventory as InventoryORM
 '''
@@ -205,3 +207,15 @@ class Inventory:
             else:
                 fulfill.append((row[1],"unfulfill"))
         return fulfill
+
+    @staticmethod
+    def can_delete(uid, iid):
+        rows = app.db.execute('''
+                            SELECT iid
+                            FROM Purchase JOIN Inventory ON Inventory.id=iid
+                            WHERE uid = :uid AND iid = :iid
+                            ''',uid=uid, iid=iid)
+        if rows:
+            return False
+        else:
+            return True

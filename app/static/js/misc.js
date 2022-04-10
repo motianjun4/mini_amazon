@@ -22,6 +22,7 @@ function add_cart_button_onclick(key, iid) {
   add_item_to_cart(iid, quantity);
 }
 
+
 function add_item_to_cart(iid, quantity) {
   $.post("/addCart", { amount: Number(quantity), iid: iid }, (data) => {
     if (data.status != "success") {

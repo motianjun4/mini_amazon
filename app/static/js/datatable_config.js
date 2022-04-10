@@ -706,4 +706,5 @@ window.datatable_order = {
   "recent-purchase": [[0, 'desc']],
   "order-fulfill": [[0, 'desc']],
   "my-transactions": [[4, 'desc']],
+  "product-manage-list": [[0, 'desc']]
 }

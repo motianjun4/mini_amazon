@@ -183,8 +183,8 @@ def gen_transaction():
     return
 
 
-gen_users()
-# gen_products()
+# gen_users()
+gen_products()
 # gen_cart()
 # gen_inventory()
 # gen_order()

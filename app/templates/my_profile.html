@@ -108,6 +108,9 @@
     <div class="card-body">
       <h4 class="card-title">Seller Management</h4>
       <div>
+        <a class="btn btn-primary" href="{{ url_for('products.product_create') }}" role="button">Create Product</a>
+        <a class="btn btn-primary" href="{{ url_for('products.product_manage') }}" role="button">Magage Product</a>
+        <div style="height: 0.5em;"></div>
         <a class="btn btn-primary" href="/my_inventory" role="button">My Inventories</a>
         <a class="btn btn-primary" href="/orders" role="button">My Orders</a>
         <div style="height: 0.5em;"></div>
@@ -115,7 +118,6 @@
         <a class="btn btn-primary" href="/visual_ana" role="button">Inventory Analytics</a>
         <div style="height: 0.5em;"></div>
         <a class="btn btn-primary" href="/co_worker" role="button">Buyer Analytics</a>
-        
       </div>
       
     </div>

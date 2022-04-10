@@ -14,7 +14,16 @@
           {{ form.hidden_tag() }}
           <p>
             {{ form.product_name.label }}
-            {{ form.product_name(class="form-control") }}<br />
+            {{ form.product_name(class="form-control") }}
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+              <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+            {% endwith %}<br/>
             {% for error in form.product_name.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}

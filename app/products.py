@@ -8,7 +8,7 @@ from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
-from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField
+from wtforms import StringField, IntegerField, FloatField, SubmitField, FileField, SelectField
 from wtforms.validators import DataRequired, NumberRange
 from app.utils.json_response import ResponseType, json_response
 from app.utils.time import iso, localize
@@ -59,7 +59,8 @@ def search():
 
 class ProductForm(FlaskForm):
     product_name = StringField('Product Name', validators=[DataRequired()])
-    category = StringField('Category', validators=[DataRequired()])
+    category = SelectField(u'Category', choices=[('Electronics', 'Electronics'), ('Sports', 'Sports'), 
+    ('Food', 'Food'), ('Fashion', 'Fashion'), ('Daily Supplies', 'Daily Supplies'), ('Medicine', 'Medicine')], validators=[DataRequired()])
     quantity = IntegerField('Quantity', validators=[DataRequired()])
     price = FloatField('Price', validators=[DataRequired()])
     description = StringField('Description', validators=[DataRequired()])
@@ -72,13 +73,16 @@ class ProductForm(FlaskForm):
 def product_create():
     form = ProductForm()
     if form.validate_on_submit():
-        file = request.files['image']
-        tmp_filepath = f"/tmp/{uuid1()}.jpg"
-        file.save(tmp_filepath)
-        pid, iid = Product.product_create(form, current_user.id)
-        if pid and iid:
-            put_file('image', f'product_{pid}.jpg', tmp_filepath)
-            return redirect(url_for('products.product_manage'))
+        if not Product.get_all_by_name_ORM(form.product_name.data):
+            print(111)
+            file = request.files['image']
+            tmp_filepath = f"/tmp/{uuid1()}.jpg"
+            file.save(tmp_filepath)
+            pid, iid = Product.product_create(form, current_user.id)
+            if pid and iid:
+                put_file('image', f'product_{pid}.jpg', tmp_filepath)
+                return product_detail(pid)
+        flash('Product name existed!')
     return render_template('product_create.html', title='Create Product', form=form)
 
 
@@ -99,7 +103,7 @@ def product_edit(pid):
     if form.validate_on_submit():
         # button="submit" if form.submit.data else "delete"
         if form.submit.data:
-            if not Product.get_all_by_name_ORM(form.product_name.data, pid):
+            if not Product.get_all_by_name_ORM(form.product_name.data):
                 Product.product_edit(form, pid)
                 return redirect(url_for('products.product_manage'))
             flash('Product name existed!')

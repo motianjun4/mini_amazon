@@ -8,7 +8,7 @@
   <div class="card">
     <img class="card-img-top" src="holder.js/100x180/" alt="">
     <div class="card-body">
-      <h4 class="card-title">Add new inventory produc</h4>
+      <h4 class="card-title">Add new inventory</h4>
       <div>
 
 <form action="" method="post" enctype="multipart/form-data">
@@ -19,16 +19,19 @@
     {% for error in form.name.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
+    <br />
     {{ form.quantity.label }}
     {{ form.quantity(size=64, class="form-control") }}<br/>
     {% for error in form.quantity.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
+    <br />
     {{ form.price.label }}
     {{ form.price(size=64, class="form-control") }}<br/>
     {% for error in form.price.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
+    <br />
   <p>{{ form.add(class="btn btn-success") }}</p>
 </form>
 

@@ -100,3 +100,12 @@ SELECT DISTINCT category
 FROM product
 """)
         return [row[0] for row in rows]
+
+    @staticmethod
+    def get_total_sales(pid):
+        rows = app.db.execute("""
+SELECT SUM(purchase.count)
+FROM purchase JOIN inventory ON purchase.iid = inventory.id
+WHERE inventory.pid=:pid
+""", pid=pid)
+        return rows[0][0]

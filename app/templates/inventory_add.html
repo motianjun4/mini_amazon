@@ -19,16 +19,19 @@
     {% for error in form.name.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
+    <br />
     {{ form.quantity.label }}
     {{ form.quantity(size=64, class="form-control") }}<br/>
     {% for error in form.quantity.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
+    <br />
     {{ form.price.label }}
     {{ form.price(size=64, class="form-control") }}<br/>
     {% for error in form.price.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
+    <br />
   <p>{{ form.add(class="btn btn-success") }}</p>
 </form>
 

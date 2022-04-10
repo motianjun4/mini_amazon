@@ -102,3 +102,12 @@ def visual_ana():
     return render_template('rundownlist.html',
                            run_down_list=run_down_list,
                            product_trends = product_trends)
+
+@bp.route('/sell_fulfill')
+@login_required
+def seller_fulfill_rate():
+    fulfill_list = Inventory.inventory_fulfill(current_user.id)
+    seller_fulfill_list = [
+        {"name": item[1], "count": item[0]}
+    for item in fulfill_list]
+    return json_response(ResponseType.SUCCESS, seller_fulfill_list)

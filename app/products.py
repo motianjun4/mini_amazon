@@ -60,8 +60,8 @@ def search():
 class ProductForm(FlaskForm):
     product_name = StringField('Product Name', validators=[DataRequired()])
     category = StringField('Category', validators=[DataRequired()])
-    quantity = IntegerField('Quantity', validators=[DataRequired(), NumberRange(min=0)])
-    price = FloatField('Price', validators=[DataRequired(), NumberRange(min=0)])
+    quantity = IntegerField('Quantity', validators=[DataRequired()])
+    price = FloatField('Price', validators=[DataRequired()])
     description = StringField('Description', validators=[DataRequired()])
     image = FileField(u'Image File', validators=[FileAllowed(['jpg'])])
     submit = SubmitField('Create!')

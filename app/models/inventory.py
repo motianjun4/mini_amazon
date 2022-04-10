@@ -189,3 +189,19 @@ class Inventory:
             sql += str(k) + ','
         sql = sql[:-1]+')'
         app.db.execute(sql)
+
+    @staticmethod
+    def inventory_fulfill(uid):
+        rows = app.db.execute('''
+                            SELECT fulfillment, COUNT(*)
+                            FROM Purchase JOIN Inventory ON Inventory.id=iid
+                            WHERE uid = :uid
+                            GROUP BY fulfillment
+                            ''',uid=uid)
+        fulfill = []
+        for row in rows:
+            if row[0]:
+                fulfill.append((row[1],"fulfill"))
+            else:
+                fulfill.append((row[1],"unfulfill"))
+        return fulfill

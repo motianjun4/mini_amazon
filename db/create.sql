@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS "user" (
     password VARCHAR(255) NOT NULL,
     firstname VARCHAR(255) NOT NULL,
     lastname VARCHAR(255) NOT NULL,
-    balance DECIMAL(12,2) NOT NULL
+    balance DECIMAL(12,2) NOT NULL,
+    sell_address VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "product" (

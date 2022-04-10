@@ -126,6 +126,7 @@ def product_manage():
 def product_detail(pid):
     # show product detail, list of seller and current stock, reviews
     product = Product.get(pid)
+    total_sales = Product.get_total_sales(pid)
     seller_list = Inventory.get_seller_list(pid)
     seller_obj_list = [{
         "iid": item[5],
@@ -177,6 +178,7 @@ def product_detail(pid):
                            has_half=has_half,
                            has_summary=has_summary,
                            summary_review = summary_review,
+                           total_sales=total_sales
                            )
 
 @bp.route('/addCart', methods=['POST'])

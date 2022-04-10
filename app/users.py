@@ -110,28 +110,6 @@ def my_profile():
         "quantity": item.quantity,
     } for item in inventory_list]
     is_seller = inventory_list.count() > 0 
-
-    #seller review and product review
-    seller_review = Review.show_review_list_user(current_user.id, 1)
-    seller_review_obj_list = []
-    if seller_review:
-        seller_review_obj_list = [{
-            "id": item[6],
-            "time": strtime(localize(item[5])),
-            "seller": {"id": item[4], "name": item[2]+" "+item[3]},
-            "rate": item[0],
-            "review": item[1],
-        } for item in seller_review]
-    product_review = Review.show_review_list_user(current_user.id, 2)
-    product_review_obj_list = []
-    if product_review:
-        product_review_obj_list = [{
-            "id": item[5],
-            "time": strtime(localize(item[4])),
-            "product": {"id": item[3], "name": item[2]},
-            "rate": item[0],
-            "review": item[1],
-        } for item in product_review]
     
     user_obj = User.get(current_user.id)
     user_dict = {"id":user_obj.id, "name":user_obj.firstname+" "+user_obj.lastname, "email":user_obj.email}
@@ -140,8 +118,6 @@ def my_profile():
     return render_template('my_profile.html',
                            purchase_obj_list=purchase_obj_list,
                            inventory_obj_list=inventory_obj_list,
-                           seller_review_obj_list=seller_review_obj_list,
-                           product_review_obj_list=product_review_obj_list,
                            is_seller=is_seller,
                            user=current_user,
                            user_dict=user_dict)
@@ -336,4 +312,32 @@ def user_chat():
     user_dict = {"id":user.id, "name":user.firstname+" "+user.lastname, "email":user.email}
     return render_template('user_chat.html',
                             user_dict=user_dict,
+    )
+
+@bp.route('/user/review')
+def user_review():
+    #seller review and product review
+    seller_review = Review.show_review_list_user(current_user.id, 1)
+    seller_review_obj_list = []
+    if seller_review:
+        seller_review_obj_list = [{
+            "id": item[6],
+            "time": strtime(localize(item[5])),
+            "seller": {"id": item[4], "name": item[2]+" "+item[3]},
+            "rate": item[0],
+            "review": item[1],
+        } for item in seller_review]
+    product_review = Review.show_review_list_user(current_user.id, 2)
+    product_review_obj_list = []
+    if product_review:
+        product_review_obj_list = [{
+            "id": item[5],
+            "time": strtime(localize(item[4])),
+            "product": {"id": item[3], "name": item[2]},
+            "rate": item[0],
+            "review": item[1],
+        } for item in product_review]
+    return render_template('my_review.html',
+                            seller_review_obj_list=seller_review_obj_list,
+                            product_review_obj_list=product_review_obj_list,
     )

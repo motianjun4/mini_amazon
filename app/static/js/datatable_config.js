@@ -403,16 +403,7 @@ window.datatable_config = {
     { title: "Upvotes", data: "upvote_cnt" },
   ],
   "order-fulfill": [
-    {
-      title: "ID",
-      data: "oid",
-      render: (data, type, row) => {
-        if (type === "display") {
-          return `<a href="/order/${data}">#${data}</a>`;
-        }
-        return data;
-      },
-    },
+    { title: "Create At", data: "create_at" },
     {
       title: "Product",
       data: "product",
@@ -435,7 +426,6 @@ window.datatable_config = {
         return `<a href="tel:${data}">${data}</a>`;
       },
     },
-    { title: "Create At", data: "create_at" },
     // {title:"Categories", data:"categories"},
     { title: "Quantity", data: "total_amount" },
     {
@@ -713,7 +703,7 @@ window.datatable_order = {
   "reviews-for-product": [[0, 'desc']],
   "reviews-for-seller": [[0, 'desc']],
   "seller-table": [[1, 'asc']],
-  "recent-purchase": [[2, 'desc']],
+  "recent-purchase": [[0, 'desc']],
   "order-fulfill": [[0, 'desc']],
   "my-transactions": [[4, 'desc']],
 }

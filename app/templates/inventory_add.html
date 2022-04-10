@@ -15,12 +15,6 @@
   {{ form.hidden_tag() }}
   <p>
     <br />
-    {{ form.name.label }}
-    {{ form.name(size=64, class="form-control") }}<br/>
-    {% for error in form.name.errors %}
-    <span style="color: red;">[{{ error }}]</span>
-    {% endfor %}
-    <br />
     {{ form.quantity.label }}
     {{ form.quantity(size=64, class="form-control") }}<br/>
     {% for error in form.quantity.errors %}

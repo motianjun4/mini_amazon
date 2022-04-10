@@ -55,7 +55,7 @@ def gen_products():
                 print(f'{pid}', end=' ', flush=True)
             uid = get_id(num_users)
             name = fake.sentence(nb_words=10)[:-1]
-            category = fake.random_element(elements=('Electronics', 'Sports', 'Food'))
+            category = fake.random_element(elements=('Electronics', 'Sports', 'Food', 'Fashion', 'Daily Supplies', 'Medicine'))
             desc = fake.paragraph(nb_sentences=5)
             writer.writerow([pid, uid, name, category,
                             desc, ])
@@ -183,8 +183,8 @@ def gen_transaction():
     return
 
 
-gen_users()
-# gen_products()
+# gen_users()
+gen_products()
 # gen_cart()
 # gen_inventory()
 # gen_order()

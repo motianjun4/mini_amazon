@@ -39,7 +39,7 @@ WHERE LOWER(name) LIKE LOWER(:like)
 {"AND category = :category" if category else ""}
 AND review.type=2
 GROUP BY product.id, inventory.price, inventory.id
-ORDER BY product.id, inventory.price
+ORDER BY product.id DESC, inventory.price
 ''' 
         rows = app.db.execute(sql, like=like, category=category)
         return [Product(*row) for row in rows]
@@ -49,8 +49,8 @@ ORDER BY product.id, inventory.price
         return app.db.get_session().query(ProductORM).filter(ProductORM.uid == uid).all()
 
     @staticmethod
-    def get_all_by_name_ORM(name, pid)->List[ProductORM]:
-        return app.db.get_session().query(ProductORM).filter(ProductORM.name == name).filter(ProductORM.id != pid).all()
+    def get_all_by_name_ORM(name)->List[ProductORM]:
+        return app.db.get_session().query(ProductORM).filter(ProductORM.name == name).all()
 
     @staticmethod
     def get_all(has_seller=True):
@@ -61,7 +61,7 @@ SELECT product.id, product.uid, name, category, description, MIN(Inventory.price
 FROM product LEFT OUTER JOIN inventory ON inventory.pid = product.id JOIN Purchase ON Inventory.id=Purchase.iid
 WHERE fulfillment = TRUE 
 GROUP BY product.id
-ORDER BY pt_num DESC 
+ORDER BY product.id DESC, pt_num DESC 
 LIMIT 20
 '''
 # {"AND inventory.id is not NULL" if has_seller else ""}

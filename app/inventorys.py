@@ -61,8 +61,12 @@ def inventory(iid):
 @bp.route('/deleteInventory/<iid>', methods=['GET', 'POST'])
 @login_required
 def deleteInventory(iid):
+    # if Inventory.can_delete(current_user.id, iid):
     Inventory.remove_product(iid)
     return redirect(url_for('inventorys.show_inventory'))
+    # else:
+    #     # flash("Someone has bought this product, you cannot delete it!")
+    #     return json_response(ResponseType.ERROR, {"message": "Someone has bought this product, you cannot delete it!"})
 
 @bp.route('/addInventory/<pid>', methods=['GET', 'POST'])
 @login_required
@@ -92,6 +96,7 @@ def show_inventory():
         "product": {"id": item.product.id, "name": item.product.name},
         "price": str(item.price),
         "quantity": item.quantity,
+        # "can_delete": True if Inventory.can_delete(current_user.id, item.id) else False
     } for item in inventory_list]
     is_seller = inventory_list.count() > 0 
     return render_template('my_inventory.html', 

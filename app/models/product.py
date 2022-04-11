@@ -49,8 +49,8 @@ ORDER BY product.id DESC, inventory.price
         return app.db.get_session().query(ProductORM).filter(ProductORM.uid == uid).all()
 
     @staticmethod
-    def get_all_by_name_ORM(name)->List[ProductORM]:
-        return app.db.get_session().query(ProductORM).filter(ProductORM.name == name).all()
+    def get_all_by_name_ORM(name, pid)->List[ProductORM]:
+        return app.db.get_session().query(ProductORM).filter(ProductORM.name == name).filter(ProductORM.id != pid).all()
 
     @staticmethod
     def get_all(has_seller=True):

@@ -37,7 +37,7 @@ LEFT JOIN purchase on purchase.iid=inventory.id
 WHERE LOWER(name) LIKE LOWER(:like)
 {"AND inventory.id is not NULL" if has_seller else ""}
 {"AND category = :category" if category else ""}
-AND review.type=2
+AND (review.type=2 OR review.type is NULL)
 GROUP BY product.id, inventory.price, inventory.id
 ORDER BY product.id DESC, inventory.price
 ''' 

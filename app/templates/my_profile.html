@@ -44,7 +44,7 @@
             </div>
             <div class="form-group row">
               <div class="col-sm-10">
-                <button id="deposit-submit" class="btn btn-primary">Deposit</button>
+                <button id="deposit-submit" class="btn btn-primary">Submit</button>
               </div>
               <script>
                 $('#deposit-submit').on('click', (event) => {
@@ -58,7 +58,7 @@
                       alert('error: ' + data.msg)
                       return
                     }
-                    window.location.href = window.location.href
+                    window.location.href = window.location.pathname
                   })
                 })
               </script>
@@ -93,7 +93,7 @@
                       alert('error: ' + data.msg)
                       return
                     }
-                    window.location.href = window.location.href
+                    window.location.href = window.location.pathname
                   })
                 })
               </script>
@@ -109,7 +109,7 @@
       <h4 class="card-title">Seller Management</h4>
       <div>
         <a class="btn btn-primary" href="{{ url_for('products.product_create') }}" role="button">Create Product</a>
-        <a class="btn btn-primary" href="{{ url_for('products.product_manage') }}" role="button">Magage Product</a>
+        <a class="btn btn-primary" href="{{ url_for('products.product_manage') }}" role="button">Manage Product</a>
         <div style="height: 0.5em;"></div>
         <a class="btn btn-primary" href="/my_inventory" role="button">My Inventories</a>
         <a class="btn btn-primary" href="/orders" role="button">My Orders</a>

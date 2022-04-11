@@ -324,7 +324,7 @@ window.datatable_config = {
       title: "Product",
       data: "product",
       render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product_edit/${data.pid}">${data.name}</a>`;
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
       },
     },
     {

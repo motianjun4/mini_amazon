@@ -30,7 +30,7 @@ function add_item_to_cart(iid, quantity) {
       return;
     }
     alert(`${quantity} item added!`);
-    window.location.href = window.location.href;
+    window.location.href = window.location.pathname;
   });
 }
 
@@ -46,7 +46,7 @@ function update_cart_item_quantity(selector,cid){
       return;
     }
     alert(`Quantity updated!`);
-    window.location.href = window.location.href;
+    window.location.href = window.location.pathname;
   });
 }
 
@@ -57,7 +57,7 @@ function remove_cart_item(cid) {
       return;
     }
     alert(`Item removed!`);
-    window.location.href = window.location.href;
+    window.location.href = window.location.pathname;
   });
 }
 
@@ -68,7 +68,7 @@ function add_to_cart(cid) {
       return;
     }
     alert(`Item has been added to cart!`);
-    window.location.href = window.location.href;
+    window.location.href = window.location.pathname;
   });
 }
 
@@ -79,7 +79,7 @@ function save_cart_item(cid) {
       return;
     }
     alert(`Item has been saved!`);
-    window.location.href = window.location.href;
+    window.location.href = window.location.pathname;
   });
 }
 
@@ -95,7 +95,7 @@ function upvote_review(rid, is_upvoted) {
       return;
     }
     alert(`Review upvoted!`);
-    window.location.href = window.location.href;
+    window.location.href = window.location.pathname;
   });
 }
 
@@ -111,7 +111,7 @@ function downvote_review(rid, is_downvoted) {
       return;
     }
     alert(`Review downvoted!`);
-    window.location.href = window.location.href;
+    window.location.href = window.location.pathname;
   });
 }
 
@@ -126,7 +126,7 @@ function delete_review_like(rid) {
         return;
       }
       alert(`Canceled!`);
-      window.location.href = window.location.href;
+      window.location.href = window.location.pathname;
     },
   });
 }
@@ -138,6 +138,6 @@ function confirm_purchase_fulfillment(pid) {
       return;
     }
     alert(`Order fulfilled!`);
-    window.location.href = window.location.href;
+    window.location.href = window.location.pathname;
   });
 }

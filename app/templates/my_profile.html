@@ -33,7 +33,7 @@
         <div class="collapse" id="collapseDeposit" data-parent="#balanceCollapseGroup">
           <div class="card card-body">
             <div class="form-group">
-              <label for="amount">Amount recharge</label>
+              <label for="amount">Amount Recharge:</label>
               <div class="input-group mb-2">
                 <div class="input-group-prepend">
                   <div class="input-group-text">$</div>
@@ -152,6 +152,18 @@
     <!-- <img class="card-img-top" src="holder.js/100x180/" alt=""> -->
     <div class="card-body">
       <h4 class="card-title">Recent Purchases</h4>
+      <div class="card-text">
+
+          <div class="card card-body m-2">
+            Filter by:
+            <div class="flex" style="justify-content: space-around;">
+              <div class="flex">Date:<div id="filter-date" style="position: relative; width:10em"></div></div>
+              <div class="flex">Seller:<div id="filter-seller" style="position: relative; width:10em"></div></div>
+            </div>
+          </div>
+        <!-- </div> -->
+        
+      </div>
       <div class="card-text">
         {%import 'datatable.html' as t%}
         {{t.datatable("recent-purchase", purchase_obj_list)}}

@@ -12,5 +12,8 @@ def iso(dt: datetime)->str:
 def strtime(dt: datetime)->str:
     return dt.strftime("%Y-%m-%d %H:%M:%S")
 
+def strdate(dt: datetime)->str:
+    return dt.strftime("%Y-%m-%d")
+
 def get_now()->datetime:
     return datetime.now().astimezone(pytz.utc)

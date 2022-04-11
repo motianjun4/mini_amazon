@@ -73,8 +73,7 @@ class ProductForm(FlaskForm):
 def product_create():
     form = ProductForm()
     if form.validate_on_submit():
-        if not Product.get_all_by_name_ORM(form.product_name.data):
-            print(111)
+        if not Product.get_all_by_name_ORM(form.product_name.data, -1):
             file = request.files['image']
             tmp_filepath = f"/tmp/{uuid1()}.jpg"
             file.save(tmp_filepath)

@@ -143,14 +143,10 @@ window.datatable_config = {
       data: "product.pid",
     },
     {
-      title: "Name",
-      data: "product.name",
-    },
-    {
-      title: "Picture",
+      title: "Product",
       data: "product",
       render: (data, type, row) => {
-        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product/${data.id}">${data.name}</a>`;
+        return `<img style="width:3em; height: 3em; margin-right: 1em" data-src="/img/product_${data.pid}.jpg" /><a href="/product/${data.pid}">${data.name}</a>`;
       },
     },
     {

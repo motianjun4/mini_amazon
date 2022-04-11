@@ -103,7 +103,7 @@ def product_edit(pid):
     if form.validate_on_submit():
         # button="submit" if form.submit.data else "delete"
         if form.submit.data:
-            if not Product.get_all_by_name_ORM(form.product_name.data):
+            if not Product.get_all_by_name_ORM(form.product_name.data, pid):
                 Product.product_edit(form, pid)
                 return redirect(url_for('products.product_manage'))
             flash('Product name existed!')

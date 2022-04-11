@@ -43,51 +43,58 @@
         <!-- <div class="container px-4 px-lg-5"> -->
             <a class="navbar-brand" href="/">Mini-Amazon</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-                      aria-expanded="false">Categories</a>
-                    <ul id="category-dropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      
-                    </ul>
-                    <script>
-                      $.getJSON("/categories", function(data) {
-                        $.each(data.data, function(idx, value) {
-                          $("#category-dropdown").append(
-                            `<li><a class="dropdown-item" href="/search?c=${value}">${value}</a></li>`
-                          );
+            <div class="collapse navbar-collapse flex" id="navbarSupportedContent" style="justify-content:space-between;">
+                <div>
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">Categories</a>
+                      <ul id="category-dropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  
+                      </ul>
+                      <script>
+                        $.getJSON("/categories", function (data) {
+                          $.each(data.data, function (idx, value) {
+                            $("#category-dropdown").append(
+                              `<li><a class="dropdown-item" href="/search?c=${value}">${value}</a></li>`
+                            );
+                          });
                         });
-                      });
-                    </script>
-                  </li>
-                </ul>
-                <form class="form-inline my-2 my-lg-0 mr-2" action="/search" method="get">
-                  <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" value="{{query}}">
-                  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
-                <form class="d-flex">
+                      </script>
+                    </li>
+                  </ul>
+                </div>
+                <div style="flex-grow: 1;" class="mx-2">
+                  <form class="input-group" action="/search" method="get">
+                    <input  name="q" class="form-control" type="search" placeholder="Search" aria-label="Search" value="{{query}}">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                  </form>
+                </div>
+                <div>
+                  <form class="d-flex">
                     {% if current_user.is_authenticated %}
-                      <a class="navbar-brand" href="/user/{{current_user.id}}">Hello {{current_user.firstname}}! </a>
-                      <a href="{{ url_for('users.my_profile') }}" class="btn btn-outline-dark mr-1">My Account</a>
-                      <a href="{{ url_for('users.logout') }}" class="btn btn-outline-dark mr-1">Log out</a>
-                      <a class="btn btn-outline-dark" type="button" href="{{url_for('cart.cart')}}">
-                          <i class="bi-cart-fill me-1"></i>
-                          Cart
-                          <span id="cart-cnt" class="badge bg-dark text-white ms-1 rounded-pill"></span>
-                          <script>
-                            $.ajax({
-                              url: "{{ url_for('cart.cart_cnt') }}",
-                              success: function(data) {
-                                $('#cart-cnt').text(data.data.count);
-                              }
-                            });
-                          </script>
-                      </a>
+                    <a class="navbar-brand" href="/user/{{current_user.id}}">Hello {{current_user.firstname}}! </a>
+                    <a href="{{ url_for('users.my_profile') }}" class="btn btn-outline-dark mr-1">My Account</a>
+                    <a href="{{ url_for('users.logout') }}" class="btn btn-outline-dark mr-1">Log out</a>
+                    <a class="btn btn-outline-dark" type="button" href="{{url_for('cart.cart')}}">
+                      <i class="bi-cart-fill me-1"></i>
+                      Cart
+                      <span id="cart-cnt" class="badge bg-dark text-white ms-1 rounded-pill"></span>
+                      <script>
+                        $.ajax({
+                          url: "{{ url_for('cart.cart_cnt') }}",
+                          success: function (data) {
+                            $('#cart-cnt').text(data.data.count);
+                          }
+                        });
+                      </script>
+                    </a>
                     {% else %}
-                      <a href="{{ url_for('users.login') }}" class="btn btn-outline-dark">Log in</a>
+                    <a href="{{ url_for('users.login') }}" class="btn btn-outline-dark">Log in</a>
                     {% endif %}
-                </form>
+                  </form>
+                </div>
+                
             </div>
         <!-- </div> -->
     </nav>

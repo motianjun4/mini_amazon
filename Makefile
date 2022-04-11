@@ -5,7 +5,7 @@ ifneq (,$(wildcard ./.env))
 endif
 
 run:
-	flask run --port 5002 --host 0.0.0.0
+	flask run --port 5001 --host 0.0.0.0
 install:
 	pip install -r requirements.txt
 lint:

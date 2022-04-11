@@ -61,7 +61,7 @@ SELECT product.id, product.uid, name, category, description, MIN(Inventory.price
 FROM product LEFT OUTER JOIN inventory ON inventory.pid = product.id JOIN Purchase ON Inventory.id=Purchase.iid
 WHERE fulfillment = TRUE 
 GROUP BY product.id
-ORDER BY product.id DESC, pt_num DESC 
+ORDER BY pt_num DESC 
 LIMIT 20
 '''
 # {"AND inventory.id is not NULL" if has_seller else ""}

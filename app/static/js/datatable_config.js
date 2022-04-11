@@ -704,3 +704,30 @@ window.datatable_order = {
   "my-transactions": [[4, 'desc']],
   "product-manage-list": [[0, 'desc']]
 }
+
+
+window.datatable_filter = {
+  "product-search-list": [
+    { column_number: 1, filter_type: "range_number_slider" },
+    { column_number: 2, filter_type: "range_number_slider" },
+    { column_number: 3, filter_type: "range_number_slider" },
+  ],
+  "recent-purchase": [
+    {
+      column_number: 2,
+      select_type: "chosen",
+      filter_container_id: "filter-seller",
+    },
+    {
+      column_number: 3,
+      filter_type: "range_date",
+      date_format: "yyyy-mm-dd",
+      filter_container_id: "filter-date",
+    },
+    {
+      column_number: 7,
+      filter_type: "chosen",
+      filter_container_id: "filter-status",
+    },
+  ],
+};

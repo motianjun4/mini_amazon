@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 
 from app.models.transaction import Transaction
-from .utils.time import iso, localize, strtime
+from .utils.time import iso, localize, strdate, strtime
 from werkzeug.urls import url_parse
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -94,7 +94,7 @@ def my_profile():
         "product": {"pid": purchase.inventory.product.id, "name": purchase.inventory.product.name},
         "seller": {"sid": purchase.inventory.seller.id, "name": purchase.inventory.seller.firstname + " " + purchase.inventory.seller.lastname},
         "oid": purchase.oid,
-        "purchase_time": strtime(localize(purchase.order.create_at)),
+        "purchase_time": strdate(localize(purchase.order.create_at)),
         "price":"$"+str(purchase.price),
         "count":purchase.count,
         "total":"$"+str(purchase.count*purchase.price),

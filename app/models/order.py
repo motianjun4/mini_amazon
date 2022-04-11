@@ -252,7 +252,7 @@ class Order:
         rows = app.db.execute('''
                             SELECT date(create_at), SUM(count)
                             FROM "order" JOIN Purchase ON "order".id=Purchase.oid JOIN Inventory ON Inventory.id=Purchase.iid
-                            WHERE Inventory.uid = 3
+                            WHERE Inventory.uid = :uid
                             GROUP BY date(create_at)
                             ''',uid=uid)
         return rows

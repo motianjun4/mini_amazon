@@ -1,6 +1,7 @@
 # Mini-Amazon
 This is a group final project for Duke COMPSCI 516 course.   
-[Demo Link](http://vcm.tinchun.top:5001)
+[Demo Link](http://vcm.tinchun.top:5001).  
+[Demo Video](https://youtu.be/QWuk3q39c80)
 
 All passwords and tokens in the history commits have been removed and revoked. All new passwords and tokens are randomly generated.  
 

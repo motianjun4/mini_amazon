@@ -43,9 +43,10 @@ The Docker-compose will automatically deploy this Mini-Amazon service, Postgres 
 1. Check [docker-compose.yaml](./docker-compose.yaml), and modify it if you want.
 
 2. Deploy with Docker-compose
-```bash
-# This command will call docker-compose up -d
-$ make up
-```
+    ```bash
+    $ docker-compose up -d
+    ```
+    PS: If this is not able to init the database, try it again!
+
 
 [Original Readme](./Desc.md)
